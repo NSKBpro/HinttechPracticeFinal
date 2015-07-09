@@ -15,6 +15,7 @@ namespace HinttechPractice.Controllers
     {
         private HolidayService db = new HolidayService();
         TestService db2 = new TestService();
+        private UsersService usr = new UsersService();
         //
         // GET: /LoadHolidays/
         public ActionResult Index()
@@ -26,6 +27,8 @@ namespace HinttechPractice.Controllers
         {
             ViewBag.initHolidays = db.GetHolidays();
             ViewBag.initVacations = db2.GetVacations();
+            string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
+            ViewBag.idOfUser = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             return View("InitCalendar");
         }
 
@@ -37,6 +40,8 @@ namespace HinttechPractice.Controllers
         {
             dt = Convert.ToDateTime(Request.QueryString["dateFrom"]);
             ViewBag.dan = Request.QueryString["dateFrom"];
+            string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
+            ViewBag.idOfUser = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             bool isEmpty = !db.GetHolidaysForDate(dt).Any();
             if (isEmpty)
             {

@@ -171,6 +171,7 @@
     <Content Include="Scripts\myCSS.css" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Content\img\hinttechLogo.png" />
+    <Content Include="Scripts\sakri.js" />
     <Content Include="Scripts\theCalendar.js" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
