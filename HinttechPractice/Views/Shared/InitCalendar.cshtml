@@ -202,10 +202,10 @@
 
 
 </center>
-<table class="table" border="1" id="tabela" style="display: none">
-    <tr>
+<table class="table table-hover table-bordered" id="tabela" style="display: none" >
+    <tr class="success">
 
-        <th>
+        <th style="width:7px">
             UserId
         </th>
         <th>
@@ -217,10 +217,11 @@
         <th>
             Description
         </th>
-        <th>
+        <th style="width:7px">
             IsSickLeave
         </th>
-        <th></th>
+        <th style ="width:50px">Edit</th>
+        <th style ="width:50px">Delete</th>
     </tr>
 
     @foreach (var item in ViewBag.initVacations)
@@ -240,11 +241,19 @@
                 @(item.Description)
             </td>
             <td>
-                @(item.IsSickLeave)
+             @if((item.IsSickLeave)){
+                 
+                 <span class="glyphicon glyphicon-ok"></span>
+             }
+             else
+             {
+                  <span class="glyphicon glyphicon-remove"></span>
+             }
             </td>
-            <td>
-                @Html.ActionLink("EditVacation", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave })
-                @Html.ActionLink("DeleteVacation", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId })
+            <td >
+                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave },new { @class = "btn btn-info" })
+            </td><td>
+                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId }, new { @class = "btn btn-danger" })
             </td>
         </tr>
     }
