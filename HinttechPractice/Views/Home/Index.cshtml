@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Welcome to HINTTECH</h1>
+    <p class="lead">Kajtes napisi za sta se ovo koristi!</p>
+    <p><a href="http://www.hinttech.com/" class="btn btn-primary btn-large">More here &raquo;</a></p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Contact us</h4>
+        <p>
+            Find us there..
+        </p>
+        <p>@Html.ActionLink("Contact \u00bb", "Contact", "Home", null, new { @class = "btn btn-default" })</p>
+    </div>
+    <div class="col-md-4">
+        <h4>About us..</h4>
+        <p>If u want to learn more about us, click here..</p>
+        <p> @Html.ActionLink("About \u00bb", "About", "Home", null, new { @class = "btn btn-default" })</p>
+</div>
+    <div class="col-md-4">
+        <h4>Looking for job?</h4>
+        <p>If u want da bla bla, follow link.</p>
+        <p><a class="btn btn-default" href="http://www.hinttech.com/resourcing/">Click here &raquo;</a></p>
+    </div>
+</div>

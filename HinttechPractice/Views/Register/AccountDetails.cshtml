@@ -1,0 +1,79 @@
+﻿@model HinttechPractice.Models.UserViewModel
+
+@{
+    ViewBag.Title = "AccountDetails";
+}
+
+<h2>Account details</h2>
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        @{
+            var imgSrc = "/Content/img/empty.jpg";
+            if (Model.ProfilePicture != null)
+            {
+                var base64 = Convert.ToBase64String(Model.ProfilePicture);
+                imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+
+        }
+        <img src="@imgSrc" height="350" width="350" />
+    </div>
+
+    <div class="col-md-8 ">
+      
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Username)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Username)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.VacationDays)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.VacationDays)
+            </dd>
+        </dl>
+
+    </div>
+</div>
+<hr />
+<p>
+    @Html.ActionLink("Back to homepage", "Index", "Home")
+</p>

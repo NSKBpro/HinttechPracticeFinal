@@ -1,0 +1,214 @@
+﻿@model IEnumerable<HinttechPractice.Data.Vacation>
+
+
+    <link href="../Scripts/fullcalendar.css" rel='stylesheet' />
+    <link href="../Scripts/myCSS.css" rel='stylesheet' />
+    <link href="../Scripts/fullcalendar.print.css" rel='stylesheet' media='print' />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="../Scripts/moment.min.js"></script>
+    <script src="../Scripts/jquery.min.js"></script>
+    <script src="../Scripts/fullcalendar.min.js"></script>
+    <script src="../Scripts/getStuffFromDB.js"></script>
+     <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <div id='calendar'></div>
+    <script>
+        status = 0;
+        datum11 = 0;
+        boja = '#FF0000';
+        flag = 0;
+        
+        $(document).ready(function () {
+            $("#tabela").hide();
+            $("#hide").hide();
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay',
+
+                },
+
+                dayClick: function (date, jsEvent, view) {
+                    
+                    var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+                    
+
+                   
+                    alert('Clicked on: ' + date.format());
+                    if (status == 0) {
+                        var datum1 = date.format();
+                        datum11 = datum1;
+                        status = 1;
+                        $(this).css('background-color', 'red');
+                        
+
+                    }else if (status == 1)
+                    {
+                        var datum2 = date.format();
+                        status = 0;
+                        $(this).css('background-color', 'blue');
+                        datum1 = datum11;
+                        var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
+                        if (diffDays > 20)
+                        {
+                            bootbox.alert("Hello world!", function () {
+                                Example.show("Hello world callback");
+                            });
+                            return false;}
+                        
+                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2;
+                    }
+
+
+                },
+
+                defaultDate: Date(),
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+
+                events: [
+
+                    @foreach (var item in Model) {
+                       
+                       
+                        
+
+                        
+                          if ((item.IsSickLeave)){
+                              <text>
+                        {
+                            title:'@(item.Description)',
+                            start:'@(item.DateFrom)',
+                            end: '@(item.DateTo)',
+                            backgroundColor:'#FF0000'
+                               
+                        }, </text>  }
+                          else
+                          {
+                               <text>
+                        {
+                            title:'@(item.Description)',
+                            start:'@(item.DateFrom)',
+                            end: '@(item.DateTo)',
+                            backgroundColor: '#33FF33'
+                               
+                        }, </text>
+                              
+                          }
+                          
+                        }
+                        
+
+                 
+
+
+
+               
+
+
+
+                ],
+               
+               
+
+
+
+        });
+
+        });
+        $(document).ready(function () {
+            
+                $("#show").click(function () {
+                    $("#tabela").show();
+                    $("#show").hide();
+                    $("#hide").show();
+                   
+                    
+                });
+            
+            
+                $("#hide").click(function () {
+                    $("#tabela").hide();
+                    $("#hide").hide();
+                    $("#show").show();
+                    
+                  
+                });
+               
+            
+        });
+   
+    </script>
+
+
+   <br />
+    <br />
+                      <center>
+                          
+                          <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
+                        
+                          <div id="2">
+                          <button id="hide" type="button" class="btn btn-info btn-lg">Hide Vacations</button></div>
+                              
+
+                          </center> 
+    <table  class="table" border="1" id="tabela">
+        <tr >
+
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSickLeave)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model) {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsSickLeave)
+                </td>
+                <td>
+                    @Html.ActionLink("EditVacation", "EditVacation", new {vacationId=item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }) 
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("DeleteVacation", "DeleteVacation", new { vacationId = item.VacationPeriodId })
+                </td>
+            </tr>
+}
+
+    </table>
+
+  
+    
+  
+
+
+
+    }
+    
+    

@@ -1,0 +1,252 @@
+﻿
+<br />
+<br />
+<div id="calendar"></div>
+<script>
+    $(document).ready(function () {
+        status = 0;
+        datum11 = 0;
+        boja = '#FF0000';
+        flag = 0;
+
+        $(document).ready(function () {
+            $("#tabela").hide();
+            $("#hide").hide();
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                dayClick: function (date, jsEvent, view) {
+
+                    // alert('Clicked on: ' + date.format());
+                    @if (Context.User.IsInRole("Admin")) {<text>
+                    window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + date.format() + "";
+                    $(this).css('background-color', '#c3c3c3');
+                    </text> }
+
+                    @if (Context.User.IsInRole("User")) {<text>
+
+                    var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+
+                    if (status == 0) {
+                        var datum1 = date.format();
+                        datum11 = datum1;
+                        status = 1;
+                        alertify.success("Start date:   " + date.format());
+
+
+                    } else if (status == 1) {
+                        var datum2 = date.format();
+                        status = 0;
+                        alertify.success("End date:   " + date.format());
+                        datum1 = datum11;
+                        var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
+                        if (diffDays > 20) {
+                            alertify
+                             .alert("U choose more then 20 days", function () {
+                                 alertify.error('Please try again');
+                             });
+                            return false;
+                        }
+
+                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2;
+                    }
+
+                    </text>}
+
+                },
+                eventClick: function (calEvent, jsEvent, view) {
+                    var typeOfDialog, tempEndDate;
+
+                    if (calEvent.end == null)
+                        tempEndDate = calEvent.start.toString();
+                    else
+                        tempEndDate = calEvent.end.toString();
+
+                    var bgColor = $(this).css('background-color');
+                    if (bgColor === 'rgb(249, 200, 52)')
+                        typeOfDialog = BootstrapDialog.TYPE_WARNING
+                    else if (bgColor === 'rgb(255, 0, 0)')
+                        typeOfDialog = BootstrapDialog.TYPE_DANGER
+                    else if (bgColor === 'rgb(51, 255, 51)')
+                        typeOfDialog = BootstrapDialog.TYPE_SUCCESS
+
+
+                    BootstrapDialog.show({
+                        type: typeOfDialog,
+                        title: "Description: " + "<b>" + calEvent.title + "</b>",
+                        message:
+                            "Start date: " +
+                            "<b>" +
+                            calEvent.start.toString().substring(0, 10) +
+                            "</b>" +
+                            "<br/>" +
+                            "End date: " +
+                            "<b>" +
+                            tempEndDate.substring(0, 10) +
+                            "</b>",
+                        buttons: [{
+                            label: 'Dismiss',
+                            cssClass: 'btn-info',
+                            action: function (dialogRef) {
+                                dialogRef.close();
+                            }
+                        }]
+                    });
+
+                },
+                /*eventMouseover: function (calEvent, jsEvent, view) {
+
+                    $(this).css('background-color', '#c3c3c3');
+
+                },
+                eventMouseout: function (calEvent, jsEvent, view) {
+
+                    $(this).css('background-color', '#F9C834');
+
+                },*/
+                defaultDate: Date(),
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                events:
+                    [//init holidays
+                    @foreach (var item in ViewBag.initHolidays)
+                {
+                <text>
+                        {
+                            title: '@(item.Description)',
+                            start: '@(item.DateFrom)',
+                            end: '@(item.DateTo)',
+                            backgroundColor: '#F9C834',
+                            textColor: '#2a2a2a'
+                        },
+                </text>
+                }
+
+                //vacations init
+                @foreach (var item in ViewBag.initVacations)
+                    {
+
+                          if ((item.IsSickLeave)){
+                              <text>
+                        {
+                            title: '@(item.Description)',
+                            start: '@(item.DateFrom)',
+                            end: '@(item.DateTo)',
+                            backgroundColor: '#FF0000'
+
+                        }, </text>  }
+                          else
+                          {
+                              <text>
+                       {
+                           title: '@(item.Description)',
+                           start: '@(item.DateFrom)',
+                           end: '@(item.DateTo)',
+                           backgroundColor: '#33FF33'
+
+                       }, </text>
+
+                          }
+
+                        }
+                    ],
+                selectable: true,
+                timeFormat: ' '
+                /*selectHelper: true,
+                select: function (start, end) {
+                    var title = prompt('Event Title:');
+                    var eventData;
+                    if (title) {
+                        eventData = {
+                            title: title,
+                            start: start,
+                            end: end
+                        };
+                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    }
+                    $('#calendar').fullCalendar('unselect');
+                },*/
+
+            });
+
+        });
+        $(document).ready(function () {
+
+            $("#show").click(function () {
+                $("#tabela").show();
+                $("#show").hide();
+                $("#hide").show();
+            });
+            $("#hide").click(function () {
+                $("#tabela").hide();
+                $("#hide").hide();
+                $("#show").show();
+
+
+            });
+        });
+    });
+</script>
+<br />
+<br />
+<center>
+
+    <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
+
+    <div id="2">
+        <button id="hide" type="button" class="btn btn-info btn-lg">Hide Vacations</button>
+    </div>
+
+
+</center>
+<table class="table" border="1" id="tabela" style="display: none">
+    <tr>
+
+        <th>
+            UserId
+        </th>
+        <th>
+            DateFrom
+        </th>
+        <th>
+            DateTo
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            IsSickLeave
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.initVacations)
+    {
+        <tr>
+
+            <td>
+                @(item.UserId)
+            </td>
+            <td>
+                @(item.DateFrom)
+            </td>
+            <td>
+                @(item.DateTo)
+            </td>
+            <td>
+                @(item.Description)
+            </td>
+            <td>
+                @(item.IsSickLeave)
+            </td>
+            <td>
+                @Html.ActionLink("EditVacation", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave })
+                @Html.ActionLink("DeleteVacation", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId })
+            </td>
+        </tr>
+    }
+
+</table>

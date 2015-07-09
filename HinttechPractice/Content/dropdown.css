@@ -1,0 +1,26 @@
+			
+	.dropdown-menu{
+			background-color: #122221;
+			color:#fff; 
+		}
+	.dropdown-toggle:active, .open .dropdown-toggle {
+			background:#122221 !important;
+		}
+	
+	.dropdown-menu li>a{
+			color:white;
+		}
+				
+	#userHover  a:hover{
+			background-color:#122221;
+			}
+			
+	#adminHover a:hover{
+			background-color:#122221;
+			color: green;
+			}
+
+	
+	#navigacija a{
+			color: white;
+			}

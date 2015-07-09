@@ -1,0 +1,95 @@
+﻿@model IEnumerable<HinttechPractice.Data.Holiday>
+                      
+    <div>
+        @if (@ViewBag.prazanDan == null) { 
+        
+        <div>
+            <div style="text-align:center">
+                <h2>Day: @ViewBag.dan</h2><br />
+            </div>
+            <div>
+                <table class="table table-bordered table-hover" style="width: 650px; margin: 0 auto;">
+                    <tr>
+                        <th style="width:70px;">
+                            UserId
+                        </th>
+                        <th style="width:70px;">
+                            DateFrom
+                        </th>
+                        <th style="width:70px;">
+                            DateTo
+                        </th>
+                        <th style="width:150px;">
+                            Description
+                        </th>
+
+                        <th style="width:60px;"></th>
+                        <th style="width:60px;"></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.UserId
+                            </td>
+                            <td>
+                                @item.DateFrom.ToString("MM.dd.yyyy")
+                            </td>
+                            <td>
+                                @item.DateTo.ToString("MM.dd.yyyy")
+                            </td>
+                            <td>
+                                @item.Description
+                            </td>
+
+                            <td>
+                                <form method="post" action="EditHolidayRedirect">
+                                    <input type="hidden" value="@item.HolidayId" name="HolidayId" />
+                                    <input type="submit" class="btn btn-info" value="edit" />
+                                </form>
+                            </td>
+
+                            <td>
+                                <form method="post" action="RemoveHoliday">
+                                    <input type="hidden" value="@item.HolidayId" name="HolidayId" />
+                                    <input type="submit" class="btn btn-danger" value="remove" />
+                                </form>
+                            </td>
+
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+        }
+        else
+        {
+            <br/>
+            <div>
+                <div class="alert alert-info" role="alert" style="width:500px; margin:0 auto;">No events, maybe add one?</div>
+            </div>
+        }
+
+        <br /><br />
+
+        <div style="position: absolute; left: 50%; display: block;">
+            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+        </div>
+        <br />
+        <br />
+        <div style="width:500px; margin:0 auto;">
+            <form method="post" action="AddHoliday">
+                <input type="text" class="form-control" name="UserId" placeholder="UserId" required /><br />
+                <input type="date" class="form-control" name="DateFrom" placeholder="From" value="@ViewBag.dan" required /><br />
+                <input type="date" class="form-control" name="DateTo" placeholder="To" required /><br />
+                <input type="text" class="form-control" name="Description" placeholder="Description" required /><br />
+                <input type="submit" class="btn btn-success btn-block" value="Add Holiday" /><br />
+            </form>
+        </div>
+    </div>
+
+
+
+ 

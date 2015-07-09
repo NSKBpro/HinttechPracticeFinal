@@ -1,0 +1,92 @@
+﻿@model HinttechPractice.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register page";
+    if (User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("~/home/home");
+    }
+}
+
+<h2>Register page:</h2>
+
+@using (Html.BeginForm("RegisterPage", "Register", FormMethod.Post,
+                            new { enctype = "multipart/form-data" })) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Username, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Username)
+                @Html.ValidationMessageFor(model => model.Username)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.repeatPassword, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.repeatPassword)
+                @Html.ValidationMessageFor(model => model.repeatPassword)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName)
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName)
+                @Html.ValidationMessageFor(model => model.LastName)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="file" class="control-label col-md-2">Upload Image:</label>
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" style="width: 100%;" class=" btn btn-default" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Register" class="submit btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <h4>@ViewBag.Error</h4>
+}
+
+<div>
+    @Html.ActionLink("Back to homepage", "Index", "Home")
+</div>
