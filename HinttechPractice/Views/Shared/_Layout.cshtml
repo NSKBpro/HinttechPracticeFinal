@@ -54,7 +54,7 @@
                     }
                     @if (User.IsInRole("User"))
                     {
-                        <li>@Html.ActionLink(" Chose vacation ", "initHolidays", "LoadHolidays")</li>
+                        <li>@Html.ActionLink(" Choose vacation ", "initHolidays", "LoadHolidays")</li>
                         //ovde iznad ide link ka vacation serveru
                     }
 
@@ -91,7 +91,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Hinttech practice</p>
+            <p>&copy; @DateTime.Now.Year - Hinttech scheduler</p>
         </footer>
     </div>
     <script src="~/Scripts/bootstrap.min.js"></script>

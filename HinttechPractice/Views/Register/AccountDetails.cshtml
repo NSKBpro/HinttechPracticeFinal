@@ -5,12 +5,11 @@
 }
 
 <br />
-<h3>Account details:</h3>
-<br/>
-<div class="row">
-    <div class="col-md-4">
+<br />
+<div class="row" align="center">
+    <div class="col-md-4 col-md-offset-4 bg-success">
         @{
-            var imgSrc = "/Content/img/empty.jpg";
+            var imgSrc = "/Content/img/empty.png";
             if (Model.ProfilePicture != null)
             {
                 var base64 = Convert.ToBase64String(Model.ProfilePicture);
@@ -18,59 +17,73 @@
             }
 
         }
-        <img src="@imgSrc" height="350" width="350" />
-    </div>
+        <img src="@imgSrc" height="250" width="250" />
+        <hr/>
 
-    <div class="col-md-8 ">
-      
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Username)
-            </dt>
+        @*@Html.DisplayNameFor(model => model.Username)*@
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Username: @Model.Username</span>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">First name: @Model.FirstName</span>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Last name: @Model.LastName</span>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Email: @Model.Email</span>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Date created: @Model.DateCreated</span>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">Vacation days left: @Model.VacationDays</span>
+        </div>
+        
+        
+        @*<dd>
+                    @Html.DisplayFor(model => model.Username)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.Username)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.FirstName)
-            </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.LastName)
-            </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.LastName)
-            </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.Email)
-            </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.Email)
-            </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.DateCreated)
+                </dd>
 
-            <dd>
-                @Html.DisplayFor(model => model.DateCreated)
-            </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.VacationDays)
+                </dt>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.VacationDays)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.VacationDays)
-            </dd>
-        </dl>
+                <dd>
+                    @Html.DisplayFor(model => model.VacationDays)
+                </dd>
+            </dl>*@
 
     </div>
 </div>

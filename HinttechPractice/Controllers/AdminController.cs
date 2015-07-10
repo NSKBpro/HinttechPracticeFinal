@@ -61,7 +61,7 @@ namespace HinttechPractice.App_Start
             UsersService users = new UsersService();
             User user = (User)users.FindUserByUsername(id);
             if (user != null)
-            {  
+            {
                 if (user.IsUserRegistered)
                 {
                     user.IsUserRegistered = false;
@@ -78,6 +78,18 @@ namespace HinttechPractice.App_Start
             return RedirectToAction("ShowAllUsers");
         }
 
+        public ActionResult ResetVacationDays()
+        {
+            UsersService users = new UsersService();
+            List<User> modelList = users.FindAll();
+            foreach (User u in modelList)
+            {
+                u.VacationDays = 20;
+                users.Edit(u);
+            }
+
+            return RedirectToAction("ShowAllUsers");
+        }
 
         //async Task<ActinResult>
         ///<summary>
@@ -85,7 +97,7 @@ namespace HinttechPractice.App_Start
         ///</summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Contact(User user,Boolean registered)
+        public ActionResult Contact(User user, Boolean registered)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +115,7 @@ namespace HinttechPractice.App_Start
                     message.Subject = "Unregistered from Hinttech";
                     body = "<p>Your registration isn't <b>APPROVED</b> anymore.</p>";
                 }
-               
+
                 message.Body = string.Format(body);
                 message.IsBodyHtml = true;
 
@@ -125,6 +137,6 @@ namespace HinttechPractice.App_Start
             }
             return RedirectToAction("ShowAllUsers");
         }
-        
+
     }
 }

@@ -8,28 +8,28 @@
 <table class="table" id="myTable">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Username)
+            Username
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            First name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            Last name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
+            Email
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsUserRegistered)
+            Registered?
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateCreated)
+            Date created
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastLoginDate)
+            Last login date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.VacationDays)
+            Vacation days
         </th>
         <th>Change state</th>
     </tr>
@@ -50,7 +50,15 @@
             @Html.DisplayFor(modelItem => item.Email)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.IsUserRegistered)
+            @if ((item.IsUserRegistered))
+            {
+
+                <span class="glyphicon glyphicon-ok"></span>
+            }
+            else
+            {
+                <span class="glyphicon glyphicon-remove"></span>
+            }
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DateCreated)
@@ -67,4 +75,5 @@
     </tr>
 }
 </table>
-
+    <br />
+     @Html.ActionLink(" Reset all vacation days to 20 ", "ResetVacationDays", "Admin", null, new { @class = "btn btn-success btn-lg" })

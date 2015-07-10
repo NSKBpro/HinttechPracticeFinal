@@ -139,7 +139,7 @@ namespace HinttechPractice.Controllers
                             if (array.Length > 55000)
                             {
                                 ViewBag.Error = "Image size can't be more than ~50Kb!!";
-                                return View();
+                                return View(model);
                             }
                             u.ProfilePicture = array;
                         }

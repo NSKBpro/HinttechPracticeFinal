@@ -8,7 +8,8 @@
 {
     @Html.AntiForgeryToken()
     <br /><br />
-    <div class="form-horizontal" align="center" style="width: 500px; margin: 0 auto;">
+    <div class="row" align="center">
+    <div class="col-md-4 col-md-offset-4 bg-success">
         @Html.ValidationSummary(true)
 
 
@@ -60,6 +61,7 @@
             </div>
         </div>
     </div>
+        </div>
 }
 
 
