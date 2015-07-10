@@ -20,6 +20,7 @@ namespace HinttechPractice.Data
         public int UserId { get; set; }
         public System.DateTime DateFrom { get; set; }
         public System.DateTime DateTo { get; set; }
+        [Required]
         public string Description { get; set; }
         public bool IsSickLeave { get; set; }
     
