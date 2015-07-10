@@ -2,28 +2,73 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
+<div class="jumbotron" style="background-image: url(../Content/img/map.png);">
     <h1>Welcome to HINTTECH</h1>
-    <p class="lead">Kajtes napisi za sta se ovo koristi!</p>
+    <p class="lead" style="font-size:18px;">We elevate your business with a unique combination of design, technology & content.</p>
     <p><a href="http://www.hinttech.com/" class="btn btn-primary btn-large">More here &raquo;</a></p>
 </div>
 
 <div class="row">
     <div class="col-md-4">
         <h4>Contact us</h4>
-        <p>
-            Find us there..
-        </p>
-        <p>@Html.ActionLink("Contact \u00bb", "Contact", "Home", null, new { @class = "btn btn-default" })</p>
+        <p>Follow this link.</p>
+        <p id="contactUs"><button class="btn btn-default">Contact us &raquo;</button></p>
     </div>
     <div class="col-md-4">
-        <h4>About us..</h4>
-        <p>If u want to learn more about us, click here..</p>
-        <p> @Html.ActionLink("About \u00bb", "About", "Home", null, new { @class = "btn btn-default" })</p>
+        <h4>About us</h4>
+        <p>Check us out.</p>
+        <p id="aboutUs"><button class="btn btn-default">About us &raquo;</button></p>
 </div>
     <div class="col-md-4">
         <h4>Looking for job?</h4>
-        <p>If u want da bla bla, follow link.</p>
-        <p><a class="btn btn-default" href="http://www.hinttech.com/resourcing/">Click here &raquo;</a></p>
+        <p>We are hiring!</p>
+        <button id="jobs" class="btn btn-default">Jobs &raquo;</button>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#contactUs").click(function () {
+            BootstrapDialog.show({
+                title: "Contact us",
+                message:
+                    "<div style=\"text-align:center; font-size:20px; color: #818181;\"><span class=\"glyphicon glyphicon-earphone\"></span></div><br/><div style=\"text-align:center;\"><address>HintTech Novi Sad<br /> Моrnarska 7, Novi Sad 404226, Serbia<br />Phone: +381 (0)21 630 1548 </address></div>",
+                buttons: [{
+                    label: 'Dismiss',
+                    cssClass: 'btn-info',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }]
+            });
+        });
+        $("#aboutUs").click(function () {
+            BootstrapDialog.show({
+                title: "About us",
+                message:
+                    "<div style=\"text-align:center; font-size:20px; color: #818181;\"><span class=\"glyphicon glyphicon-info-sign\"></span></div><br/><p>At HintTech, strategy, creative, technology and content all work together. Together we tackle all sorts of challenges, both in the digital space and beyond. We create digital experiences that transform brands, enhance customer loyalty and contribute to better results.HintTech guides each and every one of our clients to make the right choices within the digital world..</p>",
+                buttons: [{
+                    label: 'Dismiss',
+                    cssClass: 'btn-info',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }]
+            });
+        });
+        $("#jobs").click(function () {
+            BootstrapDialog.show({
+                title: "Job offers",
+                message:
+                    "Contact our marketing team for more info.",
+                buttons: [{
+                    label: 'Dismiss',
+                    cssClass: 'btn-info',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }]
+            });
+        });
+    });
+</script>

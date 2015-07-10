@@ -40,6 +40,7 @@ namespace HinttechPractice.Controllers
         {
             dt = Convert.ToDateTime(Request.QueryString["dateFrom"]);
             ViewBag.dan = Request.QueryString["dateFrom"];
+            ViewBag.danDo = Request.QueryString["dateTo"];
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
             ViewBag.idOfUser = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             bool isEmpty = !db.GetHolidaysForDate(dt).Any();

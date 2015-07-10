@@ -69,7 +69,7 @@
         {
             <br />
             <div style="padding-top: 50px; ">
-                <div class="alert alert-info" role="alert" style="width:500px; margin:0 auto;">No holiday for this day, maybe add one?</div>
+                <div class="alert alert-info" role="alert" style="width:500px; margin:0 auto;text-align:center;font-size:1em;"><b>No holiday for this day, maybe add one?</b></div>
             </div>
         }
 
@@ -85,7 +85,7 @@
             <form method="post" action="AddHoliday">
                 <input type="hidden" class="form-control" name="UserId" placeholder="UserId" value="@ViewBag.idOfUser" /><br />
                 <input type="date" class="form-control" name="DateFrom" placeholder="From" value="@ViewBag.dan" required /><br />
-                <input type="date" class="form-control" name="DateTo" placeholder="To" required /><br />
+                <input type="date" class="form-control" name="DateTo" placeholder="To" value="@ViewBag.danDo" required /><br />
                 <input type="text" class="form-control" name="Description" placeholder="Description" required /><br />
                 <input type="submit" class="btn btn-success btn-block" value="Add Holiday" /><br />
             </form>

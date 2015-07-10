@@ -14,20 +14,25 @@
             $("#hide").hide();
             $('#calendar').fullCalendar({
                 header: {
-                    left: 'prev,next today',
+                    left: 'prev,next',
                     center: 'title',
-                    right: 'month,agendaWeek,agendaDay'
+                    right: 'today'
                 },
                 dayClick: function (date, jsEvent, view) {
 
                     // alert('Clicked on: ' + date.format());
-                    @if (Context.User.IsInRole("Admin")) {<text>
-                    window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + date.format() + "";
-                    $(this).css('background-color', '#c3c3c3');
-                    </text> }
-
                     @if (Context.User.IsInRole("User")) {<text>
 
+
+  
+                    //Vraca esc event, uradio sam hide jer je zbog ifa vracao vise od jednog diajloga
+                    $(document).keyup(function (e) {
+                        if (e.keyCode === 27)
+                            alertify.error("Canceling operation...");
+                        status = 0;
+                        e.hide();
+                    })
+                  
                     var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 
                     if (status == 0) {
@@ -154,21 +159,18 @@
                         }
                     ],
                 selectable: true,
-                timeFormat: ' '
-                /*selectHelper: true,
+                timeFormat: ' ',
+                selectHelper: true,
                 select: function (start, end) {
-                    var title = prompt('Event Title:');
-                    var eventData;
-                    if (title) {
-                        eventData = {
-                            title: title,
-                            start: start,
-                            end: end
-                        };
-                        $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    }
+                    
+                      @if(Context.User.IsInRole("Admin")) {
+                          <text>
+                          window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                          // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                          </text>
+                      }
                     $('#calendar').fullCalendar('unselect');
-                },*/
+                },
 
             });
 
@@ -205,7 +207,7 @@
 <table class="table table-hover table-bordered" id="tabela" style="display: none" >
     <tr class="success">
 
-        <th style="width:7px">
+        <th style="width:7px" >
             UserId
         </th>
         <th>
