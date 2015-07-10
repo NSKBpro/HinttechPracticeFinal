@@ -65,12 +65,12 @@ namespace HinttechPractice.App_Start
                 if (user.IsUserRegistered)
                 {
                     user.IsUserRegistered = false;
-                   // Contact(user, false);
+                    Contact(user, false);
                 }
                 else
                 {
                     user.IsUserRegistered = true;
-                   // Contact(user, true);
+                    Contact(user, true);
                 }
                 users.Edit(user);
             }
