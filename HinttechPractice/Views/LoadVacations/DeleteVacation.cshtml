@@ -10,11 +10,13 @@
             <h5>From: @Model.DateFrom.ToString("MM.dd.yyyy")</h5>
             <h5>To: @Model.DateTo.ToString("MM.dd.yyyy")</h5>
             <h5>Description: @Model.Description</h5>
-        </div>    
+        </div>
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-    <input type="hidden" value="@Model.VacationPeriodId" name="VacationPeriodId" />
+            <input type="hidden" value="@Model.VacationPeriodId" name="VacationPeriodId" />
+            <input type="hidden" value="@Model.DateFrom" name="DateFrom" />
+            <input type="hidden" value="@Model.DateTo" name="DateTo" />
             <div class="form-actions no-color ">
                 <input type="submit" value="Delete" class="btn btn-info btn-block" />
 
@@ -22,3 +24,4 @@
         }
     </div>
 </div>
+

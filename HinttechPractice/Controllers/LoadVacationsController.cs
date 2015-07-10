@@ -99,8 +99,6 @@ namespace HinttechPractice.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.EditVacation(vacation);
-
                 return RedirectToAction("initHolidays", "LoadHolidays");
             }
             return View();
@@ -115,13 +113,14 @@ namespace HinttechPractice.Controllers
         [HttpPost]
         public ActionResult DeleteVacation(Vacation vacation)
         {
-            if (ModelState.IsValid)
-            {
+                double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
+                UsersService users = new UsersService();
+                User u = (User)users.FindUserByUsername(HttpContext.User.Identity.Name);
+                int days = u.VacationDays + Convert.ToInt32(numDays);
+                u.VacationDays = days;
+                users.Edit(u);
                 db.DeleteVacation(vacation.VacationPeriodId);
-
                 return RedirectToAction("initHolidays", "LoadHolidays");
-            }
-            return View();
         }
     }
 }
