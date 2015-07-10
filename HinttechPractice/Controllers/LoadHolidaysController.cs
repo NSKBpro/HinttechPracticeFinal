@@ -28,8 +28,11 @@ namespace HinttechPractice.Controllers
         {
             ViewBag.initHolidays = db.GetHolidays();
             ViewBag.initVacations = db2.GetVacations();
+
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
-            ViewBag.idOfUser = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
+            int userId=usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
+            ViewBag.idOfUser = userId;
+            ViewBag.initVacationsForCurrentUser = db2.GetVacationsForCurrentUser(userId);
             return View("InitCalendar");
         }
 
