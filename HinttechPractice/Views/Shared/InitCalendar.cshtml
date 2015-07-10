@@ -28,6 +28,16 @@
 
                     @if (Context.User.IsInRole("User")) {<text>
 
+
+  
+                    //Vraca esc event, uradio sam hide jer je zbog ifa vracao vise od jednog diajloga
+                    $(document).keyup(function (e) {
+                        if (e.keyCode === 27)
+                            alertify.error("Canceling operation...");
+                        status = 0;
+                        e.hide();
+                    })
+                  
                     var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 
                     if (status == 0) {
@@ -205,7 +215,7 @@
 <table class="table table-hover table-bordered" id="tabela" style="display: none" >
     <tr class="success">
 
-        <th style="width:7px">
+        <th style="width:7px" >
             UserId
         </th>
         <th>
