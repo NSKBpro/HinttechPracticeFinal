@@ -9,8 +9,8 @@
 
             <input type="hidden" name="HolidayId" value="@(ViewBag.holidayForEdit.HolidayId)" /><br />
             <input type="hidden" class="form-control" name="UserId" placeholder="UserId" value="@ViewBag.holidayForEdit.UserId" required /><br />
-            <input type="text" class="form-control" name="DateFrom" placeholder="From" value="@ViewBag.holidayForEdit.DateFrom" required /><br />
-            <input type="text" class="form-control" name="DateTo" placeholder="To" value="@ViewBag.holidayForEdit.DateTo" required /><br />
+            <input type="date" class="form-control" name="DateFrom" placeholder="From" value="@ViewBag.holidayForEditFrom" required /><br />
+            <input type="date" class="form-control" name="DateTo" placeholder="To" value="@ViewBag.holidayForEditTo" required /><br />
             <input type="text" class="form-control" name="Description" placeholder="Description" value="@ViewBag.holidayForEdit.Description" required /><br />
             <input type="submit" class="btn btn-success btn-block" value="Edit Holiday" /><br />
 
