@@ -59,6 +59,12 @@ namespace HinttechPractice.Controllers
                 vacation.DateFrom = Convert.ToDateTime(s1);
                 vacation.DateTo = Convert.ToDateTime(s2);
                 db.AddVacation(vacation);
+                double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
+                UsersService users = new UsersService();
+                User u = (User)users.FindById(vacation.UserId);
+                int days = u.VacationDays - Convert.ToInt32(numDays);
+                u.VacationDays = days;
+                users.Edit(u);
                 return RedirectToAction("initHolidays", "LoadHolidays");
 
             }
