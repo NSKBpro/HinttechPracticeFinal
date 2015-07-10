@@ -32,15 +32,18 @@ namespace HinttechPractice.Controllers
             return View("InitCalendar");
         }
 
-        public ActionResult RegistracijaOdmora(String parameterdatum1, String parameterdatum2, String userId)
+        public ActionResult RegistracijaOdmora(String parameterdatum1, String parameterdatum2)
         {
+            UsersService users = new UsersService();
+            User u = users.FindUserByUsername(HttpContext.User.Identity.Name);
+           
             s1 = parameterdatum1;
             s2 = parameterdatum2;
             ViewBag.Parameterdatum1 = parameterdatum1;
             ViewBag.Parameterdatum2 = parameterdatum2;
-            ViewBag.UserId = userId;
+            ViewBag.UserId = u.UserId;
             var vac = new Vacation();
-            vac.UserId = Int32.Parse(userId);
+            vac.UserId = Int32.Parse(u.UserId.ToString());
             vac.DateFrom = Convert.ToDateTime(parameterdatum1);
             vac.DateTo = Convert.ToDateTime(parameterdatum2);
 
@@ -57,14 +60,11 @@ namespace HinttechPractice.Controllers
                 vacation.DateFrom = Convert.ToDateTime(s1);
                 vacation.DateTo = Convert.ToDateTime(s2);
                 db.AddVacation(vacation);
-                return RedirectToAction("GetVacations"); 
+                return RedirectToAction("initHolidays","LoadHolidays"); 
 
             }
             return View();
         }
-
-
-
 
         public ActionResult EditVacation(int vacationId,int userId,String datum1,String datum2,String opis,String isSick)
         {
@@ -90,8 +90,8 @@ namespace HinttechPractice.Controllers
             if (ModelState.IsValid)
             {
                 db.EditVacation(vacation);
-  
-                return RedirectToAction("GetVacations");
+
+                return RedirectToAction("initHolidays", "LoadHolidays");
             }
             return View();
         }
@@ -118,7 +118,7 @@ namespace HinttechPractice.Controllers
             {
                 db.DeleteVacation(vacationId);
 
-                return RedirectToAction("GetVacations");
+                return RedirectToAction("initHolidays", "LoadHolidays");
             }
             return View();
         }
