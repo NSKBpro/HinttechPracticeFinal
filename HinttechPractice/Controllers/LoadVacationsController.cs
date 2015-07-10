@@ -56,8 +56,8 @@ namespace HinttechPractice.Controllers
         {
             if (ModelState.IsValid)
             {
-                vacation.DateFrom = Convert.ToDateTime(s1);
-                vacation.DateTo = Convert.ToDateTime(s2);
+                vacation.DateFrom = vacation.DateFrom;
+                vacation.DateTo = vacation.DateTo;
                 db.AddVacation(vacation);
                 return RedirectToAction("initHolidays", "LoadHolidays");
 

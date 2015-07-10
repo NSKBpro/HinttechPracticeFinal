@@ -199,9 +199,7 @@
     if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
     {
         <center>
-
-            <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
-
+            <div id="1">  <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
             <div id="2">
                 <button id="hide" type="button" class="btn btn-info btn-lg" style="display: none">Hide Vacations</button>
             </div>
@@ -210,8 +208,8 @@
 }
 <div style="float:right">
     <span class="glyphicon glyphicon-stop" style="color: #F9C834;"></span>Holiday
-    <span class="glyphicon glyphicon-stop" style="color: #FF0000;"></span>Vacation
-    <span class="glyphicon glyphicon-stop" style="color: #33FF33;"></span>Sick Leave
+    <span class="glyphicon glyphicon-stop" style="color: #FF0000;"></span>Sick Leave
+    <span class="glyphicon glyphicon-stop" style="color: #33FF33;"></span>Vacation
 </div><br />
 <br />
 @if (Context.User.IsInRole("User"))
@@ -244,10 +242,10 @@
             {
                 <tr>
                     <td>
-                        @(item.DateFrom.ToString("dd.MM.yyyy"))
+                        @(item.DateFrom.ToString("MM.dd.yyyy"))
                     </td>
                     <td>
-                        @(item.DateTo.ToString("dd.MM.yyyy"))
+                        @(item.DateTo.ToString("MM.dd.yyyy"))
                     </td>
                     <td>
                         @(item.Description)
