@@ -56,7 +56,7 @@
                             return false;
                         }
 
-                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 +"&userId=" + @ViewBag.idOfUser;
+                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
                     }
 
                     </text>}
@@ -198,18 +198,20 @@
 {
     if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
     {
-        <center>
-            <div id="1">  <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
-            <div id="2">
-                <button id="hide" type="button" class="btn btn-info btn-lg" style="display: none">Hide Vacations</button>
-            </div>
-        </center>
+<center>
+
+    <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
+
+    <div id="2">
+        <button id="hide" type="button" class="btn btn-info btn-lg" style="display: none">Hide Vacations</button>
+    </div>
+</center>
     }
 }
 <div style="float:right">
     <span class="glyphicon glyphicon-stop" style="color: #F9C834;"></span>Holiday
-    <span class="glyphicon glyphicon-stop" style="color: #FF0000;"></span>Sick Leave
-    <span class="glyphicon glyphicon-stop" style="color: #33FF33;"></span>Vacation
+    <span class="glyphicon glyphicon-stop" style="color: #FF0000;"></span>Vacation
+    <span class="glyphicon glyphicon-stop" style="color: #33FF33;"></span>Sick Leave
 </div><br />
 <br />
 @if (Context.User.IsInRole("User"))
@@ -217,62 +219,62 @@
 
     if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
     {
-        <table class="table table-hover table-bordered" id="tabela" style="display: none">
-            <tr class="success">
+<table class="table table-hover table-bordered" id="tabela" style="display: none">
+    <tr class="success">
 
-                <th>
-                    DateFrom
-                </th>
-                <th>
-                    DateTo
-                </th>
-                <th>
-                    Description
-                </th>
-                <th style="width:7px">
-                    IsSickLeave
-                </th>
-                @if (Context.User.IsInRole("User"))
-                {
-                    <th style="width:50px">Edit</th>
-                    <th style="width:50px">Delete</th>
-                }
-            </tr>
+        <th>
+            DateFrom
+        </th>
+        <th>
+            DateTo
+        </th>
+        <th>
+            Description
+        </th>
+        <th style="width:7px">
+            IsSickLeave
+        </th>
+        @if (Context.User.IsInRole("User"))
+        {
+            <th style="width:50px">Edit</th>
+            <th style="width:50px">Delete</th>
+        }
+    </tr>
             @foreach (var item in ViewBag.initVacationsForCurrentUser)
+    {
+        <tr>
+            <td>
+                        @(item.DateFrom.ToString("dd.MM.yyyy"))
+            </td>
+            <td>
+                        @(item.DateTo.ToString("dd.MM.yyyy"))
+            </td>
+            <td>
+                @(item.Description)
+            </td>
+            <td>
+                @if ((item.IsSickLeave))
+                {
+
+                    <span class="glyphicon glyphicon-ok"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-remove"></span>
+                }
+            </td>
+            @if (Context.User.IsInRole("User"))
             {
-                <tr>
-                    <td>
-                        @(item.DateFrom.ToString("MM.dd.yyyy"))
-                    </td>
-                    <td>
-                        @(item.DateTo.ToString("MM.dd.yyyy"))
-                    </td>
-                    <td>
-                        @(item.Description)
-                    </td>
-                    <td>
-                        @if ((item.IsSickLeave))
-                        {
-
-                            <span class="glyphicon glyphicon-ok"></span>
-                        }
-                        else
-                        {
-                            <span class="glyphicon glyphicon-remove"></span>
-                        }
-                    </td>
-                    @if (Context.User.IsInRole("User"))
-                    {
-                        <td>
-                            @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
-                        </td>
-                        <td>
-                            @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
-                        </td>
-                    }
-                </tr>
+                <td>
+                    @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
+                </td>
             }
+        </tr>
+    }
 
-        </table>
+</table>
     }
 }
