@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace HinttechPractice.Controllers
 {
-     [MyAuthorizeAtribute(Roles = "User")]
+    [MyAuthorizeAtribute(Roles = "User")]
     public class LoadVacationsController : Controller
     {
         private static string s1;
@@ -24,7 +24,7 @@ namespace HinttechPractice.Controllers
         }
         public ActionResult GetVacations()
         {
-            
+
             ViewBag.Title = "CalendarView";
             ViewBag.initHolidays = db2.GetHolidays();
             ViewBag.initVacations = db.GetVacations();
@@ -35,7 +35,7 @@ namespace HinttechPractice.Controllers
         {
             UsersService users = new UsersService();
             User u = users.FindUserByUsername(HttpContext.User.Identity.Name);
-           
+
             s1 = parameterdatum1;
             s2 = parameterdatum2;
             ViewBag.Parameterdatum1 = parameterdatum1;
@@ -65,31 +65,20 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
-        public ActionResult EditVacation(int vacationId,String datum1,String datum2,String opis,String isSick)
+        public ActionResult EditVacation(int vacationId)
         {
             UsersService users = new UsersService();
             User u = users.FindUserByUsername(HttpContext.User.Identity.Name);
             TestService ser = new TestService();
             if (ser.FindVacationByUserId(u.UserId, vacationId) == true)
             {
-
-
-
-                ViewBag.UserId = u.UserId;
-            ViewBag.Datum1 = datum1;
-            ViewBag.Datum2 = datum2;
-            ViewBag.Opis = opis;
-            ViewBag.IsSick = isSick;
-
-            Vacation vac = new Vacation();
-            vac.VacationPeriodId = vacationId;
-                vac.UserId = u.UserId;
-            vac.DateFrom = Convert.ToDateTime(datum1);
-            vac.DateTo = Convert.ToDateTime(datum2);
-            vac.Description = opis;
-            vac.IsSickLeave = Convert.ToBoolean(isSick);
-            return View(vac);
-        }
+                Vacation vac = (Vacation)db.FindById(vacationId);
+                if (vac == null)
+                {
+                    return RedirectToAction("initHolidays", "LoadHolidays");
+                }
+                return View(vac);
+            }
             else
             {
                 return RedirectToAction("initHolidays", "LoadHolidays");
@@ -114,7 +103,7 @@ namespace HinttechPractice.Controllers
             return View(vac);
         }
 
-        [HttpPost] 
+        [HttpPost]
         public ActionResult DeleteVacation(Vacation vacation)
         {
             if (ModelState.IsValid)
@@ -125,5 +114,5 @@ namespace HinttechPractice.Controllers
             }
             return View();
         }
-	}
+    }
 }
