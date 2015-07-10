@@ -66,22 +66,35 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
-        public ActionResult EditVacation(int vacationId,int userId,String datum1,String datum2,String opis,String isSick)
+        public ActionResult EditVacation(int vacationId,String datum1,String datum2,String opis,String isSick)
         {
-            ViewBag.UserId = userId;
-            ViewBag.Datum1 = datum1;
-            ViewBag.Datum2 = datum2;
-            ViewBag.Opis = opis;
-            ViewBag.IsSick = isSick;
+            UsersService users = new UsersService();
+            User u = users.FindUserByUsername(HttpContext.User.Identity.Name);
+            TestService ser = new TestService();
+            if (ser.FindVacationByUserId(u.UserId, vacationId) == true)
+            {
 
-            Vacation vac = new Vacation();
-            vac.VacationPeriodId = vacationId;
-            vac.UserId = userId;
-            vac.DateFrom = Convert.ToDateTime(datum1);
-            vac.DateTo = Convert.ToDateTime(datum2);
-            vac.Description = opis;
-            vac.IsSickLeave = Convert.ToBoolean(isSick);
-            return View(vac);
+
+
+                ViewBag.UserId = u.UserId;
+                ViewBag.Datum1 = datum1;
+                ViewBag.Datum2 = datum2;
+                ViewBag.Opis = opis;
+                ViewBag.IsSick = isSick;
+
+                Vacation vac = new Vacation();
+                vac.VacationPeriodId = vacationId;
+                vac.UserId = u.UserId;
+                vac.DateFrom = Convert.ToDateTime(datum1);
+                vac.DateTo = Convert.ToDateTime(datum2);
+                vac.Description = opis;
+                vac.IsSickLeave = Convert.ToBoolean(isSick);
+                return View(vac);
+            }
+            else
+            {
+                return RedirectToAction("initHolidays", "LoadHolidays");
+            }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

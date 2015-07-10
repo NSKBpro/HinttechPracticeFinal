@@ -56,7 +56,7 @@
                             return false;
                         }
 
-                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 +"&userId=" + @ViewBag.idOfUser;
+                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
                     }
 
                     </text>}
@@ -267,7 +267,7 @@
                     @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
                 </td>
                 <td>
-                    @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
+                    @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
                 </td>
             }
         </tr>

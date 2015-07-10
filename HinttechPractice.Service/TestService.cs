@@ -57,6 +57,20 @@ namespace HinttechPractice.Service
             dataContext.Vacations.Remove(dataContext.Vacations.Find(vacationId));
             dataContext.SaveChanges();
         }
+
+        public Boolean FindVacationByUserId(int idUsera, int idVacation)
+        {
+            List<Vacation> vacations = new List<Vacation>();
+
+            foreach (Vacation v in GetVacations())
+            {
+                if (v.VacationPeriodId == idVacation && v.UserId == idUsera)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         
     }
 }

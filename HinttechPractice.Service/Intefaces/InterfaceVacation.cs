@@ -11,5 +11,7 @@ namespace HinttechPractice.Service.Intefaces
     public interface InterfaceVacation
     {
         DbSet<Vacation> GetVacations();
+        Boolean FindVacationByUserId(int idUsera, int idVacation);
+       
     }
 }
