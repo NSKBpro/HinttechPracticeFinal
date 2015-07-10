@@ -6,6 +6,9 @@ using System.Web;
 
 namespace HinttechPractice.Models
 {
+    ///<summary>
+    ///User view model, for account details view.
+    ///</summary>
     public class UserViewModel
     {
         [Key]

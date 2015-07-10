@@ -29,6 +29,11 @@ namespace HinttechPractice
                 defaults: new { controller = "Register", action = "EditPage", id = UrlParameter.Optional }
             );
             routes.MapRoute(
+               name: "changePass",
+               url: "home/changePassword",
+               defaults: new { controller = "Register", action = "ChangePassPage", id = UrlParameter.Optional }
+           );
+            routes.MapRoute(
                 name: "home",
                 url: "Home/home",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
