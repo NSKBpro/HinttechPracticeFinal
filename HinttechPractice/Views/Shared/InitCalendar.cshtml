@@ -24,7 +24,7 @@
                     @if (Context.User.IsInRole("User")) {<text>
 
 
-  
+
                     //Vraca esc event, uradio sam hide jer je zbog ifa vracao vise od jednog diajloga
                     $(document).keyup(function (e) {
                         if (e.keyCode === 27)
@@ -32,7 +32,7 @@
                         status = 0;
                         e.hide();
                     })
-                  
+
                     var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 
                     if (status == 0) {
@@ -56,8 +56,7 @@
                             return false;
                         }
 
-                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 + "&userId=" + @ViewBag.idOfUser;
-
+                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2;
                     }
 
                     </text>}
@@ -163,12 +162,12 @@
                 timeFormat: ' ',
                 selectHelper: true,
                 select: function (start, end) {
-                    
-                      @if(Context.User.IsInRole("Admin")) {
+
+                    @if(Context.User.IsInRole("Admin")) {
                           <text>
-                          window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
-                          // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                          </text>
+                    window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                    // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    </text>
                       }
                     $('#calendar').fullCalendar('unselect');
                 },
@@ -192,10 +191,6 @@
             });
         });
     });
-
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#myInput').focus()
-    })
 </script>
 <br />
 <br />
@@ -213,11 +208,11 @@
     <span class="glyphicon glyphicon-stop" style="color: #FF0000;"></span>Vacation
     <span class="glyphicon glyphicon-stop" style="color: #33FF33;"></span>Sick Leave
 </div><br />
-<br/>
-<table class="table table-hover table-bordered" id="tabela" style="display: none" >
+<br />
+<table class="table table-hover table-bordered" id="tabela" style="display: none">
     <tr class="success">
 
-        <th style="width:7px" >
+        <th style="width:7px">
             UserId
         </th>
         <th>
@@ -232,8 +227,11 @@
         <th style="width:7px">
             IsSickLeave
         </th>
-        <th style ="width:50px">Edit</th>
-        <th style ="width:50px">Delete</th>
+        @if (Context.User.IsInRole("User"))
+        {
+            <th style="width:50px">Edit</th>
+            <th style="width:50px">Delete</th>
+        }
     </tr>
 
     @foreach (var item in ViewBag.initVacations)
@@ -253,22 +251,26 @@
                 @(item.Description)
             </td>
             <td>
-             @if((item.IsSickLeave)){
-                 
-                 <span class="glyphicon glyphicon-ok"></span>
-             }
-             else
-             {
-                  <span class="glyphicon glyphicon-remove"></span>
-             }
+                @if ((item.IsSickLeave))
+                {
+
+                    <span class="glyphicon glyphicon-ok"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-remove"></span>
+                }
             </td>
-            <td >
-                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave },new { @class = "btn btn-info" })
-            </td><td>
-                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
-            </td>
+            @if (Context.User.IsInRole("User"))
+            {
+                <td>
+                    @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId }, new { @class = "btn btn-danger" })
+                </td>
+            }
         </tr>
     }
-
 
 </table>

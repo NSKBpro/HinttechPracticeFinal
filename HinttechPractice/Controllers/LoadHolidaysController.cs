@@ -88,6 +88,8 @@ namespace HinttechPractice.Controllers
         public ActionResult EditHolidayRedirect(int HolidayId)
         {
             ViewBag.holidayForEdit = db.GetHolidays().Find(HolidayId);
+            ViewBag.holidayForEditTo = db.GetHolidays().Find(HolidayId).DateTo.ToString("yyyy-MM-dd");
+            ViewBag.holidayForEditFrom = db.GetHolidays().Find(HolidayId).DateFrom.ToString("yyyy-MM-dd");
             return View("EditHoliday");
         }
 	}
