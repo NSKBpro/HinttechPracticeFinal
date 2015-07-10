@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HinttechPractice.Data.Holiday>
+﻿@model IEnumerable<HinttechPractice.Models.HolidaysAndUsers>
 
     <div>
         @if (@ViewBag.prazanDan == null)
@@ -11,8 +11,8 @@
                 <div>
                     <table class="table table-bordered table-hover" style="width: 650px; margin: 0 auto; ">
                         <tr>
-                            <th style="width:70px;">
-                                UserId
+                            <th style="width:120px;">
+                                Name
                             </th>
                             <th style="width:70px;">
                                 DateFrom
@@ -32,7 +32,7 @@
                         {
                             <tr>
                                 <td>
-                                    @item.UserId
+                                    @item.firstName @item.lastName
                                 </td>
                                 <td>
                                     @item.DateFrom.ToString("MM.dd.yyyy")
@@ -41,7 +41,7 @@
                                     @item.DateTo.ToString("MM.dd.yyyy")
                                 </td>
                                 <td>
-                                    @item.Description
+                                    @item.Descrition
                                 </td>
 
                                 <td>

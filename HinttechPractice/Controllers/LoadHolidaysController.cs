@@ -1,4 +1,5 @@
 ﻿using HinttechPractice.Data;
+using HinttechPractice.Models;
 using HinttechPractice.Security;
 using HinttechPractice.Service;
 using System;
@@ -43,6 +44,23 @@ namespace HinttechPractice.Controllers
             ViewBag.danDo = Request.QueryString["dateTo"];
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
             ViewBag.idOfUser = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
+            List<HolidaysAndUsers> haus = new List<HolidaysAndUsers>();
+
+            
+            
+            foreach (Holiday h in db.GetHolidaysForDate(dt))
+            {
+                HolidaysAndUsers hau = new HolidaysAndUsers();
+                User tempUser = (User)usr.FindById(h.UserId);
+                hau.firstName = tempUser.FirstName;
+                hau.lastName = tempUser.LastName;
+                hau.HolidayId = h.HolidayId;
+                hau.DateFrom = h.DateFrom;
+                hau.DateTo = h.DateTo;
+                hau.Descrition = h.Description;
+                haus.Add(hau);
+            }
+
             bool isEmpty = !db.GetHolidaysForDate(dt).Any();
             if (isEmpty)
             {
@@ -50,7 +68,7 @@ namespace HinttechPractice.Controllers
             } else {
                 ViewBag.prazanDan = null;
             }
-            return View("WindowForDay", db.GetHolidaysForDate(dt));
+            return View("WindowForDay", haus);
         }
 
         [HttpPost]
