@@ -37,6 +37,19 @@ namespace HinttechPractice.Service
                 return null;
         }
 
+        public List<Vacation> GetVacationsForCurrentUser(int userID)
+        {
+            List<Vacation> retVal = new List<Vacation>();
+            foreach (Vacation v in dataContext.Vacations)
+            {
+                if (v.UserId == userID)
+                {
+                    retVal.Add(v);
+                }
+            }
+            return retVal;
+        }
+
         public void AddVacation(Vacation testModel)
         {
             dataContext.Vacations.Add(testModel);
@@ -50,7 +63,13 @@ namespace HinttechPractice.Service
 
 
         }
+        public object FindById(int id)
+        {
+            Vacation pom = new Vacation();
+            pom = dataContext.Vacations.Find(id);
 
+            return pom;
+        }
 
         public void DeleteVacation(int vacationId)
         {
