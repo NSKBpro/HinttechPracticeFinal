@@ -8,6 +8,9 @@ using HinttechPractice.Data;
 
 namespace HinttechPractice.Security
 {
+    ///<summary>
+    ///Principal class, for role-based system. 
+    ///</summary>
     public class MyPrincipal:IPrincipal
     {
         private User account = new User();
@@ -28,6 +31,9 @@ namespace HinttechPractice.Security
             set;
         }
 
+        ///<summary>
+        /// How to behave on role param.
+        ///</summary>
         public bool IsInRole(string role)
         {
            // var roles = role.Split(new char[] {','});

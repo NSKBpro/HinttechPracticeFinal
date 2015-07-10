@@ -14,6 +14,9 @@ using System.Web.Security;
 
 namespace HinttechPractice.Controllers
 {
+    ///<summary>
+    ///All login actions.
+    ///</summary>
     [AllowAnonymous]
     public class LoginController : Controller
     {
@@ -28,11 +31,13 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
+
+        ///<summary>
+        ///Post method for login user(on context).
+        ///</summary>
         [HttpPost]
         public ActionResult LoginPage(LoginViewModel user)
         {
-            
-   
             if (user.Password == null || user.UserName == null) return View();
             UsersService userService = new UsersService();
             User currentUser = userService.FindUserByUsername(user.UserName);
@@ -56,8 +61,8 @@ namespace HinttechPractice.Controllers
                     return View();
                     }
                 }
-                byte[] pomSLIKA = currentUser.ProfilePicture;
-                currentUser.ProfilePicture = null;
+                byte[] tempPicture = currentUser.ProfilePicture; 
+                currentUser.ProfilePicture = null; // set picture to null, for JsonConverter.
                 FormsAuthenticationTicket fat = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(15), false,
                     JsonConvert.SerializeObject(currentUser, Formatting.None,
                         new JsonSerializerSettings()
@@ -70,13 +75,16 @@ namespace HinttechPractice.Controllers
 
                 Response.Cookies.Add(ck);
                 currentUser.LastLoginDate = DateTime.Now;
-                Session["LoggedUserID"] = user.UserName.ToString();
-                currentUser.ProfilePicture = pomSLIKA;
+                currentUser.ProfilePicture = tempPicture;
                 userService.Edit(currentUser);
                 ViewBag.Error = "";
                 return RedirectToRoute("home");
             }
         }
+
+        ///<summary>
+        ///Logging out user from context(clear cookie).
+        ///</summary>
         [Authorize]
         public ActionResult Logout()
         {

@@ -6,6 +6,9 @@ using System.Web;
 
 namespace HinttechPractice.Models
 {
+    ///<summary>
+    ///View model for register new users.
+    ///</summary>
     public class RegisterViewModel
     {
         [Display(Name = "Username:")]
@@ -42,6 +45,9 @@ namespace HinttechPractice.Models
         public HttpPostedFileBase File { get; set; }
     }
 
+    ///<summary>
+    ///View model for edit account(user).
+    ///</summary>
     public class EditAccountViewModel
     {
         [Display(Name = "First name:")]
@@ -61,6 +67,9 @@ namespace HinttechPractice.Models
         public Boolean removeImage { get; set; }
     }
 
+    ///<summary>
+    ///View model for password change.
+    ///</summary>
     public class ChangePasswordViewModel
     {
         [Display(Name = "Current password:")]

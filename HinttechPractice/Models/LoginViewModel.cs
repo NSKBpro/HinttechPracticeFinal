@@ -6,6 +6,9 @@ using System.Web;
 
 namespace HotelAdvisor.Models
 {
+    ///<summary>
+    ///View model for login user.
+    ///</summary>
     public class LoginViewModel
     {
         [Display(Name = "Username:")]

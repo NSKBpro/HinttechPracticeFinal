@@ -14,7 +14,9 @@ using System.Text;
 
 namespace HinttechPractice.Controllers
 {
-
+    ///<summary>
+    ///Controller for register new users, edit users, change password...
+    ///</summary>
     public class RegisterController : Controller
     {
         public ActionResult Index()
@@ -28,6 +30,9 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
+        ///<summary>
+        ///Register new users, and upload picture(if exists).
+        ///</summary>
         [HttpPost]
         [AllowAnonymous]
         public ActionResult RegisterPage(RegisterViewModel model, HttpPostedFileBase file)
@@ -79,20 +84,6 @@ namespace HinttechPractice.Controllers
 
                 }
                 userService.Create(user);
-                ////login PART
-                //FormsAuthenticationTicket fat = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(15), false,
-                //    JsonConvert.SerializeObject(user, Formatting.None,
-                //        new JsonSerializerSettings()
-                //        {
-                //            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                //        })
-                //    );
-                //HttpCookie ck = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(fat));
-                //ck.Expires = DateTime.Now.AddMinutes(15);
-
-                //Response.Cookies.Add(ck);
-                //Session["LoggedUserID"] = user.Username.ToString();
-                //ViewBag.Error = "";
                 return RedirectToAction("RegisterOK", "Home");
             }
             return View();
@@ -104,9 +95,9 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             User u = (User)users.FindUserByUsername(id);
             String pom = User.Identity.Name;
-            if (!pom.Equals(u.Username)) return RedirectToAction("Index", "Home");
             if (u != null)
             {
+                if (!pom.Equals(u.Username)) return RedirectToAction("Index", "Home");
                 EditAccountViewModel model = new EditAccountViewModel();
                 model.Email = u.Email;
                 model.FirstName = u.FirstName;
@@ -117,6 +108,9 @@ namespace HinttechPractice.Controllers
             else return View();
         }
 
+        ///<summary>
+        ///Edit users.
+        ///</summary>
         [HttpPost]
         [Authorize]
         public ActionResult EditPage(EditAccountViewModel model, HttpPostedFileBase file)
@@ -124,8 +118,11 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             String pom = User.Identity.Name;
             User u = (User)users.FindUserByUsername(pom);
+            if (u != null)
+            {
+                if (!pom.Equals(u.Username)) return RedirectToAction("Index", "Home");
+            }
             User checkForMail = (User)users.FindUserByEmail(model.Email);
-
             if (checkForMail == null || checkForMail.Email.Equals(u.Email))
             {
                 u.FirstName = model.FirstName;
@@ -146,14 +143,12 @@ namespace HinttechPractice.Controllers
                             }
                             u.ProfilePicture = array;
                         }
-
                     }
                 }
                 else
                 {
                     u.ProfilePicture = null;
                 }
-
 
                 users.Edit(u);
                 return RedirectToAction("Index", "Home");
@@ -176,6 +171,9 @@ namespace HinttechPractice.Controllers
             return View(model);
         }
 
+        ///<summary>
+        ///Change user password.
+        ///</summary>
         [HttpPost]
         [Authorize]
         public ActionResult ChangePassPage(ChangePasswordViewModel model)
@@ -206,6 +204,9 @@ namespace HinttechPractice.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        ///<summary>
+        ///Show account details.
+        ///</summary>
         [Authorize]
         public ActionResult AccountDetails(String id)
         {

@@ -10,10 +10,11 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-
-
 namespace HinttechPractice.App_Start
 {
+    ///<summary>
+    ///Controller for admin actions.
+    ///</summary>
     [MyAuthorizeAtribute(Roles = "Admin")]
     public class AdminController : Controller
     {
@@ -22,7 +23,9 @@ namespace HinttechPractice.App_Start
             return View();
         }
 
-
+        ///<summary>
+        ///Show all registered users.
+        ///</summary>
         public ActionResult ShowAllUsers()
         {
             UsersService users = new UsersService();
@@ -35,6 +38,9 @@ namespace HinttechPractice.App_Start
             return View(bezAdmina);
         }
 
+        ///<summary>
+        ///Show only approved registered users.
+        ///</summary>
         public ActionResult showRegOnly()
         {
             UsersService users = new UsersService();
@@ -47,25 +53,15 @@ namespace HinttechPractice.App_Start
             return View(bezAdmina);
         }
 
-        public ActionResult showUnRegOnly()
-        {
-            UsersService users = new UsersService();
-            List<User> model = users.FindAll().ToList();
-            List<User> bezAdmina = new List<User>();
-            foreach (User u in model)
-            {
-                if (!u.IsUserAdmin && !u.IsUserRegistered) bezAdmina.Add(u);
-            }
-            return View(bezAdmina);
-        }
-
+        ///<summary>
+        ///For Admin, to confirm user registration. Also, sending mail to user.
+        ///</summary>
         public ActionResult ConfirmRegistration(String id)
         {
             UsersService users = new UsersService();
-
             User user = (User)users.FindUserByUsername(id);
             if (user != null)
-            {
+            {  
                 if (user.IsUserRegistered)
                 {
                     user.IsUserRegistered = false;
@@ -79,13 +75,14 @@ namespace HinttechPractice.App_Start
                 users.Edit(user);
             }
 
-
             return RedirectToAction("ShowAllUsers");
         }
 
 
-
         //async Task<ActinResult>
+        ///<summary>
+        ///Method for sending email to user, with param 'registered'.
+        ///</summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Contact(User user,Boolean registered)

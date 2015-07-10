@@ -1,17 +1,12 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "RegisterOK";
 }
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Accsess Denied</title>
-</head>
-<body>
-    <hgroup>
-        <h1>Error 401 Unautorized</h1>
-        <h2>You don't have permision to accsess this page!!!</h2>
-    </hgroup>
-</body>
-</html>
+<br />
+<br />
+<h2>Accsess Denied</h2>
+<br />
+<h4> You don't have permision to accsess this page!!!</h4>
+<br />
+<div>
+    @Html.ActionLink("Back to homepage", "Index", "Home")
+</div>

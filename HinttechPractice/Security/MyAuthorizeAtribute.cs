@@ -8,8 +8,14 @@ using HinttechPractice.Data;
 
 namespace HinttechPractice.Security
 {
+    ///<summary>
+    ///Checking authentication roles. For unknown roles, or not exist role, redirect to Login.
+    ///</summary>
     public class MyAuthorizeAtribute:AuthorizeAttribute
     {
+        ///<summary>
+        ///Checking authorization roles.
+        ///</summary>
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             if (filterContext.HttpContext.Request.IsAuthenticated)
