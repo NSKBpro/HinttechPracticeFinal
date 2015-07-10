@@ -75,6 +75,7 @@ namespace HinttechPractice.Controllers
                 Vacation vac = (Vacation)db.FindById(vacationId);
                 if (vac == null)
                 {
+                    //...
                     return RedirectToAction("initHolidays", "LoadHolidays");
                 }
                 return View(vac);
