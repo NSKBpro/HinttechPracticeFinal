@@ -56,8 +56,8 @@ namespace HinttechPractice.Controllers
         {
             if (ModelState.IsValid)
             {
-                vacation.DateFrom = Convert.ToDateTime(s1);
-                vacation.DateTo = Convert.ToDateTime(s2);
+                vacation.DateFrom = vacation.DateFrom;
+                vacation.DateTo = vacation.DateTo;
                 db.AddVacation(vacation);
                 double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
                 UsersService users = new UsersService();
@@ -84,6 +84,8 @@ namespace HinttechPractice.Controllers
                     //...
                     return RedirectToAction("initHolidays", "LoadHolidays");
                 }
+                ViewBag.editDateFrom = vac.DateFrom.ToString("yyyy-MM-dd");
+                ViewBag.editDateTo = vac.DateTo.ToString("yyyy-MM-dd");
                 return View(vac);
             }
             else
