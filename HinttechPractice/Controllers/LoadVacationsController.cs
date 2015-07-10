@@ -32,13 +32,15 @@ namespace HinttechPractice.Controllers
             return View("InitCalendar");
         }
 
-        public ActionResult RegistracijaOdmora(String parameterdatum1, String parameterdatum2)
+        public ActionResult RegistracijaOdmora(String parameterdatum1, String parameterdatum2, String userId)
         {
             s1 = parameterdatum1;
             s2 = parameterdatum2;
             ViewBag.Parameterdatum1 = parameterdatum1;
             ViewBag.Parameterdatum2 = parameterdatum2;
+            ViewBag.UserId = userId;
             var vac = new Vacation();
+            vac.UserId = Int32.Parse(userId);
             vac.DateFrom = Convert.ToDateTime(parameterdatum1);
             vac.DateTo = Convert.ToDateTime(parameterdatum2);
 
@@ -94,9 +96,17 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
-        public ActionResult DeleteVacation()
+        public ActionResult DeleteVacation(int vacationId, int userId, String datum1, String datum2, String opis, String isSick)
         {
-            return View();
+           
+            Vacation vac = new Vacation();
+            vac.VacationPeriodId = vacationId;
+            vac.UserId = userId;
+            vac.DateFrom = Convert.ToDateTime(datum1);
+            vac.DateTo = Convert.ToDateTime(datum2);
+            vac.Description = opis;
+            vac.IsSickLeave = Convert.ToBoolean(isSick);
+            return View(vac);
 
 
         }

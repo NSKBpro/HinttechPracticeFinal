@@ -1,15 +1,16 @@
 ﻿@model HinttechPractice.Data.Vacation
 
 
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <br/><br/>
-    <div class="form-horizontal">
+    <br /><br />
+    <div class="form-horizontal " align="center" style="width: 500px; margin: 0 auto">
         @Html.ValidationSummary(true)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.VacationPeriodId, new { @class = "control-label col-md-2" })
+
             <div class="col-md-10">
                 @Html.HiddenFor(model => model.VacationPeriodId)
                 @Html.ValidationMessageFor(model => model.VacationPeriodId)
@@ -17,56 +18,56 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.UserId, new { @class = "control-label col-md-2" })
+
             <div class="col-md-10">
-                @Html.EditorFor(model => model.UserId, new { @Value = "@ViewBag.UserId" })
+                @Html.HiddenFor(model => model.UserId)
                 @Html.ValidationMessageFor(model => model.UserId)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DateFrom, new { @class = "control-label col-md-2" })
+           
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DateFrom ,new { @Value = "@ViewBag.Datum1" })
+                @Html.EditorFor(model => model.DateFrom, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.DateFrom)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DateTo, new { @class = "control-label col-md-2" })
+           
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DateTo, new { @Value = "@ViewBag.Datum2" })
+                @Html.EditorFor(model => model.DateTo, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.DateTo)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { @Value = "@ViewBag.Opis" })
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control text-info" } })
                 @Html.ValidationMessageFor(model => model.Description)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IsSickLeave, new { @class = "control-label col-md-2" })
+            
             <div class="col-md-10">
-                @Html.EditorFor(model => model.IsSickLeave, new { @Value = "@ViewBag.IsSick" })
+                @Html.HiddenFor(model => model.IsSickLeave, new { htmlAttributes = new { @class = "checkbox" } })
                 @Html.ValidationMessageFor(model => model.IsSickLeave)
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <div class="col-md col-md-10">
+                <input type="submit" value="Save" class="btn btn-success btn-block" />
+
             </div>
         </div>
     </div>
 }
+<br />
 
-<div>
-    @Html.ActionLink("Back to Calendar", "GetVacations")
-</div>
+
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
