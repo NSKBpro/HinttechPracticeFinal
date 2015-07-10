@@ -63,6 +63,10 @@ namespace HinttechPractice.Controllers
                 }
                 byte[] tempPicture = currentUser.ProfilePicture; 
                 currentUser.ProfilePicture = null; // set picture to null, for JsonConverter.
+                ICollection<Vacation> tempVacation =  currentUser.Vacations;
+                ICollection<Holiday> tempHolidays = currentUser.Holidays;
+                currentUser.Vacations = null;
+                currentUser.Holidays = null;
                 FormsAuthenticationTicket fat = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(15), false,
                     JsonConvert.SerializeObject(currentUser, Formatting.None,
                         new JsonSerializerSettings()
@@ -76,6 +80,8 @@ namespace HinttechPractice.Controllers
                 Response.Cookies.Add(ck);
                 currentUser.LastLoginDate = DateTime.Now;
                 currentUser.ProfilePicture = tempPicture;
+                currentUser.Holidays = tempHolidays;
+                currentUser.Vacations = tempVacation;
                 userService.Edit(currentUser);
                 ViewBag.Error = "";
                 return RedirectToRoute("home");
