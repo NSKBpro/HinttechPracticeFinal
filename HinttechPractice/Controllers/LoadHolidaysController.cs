@@ -32,6 +32,8 @@ namespace HinttechPractice.Controllers
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
             int userId=usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             ViewBag.idOfUser = userId;
+            User u=(User)usr.FindById(userId);
+            ViewBag.BrDana = u.VacationDays;
             ViewBag.initVacationsForCurrentUser = db2.GetVacationsForCurrentUser(userId);
             return View("InitCalendar");
         }

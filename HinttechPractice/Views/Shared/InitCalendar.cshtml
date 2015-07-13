@@ -48,9 +48,9 @@
                         alertify.success("End date:   " + date.format());
                         datum1 = datum11;
                         var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
-                        if (diffDays > 20) {
+                        if (diffDays > @ViewBag.BrDana) {
                             alertify
-                             .alert("U choose more then 20 days", function () {
+                             .alert("U choose more then " + @ViewBag.BrDana+" days", function () {
                                  alertify.error('Please try again');
                              });
                             return false;
