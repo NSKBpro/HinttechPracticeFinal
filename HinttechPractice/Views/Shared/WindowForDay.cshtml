@@ -10,7 +10,7 @@
                 </div>
                 <div>
                     <table class="table table-bordered table-hover" style="width: 650px; margin: 0 auto; ">
-                        <tr>
+                        <tr class="success">
                             <th style="width:120px;">
                                 Name
                             </th>
@@ -24,8 +24,8 @@
                                 Description
                             </th>
 
-                            <th style="width:60px;"></th>
-                            <th style="width:60px;"></th>
+                            <th style="width:60px;">Edit</th>
+                            <th style="width:60px;">Delete</th>
                         </tr>
 
                         @foreach (var item in Model)
@@ -47,14 +47,14 @@
                                 <td>
                                     <form method="post" action="EditHolidayRedirect">
                                         <input type="hidden" value="@item.HolidayId" name="HolidayId" />
-                                        <input type="submit" class="btn btn-info" value="edit" />
+                                        <input type="submit" class="btn btn-info" value="Edit" />
                                     </form>
                                 </td>
 
                                 <td>
                                     <form method="post" action="RemoveHoliday">
                                         <input type="hidden" value="@item.HolidayId" name="HolidayId" />
-                                        <input type="submit" class="btn btn-danger" value="remove" />
+                                        <input type="submit" class="btn btn-danger" value="Delete" />
                                     </form>
                                 </td>
 

@@ -18,15 +18,22 @@
 
         }
         <img src="@imgSrc" height="250" width="250" />
-        <hr/>
+        <hr />
 
         <div class="list-group">
-            <a class="list-group-item success">Username: <b>@Model.Username</b></a>
+            @if (Context.User.IsInRole("Admin"))
+            {
+                <a class="list-group-item success"><b>Administrator</b></a>
+            }
+            <a class="list-group-item">Username: <b>@Model.Username</b></a>
             <a class="list-group-item">First name: <b>@Model.FirstName</b></a>
             <a class="list-group-item">Last name: <b>@Model.LastName</b></a>
             <a class="list-group-item">Email: <b>@Model.Email</b></a>
             <a class="list-group-item">Date created: <b>@Model.DateCreated.ToShortDateString()</b></a>
-            <a class="list-group-item">Vacation days left: <b>@Model.VacationDays</b></a>
+            @if (Context.User.IsInRole("User"))
+            {
+                <a class="list-group-item">Vacation days left: <b>@Model.VacationDays</b></a>
+            }
         </div>
     </div>
 </div>
