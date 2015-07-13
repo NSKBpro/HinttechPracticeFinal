@@ -32,7 +32,7 @@ namespace HinttechPractice.Models
 
         [Display(Name = "Date created:")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public Nullable<System.DateTime> DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
 
         [Display(Name = "Vacation days:")]
         public int VacationDays { get; set; }

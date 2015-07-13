@@ -53,11 +53,23 @@
                              .alert("U choose more then " + @ViewBag.BrDana+" days", function () {
                                  alertify.error('Please try again');
                              });
-                            return false;
-                        }
+                        return false;
+
+                    }
+                    if(new Date(datum2)<new Date(datum1))
+                    {
+                        alertify
+                             .alert("End date is incorrect", function () {
+                                 alertify.error('Please try with new End date');
+                             });
+                        return false;
+
+                    }
 
                         window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
                     }
+                
+
 
                     </text>}
 

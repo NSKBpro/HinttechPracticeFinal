@@ -221,7 +221,7 @@ namespace HinttechPractice.Controllers
                 model.Email = u.Email;
                 model.FirstName = u.FirstName;
                 model.LastName = u.LastName;
-                model.DateCreated = u.DateCreated;
+                model.DateCreated = (DateTime)u.DateCreated;
                 model.IsUserRegistered = u.IsUserRegistered;
                 model.ProfilePicture = u.ProfilePicture;
                 model.Username = u.Username;

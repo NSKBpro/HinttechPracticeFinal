@@ -20,61 +20,13 @@
         <img src="@imgSrc" height="250" width="250" />
         <hr/>
 
-        @*@Html.DisplayNameFor(model => model.Username)*@
-        
-        
         <div class="list-group">
             <a class="list-group-item">Username: <b>@Model.Username</b></a>
             <a class="list-group-item">First name: <b>@Model.FirstName</b></a>
             <a class="list-group-item">Last name: <b>@Model.LastName</b></a>
             <a class="list-group-item">Email: <b>@Model.Email</b></a>
-            <a class="list-group-item">Date created: <b>@Model.DateCreated</b></a>
+            <a class="list-group-item">Date created: <b>@Model.DateCreated.ToShortDateString()</b></a>
             <a class="list-group-item">Vacation days left: <b>@Model.VacationDays</b></a>
         </div>
-        
-        @*<dd>
-                    @Html.DisplayFor(model => model.Username)
-                </dd>
-                <dt>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.FirstName)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.LastName)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.DateCreated)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.DateCreated)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.VacationDays)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.VacationDays)
-                </dd>
-            </dl>*@
-
     </div>
 </div>
