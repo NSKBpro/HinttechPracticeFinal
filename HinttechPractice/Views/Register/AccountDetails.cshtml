@@ -21,25 +21,16 @@
         <hr/>
 
         @*@Html.DisplayNameFor(model => model.Username)*@
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Username: @Model.Username</span>
-        </div>
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">First name: @Model.FirstName</span>
-        </div>
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Last name: @Model.LastName</span>
-        </div>
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Email: @Model.Email</span>
-        </div>
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Date created: @Model.DateCreated</span>
-        </div>
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Vacation days left: @Model.VacationDays</span>
-        </div>
         
+        
+        <div class="list-group">
+            <a class="list-group-item">Username: <b>@Model.Username</b></a>
+            <a class="list-group-item">First name: <b>@Model.FirstName</b></a>
+            <a class="list-group-item">Last name: <b>@Model.LastName</b></a>
+            <a class="list-group-item">Email: <b>@Model.Email</b></a>
+            <a class="list-group-item">Date created: <b>@Model.DateCreated</b></a>
+            <a class="list-group-item">Vacation days left: <b>@Model.VacationDays</b></a>
+        </div>
         
         @*<dd>
                     @Html.DisplayFor(model => model.Username)
