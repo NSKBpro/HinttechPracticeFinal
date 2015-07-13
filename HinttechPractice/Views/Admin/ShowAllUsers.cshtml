@@ -8,7 +8,7 @@
    <br/>
                       <br />
 <table class="table table-hover table-bordered" id="myTable">
-    <tr>
+    <tr class="success">
         <th>
             Username
         </th>
@@ -72,7 +72,7 @@
             @Html.DisplayFor(modelItem => item.VacationDays)
         </td>
         <td>
-            @Html.ActionLink(" Change ", "ConfirmRegistration", "Admin", new { id = item.Username }, new { @class = "btn btn-danger" })
+            @Html.ActionLink(" Change ", "ConfirmRegistration", "Admin", new { id = item.Username, page = Request.QueryString["page"] }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }

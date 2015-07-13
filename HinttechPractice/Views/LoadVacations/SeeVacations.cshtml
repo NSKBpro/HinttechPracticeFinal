@@ -1,0 +1,84 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<HinttechPractice.Data.Vacation>
+
+    <br />
+    <br />
+    <div id="tabelaDiv">
+        <table class="table table-hover table-bordered" id="tabela">
+            <tr class="success">
+                <th>
+                    DateFrom
+                </th>
+                <th>
+                    DateTo
+                </th>
+                <th>
+                    Description
+                </th>
+                <th style="width:7px">
+                    IsSickLeave
+                </th>
+                    <th style="width:50px">Edit</th>
+                    <th style="width:50px">Delete</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @(item.DateFrom.ToString("dd.MM.yyyy"))
+                    </td>
+                    <td>
+                        @(item.DateTo.ToString("dd.MM.yyyy"))
+                    </td>
+                    <td>
+                        @(item.Description)
+                    </td>
+                    <td>
+                        @if ((item.IsSickLeave))
+                        {
+
+                            <span class="glyphicon glyphicon-ok"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-remove"></span>
+                        }
+                    </td>
+                    @if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateTo.ToString("yyyy-MM-dd"))))
+                    {
+                    <td>
+                        @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave, page = Request.QueryString["page"] }, new { @class = "btn btn-info btn disabled" })
+                    </td>
+                    }
+                    else
+                    {
+                    <td>
+                        @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave, page = Request.QueryString["page"] }, new { @class = "btn btn-info" })
+                    </td>
+
+                    }
+
+                    @if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateFrom.ToString("yyyy-MM-dd"))))
+                    {
+                    <td>
+                        @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave, page = Request.QueryString["page"] }, new { @class = "btn btn-danger btn disabled", onclick = "javascript:return false;" })
+                    </td>
+                    }
+                    else
+                    {
+                    <td>
+                        @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave, page = Request.QueryString["page"] }, new { @class = "btn btn-danger" })
+                    </td>
+                    }
+
+                </tr>
+            }
+
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("SeeVacations", new { page }), new PagedListRenderOptions()
+       {
+           Display = PagedListDisplayMode.IfNeeded,
+           DisplayPageCountAndCurrentLocation = true
+       })
+    </div>

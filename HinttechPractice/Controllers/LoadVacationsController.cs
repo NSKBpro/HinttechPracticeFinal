@@ -7,6 +7,10 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using PagedList.Mvc;
+
+
 
 namespace HinttechPractice.Controllers
 {
@@ -64,7 +68,7 @@ namespace HinttechPractice.Controllers
                 {
                     vacation.DateFrom = vacation.DateFrom;
                     vacation.DateTo = vacation.DateTo;
-                    db.AddVacation(vacation);  
+                    db.AddVacation(vacation);
                     int days = u.VacationDays - Convert.ToInt32(numDays);
                     u.VacationDays = days;
                     users.Edit(u);
@@ -90,23 +94,23 @@ namespace HinttechPractice.Controllers
                 if (vac == null)
                 {
                     //...
-                    return RedirectToAction("initHolidays", "LoadHolidays");
+                    return RedirectToAction("SeeVacations");
                 }
                 String datum = DateTime.Now.ToString("yyyy-MM-dd");
                 ViewBag.Datum = datum;
-             
+
                 ViewBag.editDateFrom = vac.DateFrom.ToString("yyyy-MM-dd");
                 ViewBag.editDateTo = vac.DateTo.ToString("yyyy-MM-dd");
                 return View(vac);
             }
             else
             {
-                return RedirectToAction("initHolidays", "LoadHolidays");
+                return RedirectToAction("SeeVacations");
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditVacation(Vacation vacation)
+        public ActionResult EditVacation(Vacation vacation, int? page)
         {
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
@@ -116,13 +120,14 @@ namespace HinttechPractice.Controllers
                 if (ModelState.IsValid)
                 {
                     db.EditVacation(vacation);
-                    return RedirectToAction("initHolidays", "LoadHolidays");
+                    return SeeVacations(page);
 
                 }
                 return View();
-            }else
+            }
+            else
             {
-                return RedirectToAction("initHolidays", "LoadHolidays");
+                return View();
             }
         }
 
@@ -133,16 +138,28 @@ namespace HinttechPractice.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteVacation(Vacation vacation)
+        public ActionResult DeleteVacation(Vacation vacation, int? page)
         {
-                double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-                UsersService users = new UsersService();
-                User u = (User)users.FindUserByUsername(HttpContext.User.Identity.Name);
-                int days = u.VacationDays + Convert.ToInt32(numDays);
-                u.VacationDays = days;
-                users.Edit(u);
-                db.DeleteVacation(vacation.VacationPeriodId);
-                return RedirectToAction("initHolidays", "LoadHolidays");
+            double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
+            UsersService users = new UsersService();
+            User u = (User)users.FindUserByUsername(HttpContext.User.Identity.Name);
+            int days = u.VacationDays + Convert.ToInt32(numDays);
+            u.VacationDays = days;
+            users.Edit(u);
+            db.DeleteVacation(vacation.VacationPeriodId);
+            return SeeVacations(page);
+        }
+
+        public ActionResult SeeVacations(int? page)
+        {
+            UsersService users = new UsersService();
+            int userId = users.FindUserByUsername(HttpContext.User.Identity.Name).UserId;
+            List<Vacation> currentUserVacations = db.GetVacationsForCurrentUser(userId);
+            double pomValue = currentUserVacations.Count() / 3;
+            if (page >= pomValue) page = 1;
+            String datum = DateTime.Now.ToString("yyyy-MM-dd");
+            ViewBag.Datum = datum;
+            return View("SeeVacations", currentUserVacations.ToList().ToPagedList(page ?? 1, 6));
         }
     }
 }

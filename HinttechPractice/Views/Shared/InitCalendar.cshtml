@@ -1,7 +1,4 @@
-﻿@using PagedList;
-@using PagedList.Mvc;
-
-<br />
+﻿<br />
 <br />
 <div id="calendar"></div>
 <script>
@@ -106,10 +103,10 @@
                             "<b>" +
                             tempEndDate.substring(0, 10) +
                             "</b>" +
-                            "<br/>" +		
-                            "User: " +		
-                            "<b>" +		
-                            getFullNameFromId(calEvent.userID) +		
+                            "<br/>" +
+                            "User: " +
+                            "<b>" +
+                            getFullNameFromId(calEvent.userID) +
                             "</b>",
                         buttons: [{
                             label: 'Dismiss',
@@ -194,136 +191,23 @@
             });
 
     });
-    $(document).ready(function () {
-
-        $("#show").click(function () {
-            $("#tabela").show();
-            $("#show").hide();
-            $("#hide").show();
-        });
-        $("#hide").click(function () {
-            $("#tabela").hide();
-            $("#hide").hide();
-            $("#show").show();
-
-
-        });
-    });
     });
 
-    function getFullNameFromId(id){		
-        var array = @Html.Raw(Json.Encode(@ViewBag.users));		
-            		
-        for(var i = 0; i < array.length; i++) {		
-            if(array[i].usrId == id){		
-                return array[i].firstName + ' ' + array[i].lastName;		
-            }		
-        }		
+    function getFullNameFromId(id){
+        var array = @Html.Raw(Json.Encode(@ViewBag.users));
+
+        for(var i = 0; i < array.length; i++) {
+            if(array[i].usrId == id){
+                return array[i].firstName + ' ' + array[i].lastName;
+            }
+        }
     }
 </script>
 <br />
 <br />
-@if (Context.User.IsInRole("User"))
-{
-    if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
-    {
-        <center>
-
-            <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
-
-            <div id="2">
-                <button id="hide" type="button" class="btn btn-info btn-lg" style="display: none">Hide Vacations</button>
-            </div>
-        </center>
-    }
-}
 <div style="float:right">
     <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday
     <span class="glyphicon glyphicon-stop" style="color: #df4040;"></span>Sick Leave
     <span class="glyphicon glyphicon-stop" style="color: #50b239;"></span>Vacation
 </div><br />
 <br />
-@if (Context.User.IsInRole("User"))
-{
-
-    if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
-    {
-        <table class="table table-hover table-bordered" id="tabela" style="display: none">
-            <tr class="success">
-
-                <th>
-                    DateFrom
-                </th>
-                <th>
-                    DateTo
-                </th>
-                <th>
-                    Description
-                </th>
-                <th style="width:7px">
-                    IsSickLeave
-                </th>
-                @if (Context.User.IsInRole("User"))
-                {
-                    <th style="width:50px">Edit</th>
-                    <th style="width:50px">Delete</th>
-                }
-            </tr>
-            @foreach (var item in ViewBag.initVacationsForCurrentUser)
-            {
-                <tr>
-                    <td>
-                        @(item.DateFrom.ToString("dd.MM.yyyy"))
-                    </td>
-                    <td>
-                        @(item.DateTo.ToString("dd.MM.yyyy"))
-                    </td>
-                    <td>
-                        @(item.Description)
-                    </td>
-                    <td>
-                        @if ((item.IsSickLeave))
-                        {
-
-                            <span class="glyphicon glyphicon-ok"></span>
-                        }
-                        else
-                        {
-                            <span class="glyphicon glyphicon-remove"></span>
-                        }
-                    </td>
-                    @if (Context.User.IsInRole("User"))
-                    {
-                        if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateTo.ToString("yyyy-MM-dd"))))
-                        {
-                            <td>
-                                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info btn disabled" })
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
-                            </td>
-
-                        }
-
-                        if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateFrom.ToString("yyyy-MM-dd"))))
-                        {
-                            <td>
-                                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger btn disabled", onclick = "javascript:return false;" })
-                            </td>
-                        }
-                        else
-                        {
-                            <td>
-                                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
-                            </td>
-                        }
-                    }
-                </tr>
-            }
-
-        </table>
-    }
-}
