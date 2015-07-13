@@ -27,10 +27,17 @@
         </div>
 
         <div class="form-group">
-           
+           @if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(@ViewBag.editDateFrom))) { 
             <div class="col-md-10">
-                <input type="date" name="DateFrom" required class="form-control" value="@ViewBag.editDateFrom" />
+                <input type="date" name="DateFrom" required class="form-control" value="@ViewBag.editDateFrom" readonly />
             </div>
+           }
+           else
+           {
+             <div class="col-md-10">
+                <input type="date" name="DateFrom" required class="form-control" value="@ViewBag.editDateFrom" />
+            </div>  
+           }
         </div>
 
         <div class="form-group">

@@ -84,6 +84,8 @@ namespace HinttechPractice.Controllers
                     //...
                     return RedirectToAction("initHolidays", "LoadHolidays");
                 }
+                String datum = DateTime.Now.ToString("yyyy-MM-dd");
+                ViewBag.Datum = datum;
                 ViewBag.editDateFrom = vac.DateFrom.ToString("yyyy-MM-dd");
                 ViewBag.editDateTo = vac.DateTo.ToString("yyyy-MM-dd");
                 return View(vac);
@@ -99,7 +101,9 @@ namespace HinttechPractice.Controllers
         {
             if (ModelState.IsValid)
             {
+                db.EditVacation(vacation);
                 return RedirectToAction("initHolidays", "LoadHolidays");
+                
             }
             return View();
         }
