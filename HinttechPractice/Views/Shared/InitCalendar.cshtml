@@ -1,0 +1,329 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+<br />
+<br />
+<div id="calendar"></div>
+<script>
+    $(document).ready(function () {
+        status = 0;
+        datum11 = 0;
+        boja = '#FF0000';
+        flag = 0;
+
+        $(document).ready(function () {
+            $("#tabela").hide();
+            $("#hide").hide();
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'today'
+                },
+                dayClick: function (date, jsEvent, view) {
+
+                    // alert('Clicked on: ' + date.format());
+                    @if (Context.User.IsInRole("User")) {<text>
+
+
+
+                    //Vraca esc event, uradio sam hide jer je zbog ifa vracao vise od jednog diajloga
+                    $(document).keyup(function (e) {
+                        if (e.keyCode === 27)
+                            alertify.error("Canceling operation...");
+                        status = 0;
+                        e.hide();
+                    })
+
+                    var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+
+                    if (status == 0) {
+                        var datum1 = date.format();
+                        datum11 = datum1;
+                        status = 1;
+                        alertify.success("Start date:   " + date.format());
+
+
+                    } else if (status == 1) {
+                        var datum2 = date.format();
+                        status = 0;
+                        alertify.success("End date:   " + date.format());
+                        datum1 = datum11;
+                        var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
+                        if (diffDays > @ViewBag.BrDana) {
+                            alertify
+                             .alert("U choose more then " + @ViewBag.BrDana+" days", function () {
+                                 alertify.error('Please try again');
+                        });
+                        return false;
+
+                    }
+                    if(new Date(datum2)<new Date(datum1))
+                    {
+                        alertify
+                             .alert("End date is incorrect", function () {
+                                 alertify.error('Please try with new End date');
+                             });
+                        return false;
+
+                    }
+
+                    window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
+                }
+
+
+
+                </text>}
+
+            },
+                eventClick: function (calEvent, jsEvent, view) {
+                    var typeOfDialog, tempEndDate;
+
+                    if (calEvent.end == null)
+                        tempEndDate = calEvent.start.toString();
+                    else
+                        tempEndDate = calEvent.end.toString();
+
+                    var bgColor = $(this).css('background-color');
+                    if (bgColor === 'rgb(55, 138, 191)')
+                        typeOfDialog = BootstrapDialog.TYPE_PRIMARY
+                    else if (bgColor === 'rgb(223, 64, 64)')
+                        typeOfDialog = BootstrapDialog.TYPE_DANGER
+                    else if (bgColor === 'rgb(80, 178, 57)')
+                        typeOfDialog = BootstrapDialog.TYPE_SUCCESS
+
+
+                    BootstrapDialog.show({
+                        type: typeOfDialog,
+                        title: "Description: " + "<b>" + calEvent.title + "</b>",
+                        message:
+                            "Start date: " +
+                            "<b>" +
+                            calEvent.start.toString().substring(0, 10) +
+                            "</b>" +
+                            "<br/>" +
+                            "End date: " +
+                            "<b>" +
+                            tempEndDate.substring(0, 10) +
+                            "</b>" +
+                            "<br/>" +		
+                            "User: " +		
+                            "<b>" +		
+                            getFullNameFromId(calEvent.userID) +		
+                            "</b>",
+                        buttons: [{
+                            label: 'Dismiss',
+                            cssClass: 'btn-info',
+                            action: function (dialogRef) {
+                                dialogRef.close();
+                            }
+                        }]
+                    });
+
+                },
+            /*eventMouseover: function (calEvent, jsEvent, view) {
+
+                $(this).css('background-color', '#c3c3c3');
+
+            },
+            eventMouseout: function (calEvent, jsEvent, view) {
+
+                $(this).css('background-color', '#F9C834');
+
+            },*/
+            defaultDate: Date(),
+            editable: false,
+            eventLimit: true, // allow "more" link when too many events
+            events:
+            [//init holidays
+            @foreach (var item in ViewBag.initHolidays)
+                {
+                <text>
+                {
+                    title: '@(item.Description)',
+                    start: '@(item.DateFrom)',
+                    end: '@(item.DateTo)',
+                    backgroundColor: '#378abf',
+                    userID: '@(item.UserId)'
+                },
+        </text>
+                }
+
+        //vacations init
+        @foreach (var item in ViewBag.initVacations)
+                    {
+
+                          if ((item.IsSickLeave)){
+                              <text>
+                {
+                    title: '@(item.Description)',
+                    start: '@(item.DateFrom)',
+                    end: '@(item.DateTo)',
+                    backgroundColor: '#df4040',
+                    userID: '@(item.UserId)'
+                }, </text>  }
+                          else
+                          {
+                              <text>
+               {
+                   title: '@(item.Description)',
+                   start: '@(item.DateFrom)',
+                   end: '@(item.DateTo)',
+                   backgroundColor: '#50b239',
+                   userID: '@(item.UserId)'
+               }, </text>
+
+                          }
+
+                        }
+            ],
+            selectable: true,
+            timeFormat: ' ',
+            selectHelper: true,
+            select: function (start, end) {
+
+                @if(Context.User.IsInRole("Admin")) {
+                          <text>
+                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                </text>
+                      }
+                $('#calendar').fullCalendar('unselect');
+            },
+
+            });
+
+    });
+    $(document).ready(function () {
+
+        $("#show").click(function () {
+            $("#tabela").show();
+            $("#show").hide();
+            $("#hide").show();
+        });
+        $("#hide").click(function () {
+            $("#tabela").hide();
+            $("#hide").hide();
+            $("#show").show();
+
+
+        });
+    });
+    });
+
+    function getFullNameFromId(id){		
+        var array = @Html.Raw(Json.Encode(@ViewBag.users));		
+            		
+        for(var i = 0; i < array.length; i++) {		
+            if(array[i].usrId == id){		
+                return array[i].firstName + ' ' + array[i].lastName;		
+            }		
+        }		
+    }
+</script>
+<br />
+<br />
+@if (Context.User.IsInRole("User"))
+{
+    if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
+    {
+        <center>
+
+            <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
+
+            <div id="2">
+                <button id="hide" type="button" class="btn btn-info btn-lg" style="display: none">Hide Vacations</button>
+            </div>
+        </center>
+    }
+}
+<div style="float:right">
+    <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday
+    <span class="glyphicon glyphicon-stop" style="color: #df4040;"></span>Sick Leave
+    <span class="glyphicon glyphicon-stop" style="color: #50b239;"></span>Vacation
+</div><br />
+<br />
+@if (Context.User.IsInRole("User"))
+{
+
+    if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
+    {
+        <table class="table table-hover table-bordered" id="tabela" style="display: none">
+            <tr class="success">
+
+                <th>
+                    DateFrom
+                </th>
+                <th>
+                    DateTo
+                </th>
+                <th>
+                    Description
+                </th>
+                <th style="width:7px">
+                    IsSickLeave
+                </th>
+                @if (Context.User.IsInRole("User"))
+                {
+                    <th style="width:50px">Edit</th>
+                    <th style="width:50px">Delete</th>
+                }
+            </tr>
+            @foreach (var item in ViewBag.initVacationsForCurrentUser)
+            {
+                <tr>
+                    <td>
+                        @(item.DateFrom.ToString("dd.MM.yyyy"))
+                    </td>
+                    <td>
+                        @(item.DateTo.ToString("dd.MM.yyyy"))
+                    </td>
+                    <td>
+                        @(item.Description)
+                    </td>
+                    <td>
+                        @if ((item.IsSickLeave))
+                        {
+
+                            <span class="glyphicon glyphicon-ok"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-remove"></span>
+                        }
+                    </td>
+                    @if (Context.User.IsInRole("User"))
+                    {
+                        if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateTo.ToString("yyyy-MM-dd"))))
+                        {
+                            <td>
+                                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info btn disabled" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
+                            </td>
+
+                        }
+
+                        if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateFrom.ToString("yyyy-MM-dd"))))
+                        {
+                            <td>
+                                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger btn disabled", onclick = "javascript:return false;" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+
+        </table>
+    }
+}
