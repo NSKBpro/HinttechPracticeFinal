@@ -1,4 +1,6 @@
-﻿@model IEnumerable<HinttechPractice.Data.User>
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<HinttechPractice.Data.User>
 
 @{
     ViewBag.Title = "ShowAllUsers";
@@ -75,5 +77,6 @@
     </tr>
 }
 </table>
+       @Html.PagedListPager(Model, page => Url.Action("ShowAllUsers", new { page }))
     <br />
      @Html.ActionLink(" Reset all vacation days to 20 ", "ResetVacationDays", "Admin", null, new { @class = "btn btn-success btn-lg" })

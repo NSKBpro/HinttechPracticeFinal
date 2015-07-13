@@ -1,4 +1,6 @@
-﻿
+﻿@using PagedList;
+@using PagedList.Mvc;
+
 <br />
 <br />
 <div id="calendar"></div>
@@ -52,7 +54,7 @@
                             alertify
                              .alert("U choose more then " + @ViewBag.BrDana+" days", function () {
                                  alertify.error('Please try again');
-                             });
+                        });
                         return false;
 
                     }
@@ -66,14 +68,14 @@
 
                     }
 
-                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
-                    }
-                
+                    window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
+                }
 
 
-                    </text>}
 
-                },
+                </text>}
+
+            },
                 eventClick: function (calEvent, jsEvent, view) {
                     var typeOfDialog, tempEndDate;
 
@@ -114,93 +116,93 @@
                     });
 
                 },
-                /*eventMouseover: function (calEvent, jsEvent, view) {
+            /*eventMouseover: function (calEvent, jsEvent, view) {
 
-                    $(this).css('background-color', '#c3c3c3');
+                $(this).css('background-color', '#c3c3c3');
 
-                },
-                eventMouseout: function (calEvent, jsEvent, view) {
+            },
+            eventMouseout: function (calEvent, jsEvent, view) {
 
-                    $(this).css('background-color', '#F9C834');
+                $(this).css('background-color', '#F9C834');
 
-                },*/
-                defaultDate: Date(),
-                editable: false,
-                eventLimit: true, // allow "more" link when too many events
-                events:
-                    [//init holidays
-                    @foreach (var item in ViewBag.initHolidays)
+            },*/
+            defaultDate: Date(),
+            editable: false,
+            eventLimit: true, // allow "more" link when too many events
+            events:
+            [//init holidays
+            @foreach (var item in ViewBag.initHolidays)
                 {
                 <text>
-                        {
-                            title: '@(item.Description)',
-                            start: '@(item.DateFrom)',
-                            end: '@(item.DateTo)',
-                            backgroundColor: '#378abf'
-                        },
-                </text>
+                {
+                    title: '@(item.Description)',
+                    start: '@(item.DateFrom)',
+                    end: '@(item.DateTo)',
+                    backgroundColor: '#378abf'
+                },
+        </text>
                 }
 
-                //vacations init
-                @foreach (var item in ViewBag.initVacations)
+        //vacations init
+        @foreach (var item in ViewBag.initVacations)
                     {
 
                           if ((item.IsSickLeave)){
                               <text>
-                        {
-                            title: '@(item.Description)',
-                            start: '@(item.DateFrom)',
-                            end: '@(item.DateTo)',
-                            backgroundColor: '#df4040'
+                {
+                    title: '@(item.Description)',
+                    start: '@(item.DateFrom)',
+                    end: '@(item.DateTo)',
+                    backgroundColor: '#df4040'
 
-                        }, </text>  }
+                }, </text>  }
                           else
                           {
                               <text>
-                       {
-                           title: '@(item.Description)',
-                           start: '@(item.DateFrom)',
-                           end: '@(item.DateTo)',
-                           backgroundColor: '#50b239'
+               {
+                   title: '@(item.Description)',
+                   start: '@(item.DateFrom)',
+                   end: '@(item.DateTo)',
+                   backgroundColor: '#50b239'
 
-                       }, </text>
+               }, </text>
 
                           }
 
                         }
-                    ],
-                selectable: true,
-                timeFormat: ' ',
-                selectHelper: true,
-                select: function (start, end) {
+            ],
+            selectable: true,
+            timeFormat: ' ',
+            selectHelper: true,
+            select: function (start, end) {
 
-                    @if(Context.User.IsInRole("Admin")) {
+                @if(Context.User.IsInRole("Admin")) {
                           <text>
-                    window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
-                    // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                    </text>
+                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                </text>
                       }
-                    $('#calendar').fullCalendar('unselect');
-                },
+                $('#calendar').fullCalendar('unselect');
+            },
 
             });
+
+    });
+    $(document).ready(function () {
+
+        $("#show").click(function () {
+            $("#tabela").show();
+            $("#show").hide();
+            $("#hide").show();
+        });
+        $("#hide").click(function () {
+            $("#tabela").hide();
+            $("#hide").hide();
+            $("#show").show();
+
 
         });
-        $(document).ready(function () {
-
-            $("#show").click(function () {
-                $("#tabela").show();
-                $("#show").hide();
-                $("#hide").show();
-            });
-            $("#hide").click(function () {
-                $("#tabela").hide();
-                $("#hide").hide();
-                $("#show").show();
-
-
-            });
-        });
+    });
     });
 </script>
 <br />
@@ -209,14 +211,14 @@
 {
     if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
     {
-<center>
+        <center>
 
-    <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
+            <div id="1"> <button id="show" type="button" class="btn btn-info btn-lg">See Vacations</button></div>
 
-    <div id="2">
-        <button id="hide" type="button" class="btn btn-info btn-lg" style="display: none">Hide Vacations</button>
-    </div>
-</center>
+            <div id="2">
+                <button id="hide" type="button" class="btn btn-info btn-lg" style="display: none">Hide Vacations</button>
+            </div>
+        </center>
     }
 }
 <div style="float:right">
@@ -230,82 +232,82 @@
 
     if (Enumerable.Count(ViewBag.initVacationsForCurrentUser) > 0)
     {
-<table class="table table-hover table-bordered" id="tabela" style="display: none">
-    <tr class="success">
+        <table class="table table-hover table-bordered" id="tabela" style="display: none">
+            <tr class="success">
 
-        <th>
-            DateFrom
-        </th>
-        <th>
-            DateTo
-        </th>
-        <th>
-            Description
-        </th>
-        <th style="width:7px">
-            IsSickLeave
-        </th>
-        @if (Context.User.IsInRole("User"))
-        {
-            <th style="width:50px">Edit</th>
-            <th style="width:50px">Delete</th>
-        }
-    </tr>
+                <th>
+                    DateFrom
+                </th>
+                <th>
+                    DateTo
+                </th>
+                <th>
+                    Description
+                </th>
+                <th style="width:7px">
+                    IsSickLeave
+                </th>
+                @if (Context.User.IsInRole("User"))
+                {
+                    <th style="width:50px">Edit</th>
+                    <th style="width:50px">Delete</th>
+                }
+            </tr>
             @foreach (var item in ViewBag.initVacationsForCurrentUser)
-    {
-        <tr>
-            <td>
-                        @(item.DateFrom.ToString("dd.MM.yyyy"))
-            </td>
-            <td>
-                        @(item.DateTo.ToString("dd.MM.yyyy"))
-            </td>
-            <td>
-                @(item.Description)
-            </td>
-            <td>
-                @if ((item.IsSickLeave))
-                {
-
-                    <span class="glyphicon glyphicon-ok"></span>
-                }
-                else
-                {
-                    <span class="glyphicon glyphicon-remove"></span>
-                }
-            </td>
-            @if (Context.User.IsInRole("User"))
             {
-                if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateTo.ToString("yyyy-MM-dd"))))
-                {
-                   <td>
-                    @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info btn disabled" })
-                </td>
-                }
-                else
-                {
-                 <td>
-                    @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
-                </td>
-                    
-                }
-                
-                if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateFrom.ToString("yyyy-MM-dd"))))
-                { 
-                <td>
-                    @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger btn disabled", onclick = "javascript:return false;" })
-                </td>
-                }
-                else
-                {
-                   <td>
-                    @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
-                </td> 
-                }
-            }
-        </tr>
-    }
+                <tr>
+                    <td>
+                        @(item.DateFrom.ToString("dd.MM.yyyy"))
+                    </td>
+                    <td>
+                        @(item.DateTo.ToString("dd.MM.yyyy"))
+                    </td>
+                    <td>
+                        @(item.Description)
+                    </td>
+                    <td>
+                        @if ((item.IsSickLeave))
+                        {
 
-</table>
+                            <span class="glyphicon glyphicon-ok"></span>
+                        }
+                        else
+                        {
+                            <span class="glyphicon glyphicon-remove"></span>
+                        }
+                    </td>
+                    @if (Context.User.IsInRole("User"))
+                    {
+                        if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateTo.ToString("yyyy-MM-dd"))))
+                        {
+                            <td>
+                                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info btn disabled" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
+                            </td>
+
+                        }
+
+                        if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateFrom.ToString("yyyy-MM-dd"))))
+                        {
+                            <td>
+                                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger btn disabled", onclick = "javascript:return false;" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.ActionLink("Delete", "../LoadVacations/DeleteVacation", new { vacationId = item.VacationPeriodId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-danger" })
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+
+        </table>
     }
 }

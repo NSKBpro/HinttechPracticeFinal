@@ -9,6 +9,8 @@ using HinttechPractice.Data;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using PagedList;
+using PagedList.Mvc;
 
 namespace HinttechPractice.App_Start
 {
@@ -26,7 +28,7 @@ namespace HinttechPractice.App_Start
         ///<summary>
         ///Show all registered users.
         ///</summary>
-        public ActionResult ShowAllUsers()
+        public ActionResult ShowAllUsers(int? page)
         {
             UsersService users = new UsersService();
             List<User> model = users.FindAll().ToList();
@@ -35,7 +37,7 @@ namespace HinttechPractice.App_Start
             {
                 if (!u.IsUserAdmin) bezAdmina.Add(u);
             }
-            return View(bezAdmina);
+            return View(bezAdmina.ToList().ToPagedList(page ?? 1, 8));
         }
 
         ///<summary>
