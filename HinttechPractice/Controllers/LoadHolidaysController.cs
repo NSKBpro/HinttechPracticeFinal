@@ -99,14 +99,14 @@ namespace HinttechPractice.Controllers
                 db.AddHoliday(h);
                 ViewBag.initHolidays = db.GetHolidays();
                 ViewBag.initVacations = db2.GetVacations();
-                return View("InitCalendar");
+                return RedirectToAction("initHolidays");
             }
             else
             {
                 ViewBag.errorMessage = "Date from can't be greater that date to.";
                 ViewBag.initHolidays = db.GetHolidays();
                 ViewBag.initVacations = db2.GetVacations();
-                return View("InitCalendar");
+                return RedirectToAction("initHolidays");
             }
 
         }
