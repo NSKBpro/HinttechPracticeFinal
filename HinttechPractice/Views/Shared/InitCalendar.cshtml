@@ -105,6 +105,11 @@
                             "End date: " +
                             "<b>" +
                             tempEndDate.substring(0, 10) +
+                            "</b>" +
+                            "<br/>" +		
+                            "User: " +		
+                            "<b>" +		
+                            getFullNameFromId(calEvent.userID) +		
                             "</b>",
                         buttons: [{
                             label: 'Dismiss',
@@ -138,7 +143,8 @@
                     title: '@(item.Description)',
                     start: '@(item.DateFrom)',
                     end: '@(item.DateTo)',
-                    backgroundColor: '#378abf'
+                    backgroundColor: '#378abf',
+                    userID: '@(item.UserId)'
                 },
         </text>
                 }
@@ -153,8 +159,8 @@
                     title: '@(item.Description)',
                     start: '@(item.DateFrom)',
                     end: '@(item.DateTo)',
-                    backgroundColor: '#df4040'
-
+                    backgroundColor: '#df4040',
+                    userID: '@(item.UserId)'
                 }, </text>  }
                           else
                           {
@@ -163,8 +169,8 @@
                    title: '@(item.Description)',
                    start: '@(item.DateFrom)',
                    end: '@(item.DateTo)',
-                   backgroundColor: '#50b239'
-
+                   backgroundColor: '#50b239',
+                   userID: '@(item.UserId)'
                }, </text>
 
                           }
@@ -204,6 +210,16 @@
         });
     });
     });
+
+    function getFullNameFromId(id){		
+        var array = @Html.Raw(Json.Encode(@ViewBag.users));		
+            		
+        for(var i = 0; i < array.length; i++) {		
+            if(array[i].usrId == id){		
+                return array[i].firstName + ' ' + array[i].lastName;		
+            }		
+        }		
+    }
 </script>
 <br />
 <br />
