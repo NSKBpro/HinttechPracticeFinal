@@ -108,13 +108,22 @@ namespace HinttechPractice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditVacation(Vacation vacation)
         {
-            if (ModelState.IsValid)
+            UsersService users = new UsersService();
+            User u = (User)users.FindById(vacation.UserId);
+            Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
+            if (Convert.ToInt32(numDays) < u.VacationDays)
             {
-                db.EditVacation(vacation);
+                if (ModelState.IsValid)
+                {
+                    db.EditVacation(vacation);
+                    return RedirectToAction("initHolidays", "LoadHolidays");
+
+                }
+                return View();
+            }else
+            {
                 return RedirectToAction("initHolidays", "LoadHolidays");
-                
             }
-            return View();
         }
 
         public ActionResult DeleteVacation(int vacationId)
