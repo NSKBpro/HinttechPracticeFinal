@@ -1,10 +1,27 @@
 ﻿@model HinttechPractice.Data.Vacation
+
+<script>
+    function funProvera() {
+        var datum1 = document.getElementById("datum1").value;
+        var datum2 = document.getElementById("datum2").value;
+        if (datum2 < datum1) {
+            alertify.error("Incorrect.Please try again");
+            return false;
+        } else {
+            alertify.success("Well done you can proceed now");
+            return true;
+        }
+    }
+</script>
+
+
+
 @{
 
     ViewBag.title = "Index";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("RegistracijaOdmora", "LoadVacations", FormMethod.Post, new { onsubmit = "return funProvera()" }))
 {
     @Html.AntiForgeryToken()
     <br /><br />
@@ -25,13 +42,13 @@
         <div class="form-group">
 
             <div class="col-md-10">
-                <input type="date" name="DateFrom" class="form-control" value="@ViewBag.Parameterdatum1" required />
+                <input type="date" id="datum1" name="DateFrom" class="form-control" value="@ViewBag.Parameterdatum1" required />
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-10">
-                <input type="date" name="DateTo" class="form-control" value="@ViewBag.Parameterdatum2" required/>
+                <input type="date" id="datum2" name="DateTo" class="form-control" value="@ViewBag.Parameterdatum2" required/>
             </div>
         </div>
 

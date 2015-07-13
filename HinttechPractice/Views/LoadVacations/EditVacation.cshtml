@@ -1,7 +1,7 @@
 ﻿@model HinttechPractice.Data.Vacation
 
 <script>
-    function sayHello() {
+    function funProvera() {
         var datum1 = document.getElementById("datum1").value;
         var datum2 = document.getElementById("datum2").value;
         if (datum2 < datum1) {
@@ -16,7 +16,7 @@
 
 
 
-@using (Html.BeginForm("EditVacation", "LoadVacations", FormMethod.Post, new { onsubmit = "return sayHello()" }))
+@using (Html.BeginForm("EditVacation", "LoadVacations", FormMethod.Post, new { onsubmit = "return funProvera()" }))
 {
     @Html.AntiForgeryToken()
     <br /><br />
