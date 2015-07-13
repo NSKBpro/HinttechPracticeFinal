@@ -54,6 +54,7 @@
                     }
                     @if (User.IsInRole("User"))
                     {
+                        <li>@Html.ActionLink(" See vacations ", "SeeVacations", "LoadVacations")</li>
                         <li>@Html.ActionLink(" Choose vacation ", "initHolidays", "LoadHolidays")</li>
                         //ovde iznad ide link ka vacation serveru
                     }

@@ -229,7 +229,7 @@
     <Content Include="Views\Shared\WindowForDay.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\LoadVacations\DeleteVacation.cshtml" />
-    <Content Include="Views\LoadHolidays\initCalendar.cshtml" />
+    <Content Include="Views\LoadVacations\SeeVacations.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

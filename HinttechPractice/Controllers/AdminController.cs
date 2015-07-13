@@ -39,7 +39,7 @@ namespace HinttechPractice.App_Start
             }
             double pomValue = bezAdmina.Count() / 3;
             if (page > pomValue) page = 1;
-            return View(bezAdmina.ToList().ToPagedList(page ?? 1, 6));
+            return View("ShowAllUsers", bezAdmina.ToList().ToPagedList(page ?? 1, 6));
         }
 
         ///<summary>
@@ -60,7 +60,7 @@ namespace HinttechPractice.App_Start
         ///<summary>
         ///For Admin, to confirm user registration. Also, sending mail to user.
         ///</summary>
-        public ActionResult ConfirmRegistration(String id)
+        public ActionResult ConfirmRegistration(String id, int? page)
         {
             UsersService users = new UsersService();
             User user = (User)users.FindUserByUsername(id);
@@ -79,7 +79,7 @@ namespace HinttechPractice.App_Start
                 users.Edit(user);
             }
 
-            return RedirectToAction("ShowAllUsers");
+            return ShowAllUsers(page);
         }
 
         public ActionResult ResetVacationDays()

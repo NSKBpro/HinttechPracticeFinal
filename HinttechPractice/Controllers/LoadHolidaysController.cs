@@ -8,8 +8,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using PagedList;
-using PagedList.Mvc;
 
 
 namespace HinttechPractice.Controllers
@@ -44,7 +42,6 @@ namespace HinttechPractice.Controllers
             }
 
             ViewBag.users = users;
-
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
             int userId=usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             ViewBag.idOfUser = userId;
@@ -52,10 +49,7 @@ namespace HinttechPractice.Controllers
             ViewBag.BrDana = u.VacationDays;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
-            List<Vacation> currentUserVacations = db2.GetVacationsForCurrentUser(userId);
-            double pomValue = currentUserVacations.Count() / 3;
-            if (page > pomValue) page = 1;
-            return View("InitCalendar",currentUserVacations.ToList().ToPagedList(page ?? 1, 3));
+            return View("InitCalendar");
         }
 
         private DateTime dt;
