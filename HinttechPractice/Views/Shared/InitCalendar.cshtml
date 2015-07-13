@@ -124,8 +124,7 @@
                             title: '@(item.Description)',
                             start: '@(item.DateFrom)',
                             end: '@(item.DateTo)',
-                            backgroundColor: '#F9C834',
-                            textColor: '#2a2a2a'
+                            backgroundColor: '#378abf'
                         },
                 </text>
                 }
@@ -140,7 +139,7 @@
                             title: '@(item.Description)',
                             start: '@(item.DateFrom)',
                             end: '@(item.DateTo)',
-                            backgroundColor: '#FF0000'
+                            backgroundColor: '#df4040'
 
                         }, </text>  }
                           else
@@ -150,7 +149,7 @@
                            title: '@(item.Description)',
                            start: '@(item.DateFrom)',
                            end: '@(item.DateTo)',
-                           backgroundColor: '#33FF33'
+                           backgroundColor: '#50b239'
 
                        }, </text>
 
@@ -209,9 +208,9 @@
     }
 }
 <div style="float:right">
-    <span class="glyphicon glyphicon-stop" style="color: #F9C834;"></span>Holiday
-    <span class="glyphicon glyphicon-stop" style="color: #FF0000;"></span>Sick Leave
-    <span class="glyphicon glyphicon-stop" style="color: #33FF33;"></span>Vacation
+    <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday
+    <span class="glyphicon glyphicon-stop" style="color: #df4040;"></span>Sick Leave
+    <span class="glyphicon glyphicon-stop" style="color: #50b239;"></span>Vacation
 </div><br />
 <br />
 @if (Context.User.IsInRole("User"))
