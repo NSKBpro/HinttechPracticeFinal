@@ -155,8 +155,9 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             int userId = users.FindUserByUsername(HttpContext.User.Identity.Name).UserId;
             List<Vacation> currentUserVacations = db.GetVacationsForCurrentUser(userId);
-            double pomValue = currentUserVacations.Count() / 3;
-            if (page >= pomValue) page = 1;
+            double tempPaginationValue = currentUserVacations.Count() / 6;
+            if (tempPaginationValue > page) page = 1;
+            if (page != 1 && 6 * tempPaginationValue == currentUserVacations.Count()) page--;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
             return View("SeeVacations", currentUserVacations.ToList().ToPagedList(page ?? 1, 6));
