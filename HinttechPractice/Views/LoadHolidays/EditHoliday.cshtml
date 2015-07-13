@@ -5,7 +5,7 @@
     </div>
     <div align="center" style="width: 500px; margin: 0 auto;">
 
-        <form method="post" action="EditHoliday">
+        <form id="editAddForma" method="post" action="EditHoliday" onsubmit="return dateCheck()">
 
             <input type="hidden" name="HolidayId" value="@(ViewBag.holidayForEdit.HolidayId)" /><br />
             <input type="hidden" class="form-control" name="UserId" placeholder="UserId" value="@ViewBag.holidayForEdit.UserId" required /><br />
@@ -18,3 +18,18 @@
 
     </div>
 
+    <script>
+        function dateCheck() {
+            var from = document.forms["editAddForma"]["DateFrom"].value;
+            var to = document.forms["editAddForma"]["DateTo"].value;
+            if (from > to) {
+
+                alertify.error("Start date cannot be greater than end date.");
+                return false;
+
+            } else {
+
+                return true;
+            }
+        }
+    </script>

@@ -94,7 +94,7 @@ namespace HinttechPractice.Controllers
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult AddHoliday(Holiday h)
         {
-            if (h.DateFrom >= h.DateTo)
+            if (h.DateFrom <= h.DateTo)
             {
                 db.AddHoliday(h);
                 ViewBag.initHolidays = db.GetHolidays();
@@ -104,6 +104,8 @@ namespace HinttechPractice.Controllers
             else
             {
                 ViewBag.errorMessage = "Date from can't be greater that date to.";
+                ViewBag.initHolidays = db.GetHolidays();
+                ViewBag.initVacations = db2.GetVacations();
                 return View("InitCalendar");
             }
 

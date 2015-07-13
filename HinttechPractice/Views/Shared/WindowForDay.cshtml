@@ -71,7 +71,7 @@
         <br />
         <br />
         <div id="bilokako" align="center" style="width:500px; margin:0 auto;">
-            <form method="post" action="AddHoliday">
+            <form id="editAddForma" method="post" action="AddHoliday" onsubmit="return dateCheck()">
                 <input type="hidden" class="form-control" name="UserId" placeholder="UserId" value="@ViewBag.idOfUser" /><br />
                 <input type="date" class="form-control" name="DateFrom" placeholder="From" value="@ViewBag.dan" required /><br />
                 <input type="date" class="form-control" name="DateTo" placeholder="To" value="@ViewBag.danDo" required /><br />
@@ -80,6 +80,22 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function dateCheck() {
+            var from = document.forms["editAddForma"]["DateFrom"].value;
+            var to = document.forms["editAddForma"]["DateTo"].value;
+            if (from > to) {
+                
+                alertify.error("Start date cannot be greater than end date.");
+                return false;
+                
+            } else {
+                
+                return true;
+            }
+        }
+    </script>
 
 
 
