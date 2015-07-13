@@ -8,6 +8,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using PagedList.Mvc;
+
 
 namespace HinttechPractice.Controllers
 {
@@ -24,7 +27,7 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
-        public ActionResult initHolidays()
+        public ActionResult initHolidays(int? page)
         {
             ViewBag.initHolidays = db.GetHolidays();
             ViewBag.initVacations = db2.GetVacations();
@@ -36,8 +39,10 @@ namespace HinttechPractice.Controllers
             ViewBag.BrDana = u.VacationDays;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
-            ViewBag.initVacationsForCurrentUser = db2.GetVacationsForCurrentUser(userId);
-            return View("InitCalendar");
+            List<Vacation> currentUserVacations = db2.GetVacationsForCurrentUser(userId);
+            double pomValue = currentUserVacations.Count() / 3;
+            if (page > pomValue) page = 1;
+            return View("InitCalendar",currentUserVacations.ToList().ToPagedList(page ?? 1, 3));
         }
 
         private DateTime dt;

@@ -77,6 +77,10 @@
     </tr>
 }
 </table>
-       @Html.PagedListPager(Model, page => Url.Action("ShowAllUsers", new { page }))
+       @Html.PagedListPager(Model, page => Url.Action("ShowAllUsers", new { page }), new PagedListRenderOptions()
+       {
+           Display = PagedListDisplayMode.IfNeeded,
+           DisplayPageCountAndCurrentLocation = true
+       })
     <br />
      @Html.ActionLink(" Reset all vacation days to 20 ", "ResetVacationDays", "Admin", null, new { @class = "btn btn-success btn-lg" })

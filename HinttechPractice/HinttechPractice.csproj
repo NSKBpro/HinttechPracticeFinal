@@ -226,9 +226,9 @@
     <Content Include="Views\LoadVacations\RegistracijaOdmora.cshtml" />
     <Content Include="Views\LoadVacations\Vacations.cshtml" />
     <Content Include="Views\Shared\WindowForDay.cshtml" />
-    <Content Include="Views\Shared\InitCalendar.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\LoadVacations\DeleteVacation.cshtml" />
+    <Content Include="Views\LoadHolidays\initCalendar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

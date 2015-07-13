@@ -37,7 +37,9 @@ namespace HinttechPractice.App_Start
             {
                 if (!u.IsUserAdmin) bezAdmina.Add(u);
             }
-            return View(bezAdmina.ToList().ToPagedList(page ?? 1, 8));
+            double pomValue = bezAdmina.Count() / 3;
+            if (page > pomValue) page = 1;
+            return View(bezAdmina.ToList().ToPagedList(page ?? 1, 6));
         }
 
         ///<summary>
