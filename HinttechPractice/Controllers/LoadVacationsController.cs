@@ -63,7 +63,8 @@ namespace HinttechPractice.Controllers
              String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-            if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
+
+            if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
 
                 if (ModelState.IsValid)
@@ -71,9 +72,6 @@ namespace HinttechPractice.Controllers
                     vacation.DateFrom = vacation.DateFrom;
                     vacation.DateTo = vacation.DateTo;
                     db.AddVacation(vacation);
-                    int days = u.VacationDays - Convert.ToInt32(numDays);
-                    u.VacationDays = days;
-                    users.Edit(u);
                     return RedirectToAction("initHolidays", "LoadHolidays");
 
                 }
@@ -81,7 +79,29 @@ namespace HinttechPractice.Controllers
             }
             else
             {
-                return RedirectToAction("initHolidays", "LoadHolidays");
+
+
+                if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
+                {
+
+                    if (ModelState.IsValid)
+                    {
+                        vacation.DateFrom = vacation.DateFrom;
+                        vacation.DateTo = vacation.DateTo;
+                        db.AddVacation(vacation);
+                        int days = u.VacationDays - Convert.ToInt32(numDays);
+                        u.VacationDays = days;
+                        users.Edit(u);
+                        return RedirectToAction("initHolidays", "LoadHolidays");
+
+                    }
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("initHolidays", "LoadHolidays");
+                }
+
             }
         }
 
