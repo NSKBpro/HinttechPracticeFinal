@@ -28,6 +28,19 @@ namespace HinttechPractice.Controllers
         {
             ViewBag.initHolidays = db.GetHolidays();
             ViewBag.initVacations = db2.GetVacations();
+            List<UsersLite> users = new List<UsersLite>();
+
+            foreach (User us in usr.FindAll())
+            {
+                UsersLite usl = new UsersLite();
+                usl.usrId = us.UserId;
+                usl.firstName = us.FirstName;
+                usl.lastName = us.LastName;
+
+                users.Add(usl);
+            }
+
+            ViewBag.users = users;
 
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
             int userId=usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
