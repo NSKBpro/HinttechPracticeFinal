@@ -60,8 +60,10 @@ namespace HinttechPractice.Controllers
         {
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
+             String datum = DateTime.Now.ToString("yyyy-MM-dd");
+            ViewBag.Datum = datum;
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-            if (Convert.ToInt32(numDays) < u.VacationDays)
+            if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
 
                 if (ModelState.IsValid)
@@ -117,7 +119,7 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-            if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd"))>(DateTime.Parse(datum))))
+            if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 if (ModelState.IsValid)
                 {
