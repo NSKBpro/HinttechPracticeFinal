@@ -86,6 +86,7 @@ namespace HinttechPractice.Controllers
                 }
                 String datum = DateTime.Now.ToString("yyyy-MM-dd");
                 ViewBag.Datum = datum;
+             
                 ViewBag.editDateFrom = vac.DateFrom.ToString("yyyy-MM-dd");
                 ViewBag.editDateTo = vac.DateTo.ToString("yyyy-MM-dd");
                 return View(vac);
