@@ -54,21 +54,29 @@ namespace HinttechPractice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RegistracijaOdmora(Vacation vacation)
         {
-            if (ModelState.IsValid)
+            UsersService users = new UsersService();
+            User u = (User)users.FindById(vacation.UserId);
+            Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
+            if (Convert.ToInt32(numDays) < u.VacationDays)
             {
-                vacation.DateFrom = vacation.DateFrom;
-                vacation.DateTo = vacation.DateTo;
-                db.AddVacation(vacation);
-                double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-                UsersService users = new UsersService();
-                User u = (User)users.FindById(vacation.UserId);
-                int days = u.VacationDays - Convert.ToInt32(numDays);
-                u.VacationDays = days;
-                users.Edit(u);
-                return RedirectToAction("initHolidays", "LoadHolidays");
 
+                if (ModelState.IsValid)
+                {
+                    vacation.DateFrom = vacation.DateFrom;
+                    vacation.DateTo = vacation.DateTo;
+                    db.AddVacation(vacation);  
+                    int days = u.VacationDays - Convert.ToInt32(numDays);
+                    u.VacationDays = days;
+                    users.Edit(u);
+                    return RedirectToAction("initHolidays", "LoadHolidays");
+
+                }
+                return View();
             }
-            return View();
+            else
+            {
+                return RedirectToAction("initHolidays", "LoadHolidays");
+            }
         }
 
         public ActionResult EditVacation(int vacationId)
