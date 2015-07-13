@@ -276,9 +276,20 @@
             </td>
             @if (Context.User.IsInRole("User"))
             {
-                <td>
+                if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateTo.ToString("yyyy-MM-dd"))))
+                {
+                   <td>
+                    @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info btn disabled" })
+                </td>
+                }
+                else
+                {
+                 <td>
                     @Html.ActionLink("Edit", "../LoadVacations/EditVacation", new { vacationId = item.VacationPeriodId, userId = item.UserId, datum1 = item.DateFrom, datum2 = item.DateTo, opis = item.Description, isSick = item.IsSickLeave }, new { @class = "btn btn-info" })
                 </td>
+                    
+                }
+                
                 if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(item.DateFrom.ToString("yyyy-MM-dd"))))
                 { 
                 <td>
