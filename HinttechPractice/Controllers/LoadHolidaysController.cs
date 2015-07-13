@@ -34,6 +34,8 @@ namespace HinttechPractice.Controllers
             ViewBag.idOfUser = userId;
             User u=(User)usr.FindById(userId);
             ViewBag.BrDana = u.VacationDays;
+            String datum = DateTime.Now.ToString("yyyy-MM-dd");
+            ViewBag.Datum = datum;
             ViewBag.initVacationsForCurrentUser = db2.GetVacationsForCurrentUser(userId);
             return View("InitCalendar");
         }
