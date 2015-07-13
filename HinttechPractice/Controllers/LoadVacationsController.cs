@@ -112,10 +112,12 @@ namespace HinttechPractice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditVacation(Vacation vacation, int? page)
         {
+            String datum = DateTime.Now.ToString("yyyy-MM-dd");
+            ViewBag.Datum = datum;
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-            if (Convert.ToInt32(numDays) < u.VacationDays)
+            if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd"))>(DateTime.Parse(datum))))
             {
                 if (ModelState.IsValid)
                 {
@@ -127,7 +129,7 @@ namespace HinttechPractice.Controllers
             }
             else
             {
-                return View();
+                return RedirectToAction("SeeVacations");
             }
         }
 

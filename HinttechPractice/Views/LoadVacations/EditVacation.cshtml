@@ -1,7 +1,6 @@
 ﻿@model HinttechPractice.Data.Vacation
 
 
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -29,7 +28,7 @@
         <div class="form-group">
            @if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(@ViewBag.editDateFrom))) { 
             <div class="col-md-10">
-                <input type="date" name="DateFrom" required class="form-control" value="@ViewBag.editDateFrom" readonly />
+                <input type="date" id="datum1" name="DateFrom" required class="form-control" value="@ViewBag.editDateFrom" readonly />
             </div>
            }
            else
