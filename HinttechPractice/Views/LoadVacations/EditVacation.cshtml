@@ -22,7 +22,7 @@
         if (datum2 < datum1) {
             alertify.error("Incorrect.Please try again with new date");
             return false;
-        }else if (datum2 < datumProvera) { 
+        }else if (datum2 <= datumProvera) { 
             alertify.error("Incorrect.Please try with new date after " + datumProvera);
             return false;
         }else{
