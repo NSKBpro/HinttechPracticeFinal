@@ -3,13 +3,14 @@
 <script>
     function funProvera() {
         var proveraDani=@(ViewBag.BrDana);
-        var datum1 = document.getElementById("datum1").value;
+        var datum1 = "@(ViewBag.editDateFrom)";
         var datum2 = document.getElementById("datum2").value;
+
         var oneDay = 24 * 60 * 60 * 1000;
         var dodatak= 20 - proveraDani;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date("@ViewBag.editDateTo")) / (oneDay)));
         if (diffDays > proveraDani) {
-            alertify
+            
             alertify
                     .alert("You choose more then " + proveraDani +" days", function () {
                         alertify.error('Please try again');
@@ -18,7 +19,7 @@
 
         }
         if (datum2 < datum1) {
-            alertify.error("Incorrect.Please try again");
+            alertify.error("Incorrect.Please try again with new date");
             return false;
         }else{
             alertify.success("Well done you can proceed now");
@@ -27,7 +28,7 @@
     }
 </script>
 
-@ViewBag.editDateTo
+
 
 @using (Html.BeginForm("EditVacation", "LoadVacations", FormMethod.Post, new { onsubmit = "return funProvera()" }))
 {
@@ -56,7 +57,7 @@
         <div class="form-group">
            @if ((DateTime.Parse(@ViewBag.Datum)) > (DateTime.Parse(@ViewBag.editDateFrom))) { 
             <div class="col-md-10">
-                <input type="date" name="DateFrom" required class="form-control" value="@ViewBag.editDateFrom" readonly />
+                <input type="date" id="datum3" name="DateFrom" required class="form-control" value="@ViewBag.editDateFrom" readonly />
             </div>
            }
            else

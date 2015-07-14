@@ -8,7 +8,7 @@
         var oneDay = 24 * 60 * 60 * 1000;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date(datum1)) / (oneDay)));
         if (diffDays > proveraDani) {
-            alertify
+            
             alertify
                     .alert("You choose more then " + proveraDani +" days", function () {
                         alertify.error('Please try again');

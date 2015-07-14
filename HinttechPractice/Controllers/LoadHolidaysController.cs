@@ -94,20 +94,39 @@ namespace HinttechPractice.Controllers
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult AddHoliday(Holiday h)
         {
-            if (h.DateFrom <= h.DateTo)
+            bool overlap = false;
+            Holiday overlapingHoliday = new Holiday();
+
+            foreach (Holiday holiday in db.GetHolidays())
             {
-                db.AddHoliday(h);
-                ViewBag.initHolidays = db.GetHolidays();
-                ViewBag.initVacations = db2.GetVacations();
-                return RedirectToAction("initHolidays");
+                if (h.DateFrom < holiday.DateTo && holiday.DateFrom < h.DateTo)
+                {
+                    overlap = true;
+                    break;
+                }
+                else
+                {
+                    overlap = false;
+                }
+            }
+
+            if (!overlap)
+            {
+                if (h.DateFrom <= h.DateTo)
+                {
+                    db.AddHoliday(h);
+                }
+                else
+                {
+                    ViewBag.errorMessage = "Date from can't be greater that date to.";
+                }
             }
             else
             {
-                ViewBag.errorMessage = "Date from can't be greater that date to.";
-                ViewBag.initHolidays = db.GetHolidays();
-                ViewBag.initVacations = db2.GetVacations();
-                return RedirectToAction("initHolidays");
+                Console.WriteLine("PREKLAPANJE!!!");
             }
+            
+            return RedirectToAction("initHolidays");
 
         }
 
@@ -116,19 +135,55 @@ namespace HinttechPractice.Controllers
         public ActionResult RemoveHoliday(int HolidayId)
         {
             db.RemoveHoliday(HolidayId);
-            ViewBag.initHolidays = db.GetHolidays();
-            ViewBag.initVacations = db2.GetVacations();
-            return View("InitCalendar");
+            return RedirectToAction("initHolidays");
         }
 
         [HttpPost]
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult EditHoliday(Holiday h)
         {
-            db.EditHoliday(h);
+            /*db.EditHoliday(h);
             ViewBag.initHolidays = db.GetHolidays();
             ViewBag.initVacations = db2.GetVacations();
-            return View("InitCalendar");
+            return View("InitCalendar");*/
+
+
+            bool overlap = false;
+            Holiday overlapingHoliday = new Holiday();
+
+            foreach (Holiday holiday in db.GetHolidays())
+            {
+                if (holiday.HolidayId == h.HolidayId)
+                    continue;
+
+                if (h.DateFrom < holiday.DateTo && holiday.DateFrom < h.DateTo)
+                {
+                    overlap = true;
+                    break;
+                }
+                else
+                {
+                    overlap = false;
+                }
+            }
+
+            if (!overlap)
+            {
+                if (h.DateFrom <= h.DateTo)
+                {
+                    db.EditHoliday(h);
+                }
+                else
+                {
+                    ViewBag.errorMessage = "Date from can't be greater that date to.";
+                }
+            }
+            else
+            {
+                Console.WriteLine("PREKLAPANJE!!!");
+            }
+
+            return RedirectToAction("initHolidays");
         }
 
         [HttpPost]
