@@ -42,7 +42,7 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             User u = users.FindUserByUsername(HttpContext.User.Identity.Name);
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
-            ViewBag.Datum = datum;
+            ViewBag.Datum = datum;   
             s1 = parameterdatum1;
             s2 = parameterdatum2;
             ViewBag.Parameterdatum1 = parameterdatum1;
@@ -66,7 +66,6 @@ namespace HinttechPractice.Controllers
             User u = (User)users.FindById(vacation.UserId);
              String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
-           
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
 
             numDays -= DaysIsntCountHoliday(vacation);
@@ -159,6 +158,7 @@ namespace HinttechPractice.Controllers
                 daniZaVracanje = Convert.ToInt32(numDays);
                 String datum = DateTime.Now.ToString("yyyy-MM-dd");
                 ViewBag.Datum = datum;
+                ViewBag.Bolestan = vac.IsSickLeave;
                 datumProveraZaEdit = vac.DateTo;
                 ViewBag.editDateFrom = vac.DateFrom.ToString("yyyy-MM-dd");
                 ViewBag.editDateTo = vac.DateTo.ToString("yyyy-MM-dd");

@@ -6,10 +6,16 @@
         var datumProvera="@(ViewBag.Datum)";
         var datum1 = document.getElementById("datum1").value;
         var datum2 = document.getElementById("datum2").value;
+        var sick=document.getElementById("sick").checked;
         var oneDay = 24 * 60 * 60 * 1000;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date(datum1)) / (oneDay)));
+        if(sick==true)
+        {
+            alertify.success("Well done you can proceed now");
+            return true;
+        }
         if (diffDays > proveraDani) {
-            
+
             alertify
                     .alert("You choose more then " + proveraDani +" days", function () {
                         alertify.error('Please try again');
@@ -20,7 +26,7 @@
         else if (datum2 < datum1) {
             alertify.error("Incorrect.Please try with new date.");
             return false;
-        }else if (datum2 < datumProvera) { 
+        }else if (datum2 < datumProvera) {
             alertify.error("Incorrect.Please try with new date after " + datumProvera);
             return false;
         } else {
@@ -79,7 +85,7 @@
         <div class="form-group">
             <div class="col-md-10">
                 <label><b>Is sick:</b></label>
-                @Html.EditorFor(model => model.IsSickLeave)
+                @Html.EditorFor(model => model.IsSickLeave, new { htmlAttributes = new { @id = "sick" } })
                 @Html.ValidationMessageFor(model => model.IsSickLeave)
             </div>
         </div>

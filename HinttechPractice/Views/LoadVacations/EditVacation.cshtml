@@ -6,7 +6,6 @@
         var datumProvera="@(ViewBag.Datum)";
         var datum1 = "@(ViewBag.editDateFrom)";
         var datum2 = document.getElementById("datum2").value;
-
         var oneDay = 24 * 60 * 60 * 1000;
         var dodatak= 20 - proveraDani;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date("@ViewBag.editDateTo")) / (oneDay)));
