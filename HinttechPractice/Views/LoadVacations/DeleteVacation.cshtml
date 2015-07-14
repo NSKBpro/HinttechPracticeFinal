@@ -14,6 +14,8 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
+            <input type="hidden" value="@Request.QueryString["page"]" name="page"/>
+            
             <input type="hidden" value="@Model.VacationPeriodId" name="VacationPeriodId" />
             <input type="hidden" value="@Model.DateFrom" name="DateFrom" />
             <input type="hidden" value="@Model.DateTo" name="DateTo" />

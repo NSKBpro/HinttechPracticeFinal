@@ -165,7 +165,7 @@ namespace HinttechPractice.Controllers
             }
             else
             {
-                return RedirectToAction("SeeVacations");
+                return SeeVacations(page);
             }
         }
 
@@ -185,7 +185,7 @@ namespace HinttechPractice.Controllers
             u.VacationDays = days;
             users.Edit(u);
             db.DeleteVacation(vacation.VacationPeriodId);
-            return SeeVacations(page);
+            return SeeVacationsDelete(page);
         }
 
         public ActionResult SeeVacations(int? page)
@@ -194,8 +194,23 @@ namespace HinttechPractice.Controllers
             int userId = users.FindUserByUsername(HttpContext.User.Identity.Name).UserId;
             List<Vacation> currentUserVacations = db.GetVacationsForCurrentUser(userId);
             double tempPaginationValue = currentUserVacations.Count() / 6;
-            if (tempPaginationValue > page) page = 1;
-            if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == currentUserVacations.Count()) page--;
+            if (currentUserVacations.Count() % 6 != 0) tempPaginationValue++;
+            if (tempPaginationValue < page) page = 1;
+            //if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == currentUserVacations.Count()) page--;
+            String datum = DateTime.Now.ToString("yyyy-MM-dd");
+            ViewBag.Datum = datum;
+            return View("SeeVacations", currentUserVacations.ToList().ToPagedList(page ?? 1, 6));
+        }
+
+        public ActionResult SeeVacationsDelete(int? page)
+        {
+            UsersService users = new UsersService();
+            int userId = users.FindUserByUsername(HttpContext.User.Identity.Name).UserId;
+            List<Vacation> currentUserVacations = db.GetVacationsForCurrentUser(userId);
+            double tempPaginationValue = currentUserVacations.Count() / 6;
+            if (currentUserVacations.Count() % 6 != 0) tempPaginationValue++;
+            if (tempPaginationValue < page) page--;
+            //if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == currentUserVacations.Count()) page--;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
             return View("SeeVacations", currentUserVacations.ToList().ToPagedList(page ?? 1, 6));

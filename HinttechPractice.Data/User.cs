@@ -33,7 +33,7 @@ namespace HinttechPractice.Data
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> LastLoginDate { get; set; }
         public int VacationDays { get; set; }
-    
+
         public virtual ICollection<Holiday> Holidays { get; set; }
         public virtual ICollection<Vacation> Vacations { get; set; }
     }
