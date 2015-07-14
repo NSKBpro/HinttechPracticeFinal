@@ -86,6 +86,79 @@
                     else if (bgColor === 'rgb(80, 178, 57)')
                         typeOfDialog = BootstrapDialog.TYPE_SUCCESS
 
+                    var buttons;
+                    @if(Context.User.IsInRole("Admin")){
+                        <text>
+                    if(typeOfDialog === BootstrapDialog.TYPE_PRIMARY){
+                        
+                            
+                        buttonss = [{
+                            label: 'Edit',
+                            cssClass: 'btn-primary',
+                            action: function () {
+                                
+                                var f = document.createElement("form");
+                                f.setAttribute('method',"post");
+                                f.setAttribute('action',"EditHolidayRedirect");
+
+                                var i = document.createElement("input");
+                                i.type = "hidden";
+                                i.name = "HolidayId";
+                                i.id = "HolidayId";
+                                i.value = calEvent.holidayID;
+
+                                f.appendChild(i);
+                                f.submit();
+                            }
+                        },
+                            {
+                                label: 'Remove',
+                                cssClass: 'btn-danger',
+                                action: function () {
+                                    var f = document.createElement("form");
+                                    f.setAttribute('method',"post");
+                                    f.setAttribute('action',"RemoveHoliday");
+
+                                    var i = document.createElement("input");
+                                    i.type = "hidden";
+                                    i.name = "HolidayId";
+                                    i.id = "HolidayId";
+                                    i.value = calEvent.holidayID;
+
+                                    f.appendChild(i);
+                                    f.submit();
+                                } 
+                            },
+                            {
+                                label: 'Dismiss',
+                                cssClass: 'btn-default',
+                                action: function (dialogRef) {
+                                    dialogRef.close();
+                                }
+                            }];
+                            
+                    }else{
+                        buttonss = [
+                            {
+                                label: 'Dismiss',
+                                cssClass: 'btn-default',
+                                action: function (dialogRef) {
+                                    dialogRef.close();
+                                }
+                            }];
+                    }</text>}
+                    else
+                    {<text>
+                        buttonss = [
+                            {
+                                label: 'Dismiss',
+                                cssClass: 'btn-default',
+                                action: function (dialogRef) {
+                                    dialogRef.close();
+                                }
+                            }];
+                    </text>
+                    }
 
                     BootstrapDialog.show({
                         type: typeOfDialog,
@@ -105,13 +178,12 @@
                             "<b>" +
                             getFullNameFromId(calEvent.userID) +
                             "</b>",
-                        buttons: [{
-                            label: 'Dismiss',
-                            cssClass: 'btn-info',
-                            action: function (dialogRef) {
-                                dialogRef.close();
-                            }
-                        }]
+                        
+                        buttons: 
+                                 
+                                     buttonss
+                                 
+                             
                     });
 
                 },
@@ -139,7 +211,8 @@
                     end: '@(item.DateTo)',
                     backgroundColor: '#378abf',
                     borderColor: '#378abf',
-                    userID: '@(item.UserId)'
+                    userID: '@(item.UserId)',
+                    holidayID: '@(item.HolidayId)'
                 },
         </text>
                 }

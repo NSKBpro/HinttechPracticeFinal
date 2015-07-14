@@ -186,6 +186,7 @@ namespace HinttechPractice.Controllers
             return RedirectToAction("initHolidays");
         }
 
+
         [HttpPost]
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult EditHolidayRedirect(int HolidayId)
@@ -193,6 +194,7 @@ namespace HinttechPractice.Controllers
             ViewBag.holidayForEdit = db.GetHolidays().Find(HolidayId);
             ViewBag.holidayForEditTo = db.GetHolidays().Find(HolidayId).DateTo.ToString("yyyy-MM-dd");
             ViewBag.holidayForEditFrom = db.GetHolidays().Find(HolidayId).DateFrom.ToString("yyyy-MM-dd");
+            ViewBag.holidayForEditId = HolidayId;
             return View("EditHoliday");
         }
 	}
