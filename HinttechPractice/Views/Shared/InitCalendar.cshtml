@@ -23,6 +23,9 @@
                 },
                 dayClick: function (date, jsEvent, view) {
 
+                    var datumProvera="@(ViewBag.Datum)";
+                   
+
                     // alert('Clicked on: ' + date.format());
                     @if (Context.User.IsInRole("User")) {<text>
 
@@ -46,7 +49,13 @@
 
 
                     } else if (status == 1) {
+
                         var datum2 = date.format();
+                        if ((datumProvera > datum2))
+                        {
+                            alertify.error("Date cant be before today " + datumProvera);
+                            return false;
+                        }
                         status = 0;
                         alertify.success("End date:   " + date.format());
                         datum1 = datum11;
@@ -65,9 +74,12 @@
                     window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
                 }
 
+                    
+
+                </text>
 
 
-                </text>}
+                    }
 
             },
                 eventClick: function (calEvent, jsEvent, view) {
@@ -96,7 +108,7 @@
                             label: 'Edit',
                             cssClass: 'btn-primary',
                             action: function () {
-                                
+
                                 var f = document.createElement("form");
                                 f.setAttribute('method',"post");
                                 f.setAttribute('action',"EditHolidayRedirect");

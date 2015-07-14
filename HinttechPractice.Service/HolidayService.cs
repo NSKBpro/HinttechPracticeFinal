@@ -60,6 +60,14 @@ namespace HinttechPractice.Service
             return holidays;
         }
 
+        public object FindById(int id)
+        {
+            Holiday pom = new Holiday();
+            pom = dataContext.Holidays.Find(id);
+
+            return pom;
+        }
+
         public void EditHoliday(Holiday h)
         {
             dataContext.Entry(dataContext.Holidays.Find(h.HolidayId)).CurrentValues.SetValues(h);
