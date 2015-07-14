@@ -2,9 +2,21 @@
 
 <script>
     function funProvera() {
+        var proveraDani=@(ViewBag.BrDana);
         var datum1 = document.getElementById("datum1").value;
         var datum2 = document.getElementById("datum2").value;
-        if (datum2 < datum1) {
+        var oneDay = 24 * 60 * 60 * 1000;
+        var diffDays = Math.round(Math.abs((new Date(datum2) - new Date(datum1)) / (oneDay)));
+        if (diffDays > proveraDani) {
+            alertify
+            alertify
+                    .alert("You choose more then " + proveraDani +" days", function () {
+                        alertify.error('Please try again');
+                    });
+            return false;
+
+        }
+        else if (datum2 < datum1) {
             alertify.error("Incorrect.Please try again");
             return false;
         } else {
@@ -29,7 +41,7 @@
     <div class="col-md-4 col-md-offset-4 bg-success">
         @Html.ValidationSummary(true)
 
-
+        
 
         <div class="form-group">
 

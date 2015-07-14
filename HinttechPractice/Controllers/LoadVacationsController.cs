@@ -19,6 +19,8 @@ namespace HinttechPractice.Controllers
     {
         private static string s1;
         private static string s2;
+        private static int daniZaVracanje;
+        private static DateTime datumProveraZaEdit;
         private HolidayService db2 = new HolidayService();
         TestService db = new TestService();
 
@@ -45,6 +47,7 @@ namespace HinttechPractice.Controllers
             ViewBag.Parameterdatum1 = parameterdatum1;
             ViewBag.Parameterdatum2 = parameterdatum2;
             ViewBag.UserId = u.UserId;
+            ViewBag.BrDana = u.VacationDays;
             var vac = new Vacation();
             vac.UserId = Int32.Parse(u.UserId.ToString());
             vac.DateFrom = Convert.ToDateTime(parameterdatum1);
@@ -62,6 +65,8 @@ namespace HinttechPractice.Controllers
             User u = (User)users.FindById(vacation.UserId);
              String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
+           
+           
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
 
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
@@ -71,6 +76,7 @@ namespace HinttechPractice.Controllers
                 {
                     vacation.DateFrom = vacation.DateFrom;
                     vacation.DateTo = vacation.DateTo;
+                    datumProveraZaEdit = vacation.DateTo;
                     db.AddVacation(vacation);
                     return RedirectToAction("initHolidays", "LoadHolidays");
 
@@ -90,6 +96,7 @@ namespace HinttechPractice.Controllers
                         vacation.DateTo = vacation.DateTo;
                         db.AddVacation(vacation);
                         int days = u.VacationDays - Convert.ToInt32(numDays);
+                        daniZaVracanje = Convert.ToInt32(numDays);
                         u.VacationDays = days;
                         users.Edit(u);
                         return RedirectToAction("initHolidays", "LoadHolidays");
@@ -109,6 +116,7 @@ namespace HinttechPractice.Controllers
         {
             UsersService users = new UsersService();
             User u = users.FindUserByUsername(HttpContext.User.Identity.Name);
+            ViewBag.BrDana = u.VacationDays;
             TestService ser = new TestService();
             if (ser.FindVacationByUserId(u.UserId, vacationId) == true)
             {
@@ -139,11 +147,17 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-            if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
+            Double povecavanjeOdmora = (datumProveraZaEdit - vacation.DateTo).TotalDays;
+            
+            if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 if (ModelState.IsValid)
                 {
+                    int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje;
+                    u.VacationDays = days;
+                    users.Edit(u);
                     db.EditVacation(vacation);
+                    daniZaVracanje = Convert.ToInt32(numDays);
                     return SeeVacations(page);
 
                 }
