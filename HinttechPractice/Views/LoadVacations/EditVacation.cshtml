@@ -3,6 +3,7 @@
 <script>
     function funProvera() {
         var proveraDani=@(ViewBag.BrDana);
+        var datumProvera="@(ViewBag.Datum)";
         var datum1 = "@(ViewBag.editDateFrom)";
         var datum2 = document.getElementById("datum2").value;
 
@@ -20,6 +21,9 @@
         }
         if (datum2 < datum1) {
             alertify.error("Incorrect.Please try again with new date");
+            return false;
+        }else if (datum2 <= datumProvera) { 
+            alertify.error("Incorrect.Please try with new date after " + datumProvera);
             return false;
         }else{
             alertify.success("Well done you can proceed now");

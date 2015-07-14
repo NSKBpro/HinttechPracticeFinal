@@ -3,7 +3,7 @@
 <div id="calendar"></div>
 <script>
 
-    
+
 
     $(document).ready(function () {
         status = 0;
@@ -22,6 +22,9 @@
                     right: 'today'
                 },
                 dayClick: function (date, jsEvent, view) {
+                    
+                    var datumProvera="@(ViewBag.Datum)";
+                   
 
                     // alert('Clicked on: ' + date.format());
                     @if (Context.User.IsInRole("User")) {<text>
@@ -46,12 +49,18 @@
 
 
                     } else if (status == 1) {
+
                         var datum2 = date.format();
+                        if ((datumProvera > datum2))
+                        {
+                            alertify.error("Date cant be before today " + datumProvera);
+                            return false;
+                        }
                         status = 0;
                         alertify.success("End date:   " + date.format());
                         datum1 = datum11;
                         var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
-                       
+
                     if(new Date(datum2)<new Date(datum1))
                     {
                         alertify
@@ -65,11 +74,14 @@
                     window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
                 }
 
+                    
 
+                </text>
+                        
+                    
+                    }
 
-                </text>}
-
-            },
+                },
                 eventClick: function (calEvent, jsEvent, view) {
                     var typeOfDialog, tempEndDate;
 
@@ -115,82 +127,82 @@
                     });
 
                 },
-            /*eventMouseover: function (calEvent, jsEvent, view) {
+                /*eventMouseover: function (calEvent, jsEvent, view) {
 
-                $(this).css('background-color', '#c3c3c3');
+                    $(this).css('background-color', '#c3c3c3');
 
-            },
-            eventMouseout: function (calEvent, jsEvent, view) {
+                },
+                eventMouseout: function (calEvent, jsEvent, view) {
 
-                $(this).css('background-color', '#F9C834');
+                    $(this).css('background-color', '#F9C834');
 
-            },*/
-            defaultDate: Date(),
-            editable: false,
-            eventLimit: true, // allow "more" link when too many events
-            events:
-            [//init holidays
-            @foreach (var item in ViewBag.initHolidays)
+                },*/
+                defaultDate: Date(),
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                events:
+                [//init holidays
+                @foreach (var item in ViewBag.initHolidays)
                 {
                 <text>
-                {
-                    title: '@(item.Description)',
-                    start: '@(item.DateFrom)',
-                    end: '@(item.DateTo)',
-                    backgroundColor: '#378abf',
-                    borderColor: '#378abf',
-                    userID: '@(item.UserId)'
-                },
-        </text>
+                    {
+                        title: '@(item.Description)',
+                        start: '@(item.DateFrom)',
+                        end: '@(item.DateTo)',
+                        backgroundColor: '#378abf',
+                        borderColor: '#378abf',
+                        userID: '@(item.UserId)'
+                    },
+            </text>
                 }
 
-        //vacations init
-        @foreach (var item in ViewBag.initVacations)
+            //vacations init
+            @foreach (var item in ViewBag.initVacations)
                     {
 
                           if ((item.IsSickLeave)){
                               <text>
-                {
-                    title: '@(item.Description)',
-                    start: '@(item.DateFrom)',
-                    end: '@(item.DateTo)',
-                    backgroundColor: '#df4040',
-                    borderColor: '#df4040',
-                    userID: '@(item.UserId)'
-                }, </text>  }
+                    {
+                        title: '@(item.Description)',
+                        start: '@(item.DateFrom)',
+                        end: '@(item.DateTo)',
+                        backgroundColor: '#df4040',
+                        borderColor: '#df4040',
+                        userID: '@(item.UserId)'
+                    }, </text>  }
                           else
                           {
                               <text>
-               {
-                   title: '@(item.Description)',
-                   start: '@(item.DateFrom)',
-                   end: '@(item.DateTo)',
-                   backgroundColor: '#50b239',
-                   borderColor: '#50b239',
-                   userID: '@(item.UserId)'
-               }, </text>
+                   {
+                       title: '@(item.Description)',
+                       start: '@(item.DateFrom)',
+                       end: '@(item.DateTo)',
+                       backgroundColor: '#50b239',
+                       borderColor: '#50b239',
+                       userID: '@(item.UserId)'
+                   }, </text>
 
                           }
 
                         }
-            ],
-            selectable: true,
-            timeFormat: ' ',
-            selectHelper: true,
-            select: function (start, end) {
+                ],
+                selectable: true,
+                timeFormat: ' ',
+                selectHelper: true,
+                select: function (start, end) {
 
-                @if(Context.User.IsInRole("Admin")) {
+                    @if(Context.User.IsInRole("Admin")) {
                           <text>
-                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
-                // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                </text>
+                    window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                    // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                    </text>
                       }
-                $('#calendar').fullCalendar('unselect');
-            },
+                    $('#calendar').fullCalendar('unselect');
+                },
 
             });
 
-    });
+        });
     });
 
     function getFullNameFromId(id){
