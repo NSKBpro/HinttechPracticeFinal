@@ -5,7 +5,6 @@
         var proveraDani=@(ViewBag.BrDana);
         var datum1 = document.getElementById("datum1").value;
         var datum2 = document.getElementById("datum2").value;
-        var datum3 =@(ViewBag.Datum);
         var oneDay = 24 * 60 * 60 * 1000;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date(datum1)) / (oneDay)));
         if (diffDays > proveraDani) {
@@ -16,10 +15,8 @@
                     });
             return false;
 
-        }else if (datum1 < new Date("@ViewBag.editDateTo")) {
-            alertify.error("Start Date cant be beofre"+ datum3);
-            return false;
-        }else if (datum2 < datum1) {
+        }
+        else if (datum2 < datum1) {
             alertify.error("Incorrect.Please try again");
             return false;
         } else {
