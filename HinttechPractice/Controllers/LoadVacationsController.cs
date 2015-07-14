@@ -63,15 +63,15 @@ namespace HinttechPractice.Controllers
         {
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
-             String datum = DateTime.Now.ToString("yyyy-MM-dd");
+            String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
-           
-           
+
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
+
+            numDays -= DaysIsntCountHoliday(vacation);
 
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
-
                 if (ModelState.IsValid)
                 {
                     vacation.DateFrom = vacation.DateFrom;
@@ -79,14 +79,11 @@ namespace HinttechPractice.Controllers
                     datumProveraZaEdit = vacation.DateTo;
                     db.AddVacation(vacation);
                     return RedirectToAction("initHolidays", "LoadHolidays");
-
                 }
                 return View();
             }
             else
             {
-
-
                 if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
                 {
 
@@ -110,6 +107,39 @@ namespace HinttechPractice.Controllers
                 }
                 //provera
             }
+        }
+
+        private double DaysIsntCountHoliday(Vacation vacation)
+        {
+            HolidayService holidaysService = new HolidayService();
+            List<Holiday> holidays = holidaysService.GetHolidays().ToList();
+            double holidayDaysIsntCount = 0;
+            foreach (Holiday h in holidays)
+            {
+                //kada je praznik izmedju pocetka i kraja odmora
+                if (h.DateFrom >= vacation.DateFrom && h.DateFrom <= vacation.DateTo)
+                {
+                    if (h.DateTo <= vacation.DateTo)
+                    {
+                        holidayDaysIsntCount = (h.DateTo - h.DateFrom).TotalDays;
+                    }
+                    else if (h.DateTo > vacation.DateTo)
+                    {
+                        holidayDaysIsntCount = (vacation.DateTo - h.DateFrom).TotalDays;
+                    }
+                }
+                //kada je praznik poceo pre pocetka odmora i traje posle
+                else if (h.DateFrom <= vacation.DateFrom && h.DateTo >= vacation.DateTo)
+                {
+                    holidayDaysIsntCount = (vacation.DateTo - vacation.DateFrom).TotalDays;
+                }
+                //zavrsi se izmedju
+                else if (h.DateFrom < vacation.DateFrom && h.DateTo < vacation.DateTo && h.DateTo >= vacation.DateFrom)
+                {
+                    holidayDaysIsntCount = (h.DateTo - vacation.DateFrom).TotalDays;
+                }
+            }
+            return holidayDaysIsntCount;
         }
 
         public ActionResult EditVacation(int vacationId)
@@ -148,7 +178,8 @@ namespace HinttechPractice.Controllers
             User u = (User)users.FindById(vacation.UserId);
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
             Double povecavanjeOdmora = (datumProveraZaEdit - vacation.DateTo).TotalDays;
-            
+
+            numDays -= DaysIsntCountHoliday(vacation);
             if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 if (ModelState.IsValid)
