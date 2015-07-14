@@ -4,6 +4,7 @@
 
     <br />
     <br />
+    @if (Model.Count() != 0) { 
     <div id="tabelaDiv">
         <table class="table table-hover table-bordered" id="tabela">
             <tr class="success">
@@ -82,3 +83,8 @@
            DisplayPageCountAndCurrentLocation = true
        })
     </div>
+    }
+    @if (Model.Count() == 0)
+    {
+        <h3>You don't have any vacation.</h3>
+    }
