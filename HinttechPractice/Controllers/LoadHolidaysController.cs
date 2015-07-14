@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace HinttechPractice.Controllers
 {
-    
+
     public class LoadHolidaysController : Controller
     {
         private HolidayService db = new HolidayService();
@@ -43,9 +43,9 @@ namespace HinttechPractice.Controllers
 
             ViewBag.users = users;
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
-            int userId=usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
+            int userId = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             ViewBag.idOfUser = userId;
-            User u=(User)usr.FindById(userId);
+            User u = (User)usr.FindById(userId);
             ViewBag.BrDana = u.VacationDays;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
@@ -65,8 +65,6 @@ namespace HinttechPractice.Controllers
             ViewBag.idOfUser = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             List<HolidaysAndUsers> haus = new List<HolidaysAndUsers>();
 
-            
-            
             foreach (Holiday h in db.GetHolidaysForDate(dt))
             {
                 HolidaysAndUsers hau = new HolidaysAndUsers();
@@ -84,7 +82,9 @@ namespace HinttechPractice.Controllers
             if (isEmpty)
             {
                 ViewBag.prazanDan = "da";
-            } else {
+            }
+            else
+            {
                 ViewBag.prazanDan = null;
             }
             return View("WindowForDay", haus);
@@ -115,6 +115,7 @@ namespace HinttechPractice.Controllers
                 if (h.DateFrom <= h.DateTo)
                 {
                     db.AddHoliday(h);
+                    changeVacationDays(h);
                 }
                 else
                 {
@@ -125,10 +126,92 @@ namespace HinttechPractice.Controllers
             {
                 Console.WriteLine("PREKLAPANJE!!!");
             }
-            
+
             return RedirectToAction("initHolidays");
 
         }
+
+        private void changeVacationDays(Holiday h)
+        {
+            TestService vacationService = new TestService();
+            UsersService users = new UsersService();
+            List<Vacation> vacations = vacationService.GetVacations().ToList();
+            double addMoreDaysToVacation = 0;
+            foreach (Vacation v in vacations)
+            {
+                if (v.IsSickLeave) continue;
+
+                //ako se praznik nalazi ceo izmedju, povecaj dane za sve.
+                if (h.DateFrom >= v.DateFrom && h.DateFrom <= v.DateTo)
+                {
+                    if (h.DateTo <= v.DateTo)
+                    {
+                        addMoreDaysToVacation = (h.DateTo - h.DateFrom).TotalDays;
+                    }
+                    else
+                    {
+                        addMoreDaysToVacation = (v.DateTo - h.DateFrom).TotalDays;
+                    }
+                }
+                else if (h.DateFrom <= v.DateFrom && h.DateTo >= v.DateTo)
+                {
+                    addMoreDaysToVacation = (v.DateTo - v.DateFrom).TotalDays;
+                }
+                else if (h.DateFrom <= v.DateFrom && h.DateTo <= v.DateTo && h.DateTo >= v.DateFrom)
+                {
+
+                    addMoreDaysToVacation = (h.DateTo - v.DateFrom).TotalDays;
+                }
+
+                if (addMoreDaysToVacation > 0)
+                {
+                    User u = (User)users.FindById(v.UserId);
+                    u.VacationDays += Convert.ToInt32(addMoreDaysToVacation);
+                    users.Edit(u);
+                }
+            }
+        }
+        private void revertOldVacationDays(Holiday h)
+        {
+            TestService vacationService = new TestService();
+            UsersService users = new UsersService();
+            List<Vacation> vacations = vacationService.GetVacations().ToList();
+            double addMoreDaysToVacation = 0;
+            foreach (Vacation v in vacations)
+            {
+                if (v.IsSickLeave) continue;
+
+                //ako se praznik nalazi ceo izmedju, povecaj dane za sve.
+                if (h.DateFrom >= v.DateFrom && h.DateFrom <= v.DateTo)
+                {
+                    if (h.DateTo <= v.DateTo)
+                    {
+                        addMoreDaysToVacation = (h.DateTo - h.DateFrom).TotalDays;
+                    }
+                    else
+                    {
+                        addMoreDaysToVacation = (v.DateTo - h.DateFrom).TotalDays;
+                    }
+                }
+                else if (h.DateFrom <= v.DateFrom && h.DateTo >= v.DateTo)
+                {
+                    addMoreDaysToVacation = (v.DateTo - v.DateFrom).TotalDays;
+                }
+                else if (h.DateFrom <= v.DateFrom && h.DateTo <= v.DateTo && h.DateTo >= v.DateFrom)
+                {
+
+                    addMoreDaysToVacation = (h.DateTo - v.DateFrom).TotalDays;
+                }
+
+                if (addMoreDaysToVacation > 0)
+                {
+                    User u = (User)users.FindById(v.UserId);
+                    u.VacationDays -= Convert.ToInt32(addMoreDaysToVacation);
+                    users.Edit(u);
+                }
+            }
+        }
+
 
         [HttpPost]
         [MyAuthorizeAtribute(Roles = "Admin")]
@@ -171,7 +254,10 @@ namespace HinttechPractice.Controllers
             {
                 if (h.DateFrom <= h.DateTo)
                 {
+                    Holiday oldHoliday = (Holiday)db.FindById(h.HolidayId);
+                    revertOldVacationDays(oldHoliday);
                     db.EditHoliday(h);
+                    changeVacationDays(h);
                 }
                 else
                 {
@@ -186,6 +272,7 @@ namespace HinttechPractice.Controllers
             return RedirectToAction("initHolidays");
         }
 
+
         [HttpPost]
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult EditHolidayRedirect(int HolidayId)
@@ -193,7 +280,8 @@ namespace HinttechPractice.Controllers
             ViewBag.holidayForEdit = db.GetHolidays().Find(HolidayId);
             ViewBag.holidayForEditTo = db.GetHolidays().Find(HolidayId).DateTo.ToString("yyyy-MM-dd");
             ViewBag.holidayForEditFrom = db.GetHolidays().Find(HolidayId).DateFrom.ToString("yyyy-MM-dd");
+            ViewBag.holidayForEditId = HolidayId;
             return View("EditHoliday");
         }
-	}
+    }
 }

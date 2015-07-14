@@ -112,16 +112,17 @@ namespace HinttechPractice.Controllers
             HolidayService holidaysService = new HolidayService();
             List<Holiday> holidays = holidaysService.GetHolidays().ToList();
             double holidayDaysIsntCount = 0;
+            if (vacation.IsSickLeave) return holidayDaysIsntCount;
             foreach (Holiday h in holidays)
             {
                 //kada je praznik izmedju pocetka i kraja odmora
-                if (h.DateFrom >= vacation.DateFrom && h.DateFrom <= vacation.DateTo)
+               if (h.DateFrom >= vacation.DateFrom && h.DateFrom <= vacation.DateTo)
                 {
                     if (h.DateTo <= vacation.DateTo)
                     {
                         holidayDaysIsntCount = (h.DateTo - h.DateFrom).TotalDays;
                     }
-                    else if (h.DateTo > vacation.DateTo)
+                    else if (h.DateTo >= vacation.DateTo)
                     {
                         holidayDaysIsntCount = (vacation.DateTo - h.DateFrom).TotalDays;
                     }
@@ -132,7 +133,7 @@ namespace HinttechPractice.Controllers
                     holidayDaysIsntCount = (vacation.DateTo - vacation.DateFrom).TotalDays;
                 }
                 //zavrsi se izmedju
-                else if (h.DateFrom < vacation.DateFrom && h.DateTo < vacation.DateTo && h.DateTo >= vacation.DateFrom)
+                else if (h.DateFrom <= vacation.DateFrom && h.DateTo <= vacation.DateTo && h.DateTo >= vacation.DateFrom)
                 {
                     holidayDaysIsntCount = (h.DateTo - vacation.DateFrom).TotalDays;
                 }
@@ -179,8 +180,12 @@ namespace HinttechPractice.Controllers
             User u = (User)users.FindById(vacation.UserId);
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
             Double povecavanjeOdmora = (vacation.DateTo - datumProveraZaEdit).TotalDays;
-            
-            numDays -= DaysIsntCountHoliday(vacation);
+            Vacation oldVacation = (Vacation)db.FindById(vacation.VacationPeriodId);
+           
+            double oldHolidayVacationCount = DaysIsntCountHoliday(oldVacation);
+            double totalHolidayDays = oldHolidayVacationCount - DaysIsntCountHoliday(vacation);
+            numDays += totalHolidayDays;
+
             if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 if (ModelState.IsValid)
