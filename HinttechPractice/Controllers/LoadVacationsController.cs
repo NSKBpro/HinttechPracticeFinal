@@ -76,6 +76,7 @@ namespace HinttechPractice.Controllers
                 {
                     vacation.DateFrom = vacation.DateFrom;
                     vacation.DateTo = vacation.DateTo;
+                    datumProveraZaEdit = vacation.DateTo;
                     db.AddVacation(vacation);
                     return RedirectToAction("initHolidays", "LoadHolidays");
 
@@ -95,6 +96,7 @@ namespace HinttechPractice.Controllers
                         vacation.DateTo = vacation.DateTo;
                         db.AddVacation(vacation);
                         int days = u.VacationDays - Convert.ToInt32(numDays);
+                        daniZaVracanje = Convert.ToInt32(numDays);
                         u.VacationDays = days;
                         users.Edit(u);
                         return RedirectToAction("initHolidays", "LoadHolidays");
@@ -124,11 +126,9 @@ namespace HinttechPractice.Controllers
                     //...
                     return RedirectToAction("SeeVacations");
                 }
-                Double numDays = (vac.DateTo - vac.DateFrom).TotalDays;
-                daniZaVracanje = Convert.ToInt32(numDays);
                 String datum = DateTime.Now.ToString("yyyy-MM-dd");
                 ViewBag.Datum = datum;
-                datumProveraZaEdit = vac.DateTo;
+
                 ViewBag.editDateFrom = vac.DateFrom.ToString("yyyy-MM-dd");
                 ViewBag.editDateTo = vac.DateTo.ToString("yyyy-MM-dd");
                 return View(vac);
@@ -147,7 +147,7 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-            Double povecavanjeOdmora = (vacation.DateTo-datumProveraZaEdit).TotalDays;
+            Double povecavanjeOdmora = (datumProveraZaEdit - vacation.DateTo).TotalDays;
             
             if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
@@ -165,7 +165,7 @@ namespace HinttechPractice.Controllers
             }
             else
             {
-                return RedirectToAction("SeeVacations");
+                return SeeVacations(page);
             }
         }
 
@@ -178,20 +178,14 @@ namespace HinttechPractice.Controllers
         [HttpPost]
         public ActionResult DeleteVacation(Vacation vacation, int? page)
         {
-            Vacation vac = (Vacation)db.FindById(vacation.VacationPeriodId);
-            double numDays = (vac.DateTo - vac.DateFrom).TotalDays;
-
+            double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
             UsersService users = new UsersService();
             User u = (User)users.FindUserByUsername(HttpContext.User.Identity.Name);
-            if (!vac.IsSickLeave)
-            {
-                int days = u.VacationDays + Convert.ToInt32(numDays);
-                u.VacationDays = days;
-            }
-            
+            int days = u.VacationDays + Convert.ToInt32(numDays);
+            u.VacationDays = days;
             users.Edit(u);
-            db.DeleteVacation(vac.VacationPeriodId);
-            return SeeVacations(page);
+            db.DeleteVacation(vacation.VacationPeriodId);
+            return SeeVacationsDelete(page);
         }
 
         public ActionResult SeeVacations(int? page)
@@ -200,8 +194,23 @@ namespace HinttechPractice.Controllers
             int userId = users.FindUserByUsername(HttpContext.User.Identity.Name).UserId;
             List<Vacation> currentUserVacations = db.GetVacationsForCurrentUser(userId);
             double tempPaginationValue = currentUserVacations.Count() / 6;
-            if (tempPaginationValue > page) page = 1;
-            if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == currentUserVacations.Count()) page--;
+            if (currentUserVacations.Count() % 6 != 0) tempPaginationValue++;
+            if (tempPaginationValue < page) page = 1;
+            //if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == currentUserVacations.Count()) page--;
+            String datum = DateTime.Now.ToString("yyyy-MM-dd");
+            ViewBag.Datum = datum;
+            return View("SeeVacations", currentUserVacations.ToList().ToPagedList(page ?? 1, 6));
+        }
+
+        public ActionResult SeeVacationsDelete(int? page)
+        {
+            UsersService users = new UsersService();
+            int userId = users.FindUserByUsername(HttpContext.User.Identity.Name).UserId;
+            List<Vacation> currentUserVacations = db.GetVacationsForCurrentUser(userId);
+            double tempPaginationValue = currentUserVacations.Count() / 6;
+            if (currentUserVacations.Count() % 6 != 0) tempPaginationValue++;
+            if (tempPaginationValue < page) page--;
+            //if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == currentUserVacations.Count()) page--;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
             return View("SeeVacations", currentUserVacations.ToList().ToPagedList(page ?? 1, 6));
