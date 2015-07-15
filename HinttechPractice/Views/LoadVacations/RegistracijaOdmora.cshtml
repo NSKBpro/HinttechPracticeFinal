@@ -1,14 +1,18 @@
 ﻿@model HinttechPractice.Data.Vacation
 
 <script>
+    var flag="@(ViewBag.Flag)";
     function funProvera() {
         var proveraDani=@(ViewBag.BrDana);
-        var datumProvera="@(ViewBag.Datum)";   
+        var datumProvera="@(ViewBag.Datum)";  
+        
         var datum1 = document.getElementById("datum1").value;
         var datum2 = document.getElementById("datum2").value;
         var sick=document.getElementById("sick").checked;
         var oneDay = 24 * 60 * 60 * 1000;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date(datum1)) / (oneDay)));
+        
+
         if (diffDays > proveraDani && sick==false) {
 
             alertify
@@ -29,6 +33,17 @@
             return true;
         }
     }
+    function myFunction(){
+        if(flag==1){
+            alertify
+                        .alert("You cant use this date for vacation because you already have vacation in that period", function () {
+                            alertify.error('Please try again with new period');
+                        });
+            alertify.error("Greska");
+        }    
+       
+
+    }
 </script>
 
 
@@ -36,64 +51,65 @@
 @{
 
     ViewBag.title = "Index";
+    
 }
+<body onload="myFunction()">
+    @using (Html.BeginForm("RegistracijaOdmora", "LoadVacations", FormMethod.Post, new { onsubmit = "return funProvera()" }))
+    {
+        @Html.AntiForgeryToken()
+        <br /><br />
+        <div class="row" align="center">
+            <div class="col-md-4 col-md-offset-4 bg-success">
+                @Html.ValidationSummary(true)
 
-@using (Html.BeginForm("RegistracijaOdmora", "LoadVacations", FormMethod.Post, new { onsubmit = "return funProvera()" }))
-{
-    @Html.AntiForgeryToken()
-    <br /><br />
-    <div class="row" align="center">
-    <div class="col-md-4 col-md-offset-4 bg-success">
-        @Html.ValidationSummary(true)
 
-        
 
-        <div class="form-group">
+                <div class="form-group">
 
-            <div class="col-md-10">
-                @Html.HiddenFor(model => model.UserId)
-                @Html.ValidationMessageFor(model => model.UserId)
+                    <div class="col-md-10">
+                        @Html.HiddenFor(model => model.UserId)
+                        @Html.ValidationMessageFor(model => model.UserId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        <input type="date" id="datum1" name="DateFrom" class="form-control" value="@ViewBag.Parameterdatum1" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="date" id="datum2" name="DateTo" class="form-control" value="@ViewBag.Parameterdatum2" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control text-info", @placeholder = "Description" } })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <label><b>Is sick:</b></label>
+                        @Html.EditorFor(model => model.IsSickLeave, new { htmlAttributes = new { @id = "sick" } })
+                        @Html.ValidationMessageFor(model => model.IsSickLeave)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md col-md-10">
+                        <input type="submit" value="Save" class="btn btn-success btn-block" />
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="form-group">
-
-            <div class="col-md-10">
-                <input type="date" id="datum1" name="DateFrom" class="form-control" value="@ViewBag.Parameterdatum1" required />
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                <input type="date" id="datum2" name="DateTo" class="form-control" value="@ViewBag.Parameterdatum2" required/>
-            </div>
-        </div>
-
-        <div class="form-group">
-           
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control text-info", @placeholder = "Description" } })
-                @Html.ValidationMessageFor(model => model.Description)
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-10">
-                <label><b>Is sick:</b></label>
-                @Html.EditorFor(model => model.IsSickLeave, new { htmlAttributes = new { @id = "sick" } })
-                @Html.ValidationMessageFor(model => model.IsSickLeave)
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md col-md-10">
-                <input type="submit" value="Save" class="btn btn-success btn-block" />
-            </div>
-        </div>
-    </div>
-        </div>
-}
-
+    }
+</body>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>

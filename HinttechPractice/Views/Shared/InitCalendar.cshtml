@@ -10,17 +10,8 @@
         datum11 = 0;
         boja = '#FF0000';
        
-        var flag="@(ViewBag.Flag)";
         $(document).ready(function () {
-            if(flag==1)
-            {
-                alertify
-                            .alert("You cant use this date for vacation because you already have vacation in that period", function () {
-                                alertify.error('Please try again with new period');
-                            });
-                alertify.error("Greska");
-               
-            }
+           
             $("#tabela").hide();
             $("#hide").hide();
             $('#calendar').fullCalendar({

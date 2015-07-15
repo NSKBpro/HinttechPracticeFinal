@@ -55,6 +55,7 @@ namespace HinttechPractice.Controllers
             vac.UserId = Int32.Parse(u.UserId.ToString());
             vac.DateFrom = Convert.ToDateTime(parameterdatum1);
             vac.DateTo = Convert.ToDateTime(parameterdatum2);
+            ViewBag.Flag =flag;
             flag = 0;
 
 
@@ -98,7 +99,7 @@ namespace HinttechPractice.Controllers
                         vacation.DateFrom = vacation.DateFrom;
                         vacation.DateTo = vacation.DateTo;
                         db.AddVacation(vacation);
-                        return RedirectToAction("initHolidays", "LoadHolidays");
+                        return RedirectToAction("RegistracijaOdmora");
                     }
 
 
@@ -135,11 +136,12 @@ namespace HinttechPractice.Controllers
                             int days = u.VacationDays - Convert.ToInt32(numDays);
                             u.VacationDays = days;
                             users.Edit(u);
-                            return RedirectToAction("initHolidays", "LoadHolidays");
+                            return RedirectToAction("RegistracijaOdmora");
                         }
                          else
                          {
-                             return RedirectToAction("initHolidays", "LoadHolidays");
+                             flag = 1;
+                             return RedirectToAction("RegistracijaOdmora");
                          }
 
                     }
@@ -147,7 +149,7 @@ namespace HinttechPractice.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("initHolidays", "LoadHolidays");
+                    return RedirectToAction("RegistracijaOdmora");
                 }
                 //provera
             }
