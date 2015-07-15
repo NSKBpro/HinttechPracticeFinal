@@ -9,10 +9,18 @@
         status = 0;
         datum11 = 0;
         boja = '#FF0000';
-        flag = 0;
-
+       
+        var flag="@(ViewBag.Flag)";
         $(document).ready(function () {
-
+            if(flag==1)
+            {
+                alertify
+                            .alert("You cant use this date for vacation because you already have vacation in that period", function () {
+                                alertify.error('Please try again with new period');
+                            });
+                alertify.error("Greska");
+               
+            }
             $("#tabela").hide();
             $("#hide").hide();
             $('#calendar').fullCalendar({
@@ -24,7 +32,9 @@
                 dayClick: function (date, jsEvent, view) {
 
                     var datumProvera="@(ViewBag.Datum)";
-                   
+                    
+
+                  
 
                     // alert('Clicked on: ' + date.format());
                     @if (Context.User.IsInRole("User")) {<text>
@@ -230,6 +240,7 @@
                 }
 
         //vacations init
+        @ViewBag.Error
         @foreach (var item in ViewBag.initVacations)
                     {
 
@@ -291,7 +302,7 @@
 <br />
 <br />
 <div style="float:right">
-    <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday
+    <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday @ViewBag.Flag
     <span class="glyphicon glyphicon-stop" style="color: #df4040;"></span>Sick Leave
     <span class="glyphicon glyphicon-stop" style="color: #50b239;"></span>Vacation
 </div><br />
