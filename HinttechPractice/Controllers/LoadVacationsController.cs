@@ -19,6 +19,7 @@ namespace HinttechPractice.Controllers
     {
         private static string s1;
         private static string s2;
+        public static int flag=0;
         private static int daniZaVracanje;
         private static DateTime datumProveraZaEdit;
         private HolidayService db2 = new HolidayService();
@@ -34,6 +35,7 @@ namespace HinttechPractice.Controllers
             ViewBag.Title = "CalendarView";
             ViewBag.initHolidays = db2.GetHolidays();
             ViewBag.initVacations = db.GetVacations();
+            flag = 0;
             return View("InitCalendar");
         }
 
@@ -53,6 +55,8 @@ namespace HinttechPractice.Controllers
             vac.UserId = Int32.Parse(u.UserId.ToString());
             vac.DateFrom = Convert.ToDateTime(parameterdatum1);
             vac.DateTo = Convert.ToDateTime(parameterdatum2);
+            ViewBag.Flag =flag;
+            flag = 0;
 
 
             return View(vac);
@@ -62,22 +66,43 @@ namespace HinttechPractice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RegistracijaOdmora(Vacation vacation)
         {
+            flag = 0;
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
              String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
-
+             List<Vacation> vacations=db.GetVacationsForCurrentUser(u.UserId);
             numDays -= DaysIsntCountHoliday(vacation);
 
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
+                int brojac = 0;
                 if (ModelState.IsValid)
                 {
-                    vacation.DateFrom = vacation.DateFrom;
-                    vacation.DateTo = vacation.DateTo;
-                    db.AddVacation(vacation);
-                    return RedirectToAction("initHolidays", "LoadHolidays");
+                   
+                    foreach (Vacation v in vacations)
+                    {
+                        if ((vacation.DateFrom > v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo > v.DateFrom && vacation.DateTo < v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                        {
+                            flag = 1;
+
+                        }
+                        else
+                        {
+                            brojac++;
+                        }
+                    }
+                    if (brojac == vacations.Count)
+                    {
+                        flag = 0;
+                        vacation.DateFrom = vacation.DateFrom;
+                        vacation.DateTo = vacation.DateTo;
+                        db.AddVacation(vacation);
+                        return RedirectToAction("RegistracijaOdmora");
+                    }
+
+
                 }
                 return View();
             }
@@ -85,23 +110,46 @@ namespace HinttechPractice.Controllers
             {
                 if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
                 {
-
+                    int brojac = 0;
                     if (ModelState.IsValid)
                     {
-                        vacation.DateFrom = vacation.DateFrom;
-                        vacation.DateTo = vacation.DateTo;
-                        db.AddVacation(vacation);
-                        int days = u.VacationDays - Convert.ToInt32(numDays);
-                        u.VacationDays = days;
-                        users.Edit(u);
-                        return RedirectToAction("initHolidays", "LoadHolidays");
+                         foreach (Vacation v in vacations)
+                        {
+                            if ((vacation.DateFrom > v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo > v.DateFrom && vacation.DateTo < v.DateTo)||(vacation.DateFrom<=v.DateFrom && vacation.DateTo>=v.DateTo))
+                            {
+                                flag = 1;
+                                
+                            }
+                            else
+                            {
+                                
+                                brojac++; 
+                            }
+                        }
+
+                         if (brojac == vacations.Count)
+                        {
+                            flag = 0;
+                            vacation.DateFrom = vacation.DateFrom;
+                            vacation.DateTo = vacation.DateTo;
+                            db.AddVacation(vacation);
+                            int days = u.VacationDays - Convert.ToInt32(numDays);
+                            u.VacationDays = days;
+                            users.Edit(u);
+                            return RedirectToAction("RegistracijaOdmora");
+                        }
+                         else
+                         {
+                             flag = 1;
+                             return RedirectToAction("RegistracijaOdmora");
+                         }
 
                     }
                     return View();
                 }
                 else
                 {
-                    return RedirectToAction("initHolidays", "LoadHolidays");
+                    return RedirectToAction("RegistracijaOdmora");
                 }
                 //provera
             }
@@ -181,29 +229,81 @@ namespace HinttechPractice.Controllers
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
             Double povecavanjeOdmora = (vacation.DateTo - datumProveraZaEdit).TotalDays;
             Vacation oldVacation = (Vacation)db.FindById(vacation.VacationPeriodId);
-           
+            List<Vacation> vacations = db.GetVacationsForCurrentUser(u.UserId);
             double oldHolidayVacationCount = DaysIsntCountHoliday(oldVacation);
             double totalHolidayDays = oldHolidayVacationCount - DaysIsntCountHoliday(vacation);
             numDays += totalHolidayDays;
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
-                db.EditVacation(vacation);
-                return SeeVacations(page);
+                int brojac = 0;
+                foreach (Vacation v in vacations)
+                {
+                    if (vacation.VacationPeriodId == v.VacationPeriodId)
+                    {
+                        brojac++;
+                        continue;
+                    }
+                    if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                    {
+
+                        flag = 1;
+
+                    }
+                    else
+                    {
+                        brojac++;
+                    }
+                }
+                if (brojac == vacations.Count)
+                {
+                    db.EditVacation(vacation);
+                    return SeeVacations(page);
+                }
+                else
+                {
+                    return SeeVacations(page);
+                }
+
             }
             else
             {
 
                 if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
                 {
+                    int brojac = 0;
                     if (ModelState.IsValid)
                     {
+                        foreach (Vacation v in vacations)
+                        {
+                            if(vacation.VacationPeriodId==v.VacationPeriodId)
+                            {
+                                brojac++;
+                                continue;
+                            }
+                            if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                            {
 
-                        int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje;
-                        u.VacationDays = days;
-                        users.Edit(u);
-                        db.EditVacation(vacation);
-                        daniZaVracanje = Convert.ToInt32(numDays);
-                        return SeeVacations(page);
+                                flag = 1;
+
+                            }
+                            else
+                            {
+                                brojac++;
+                            }
+                        }
+                        if (brojac == vacations.Count)
+                        {
+                            int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje;
+                            u.VacationDays = days;
+                            users.Edit(u);
+                            db.EditVacation(vacation);
+                            daniZaVracanje = Convert.ToInt32(numDays);
+                            return SeeVacations(page);
+                        }
+                        else
+                        {
+                            return SeeVacations(page);
+                        }
 
                     }
                     return View();

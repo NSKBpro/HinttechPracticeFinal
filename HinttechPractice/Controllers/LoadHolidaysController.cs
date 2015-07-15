@@ -30,6 +30,7 @@ namespace HinttechPractice.Controllers
             ViewBag.initHolidays = db.GetHolidays();
             ViewBag.initVacations = db2.GetVacations();
             List<UsersLite> users = new List<UsersLite>();
+      
 
             foreach (User us in usr.FindAll())
             {
@@ -49,7 +50,11 @@ namespace HinttechPractice.Controllers
             ViewBag.BrDana = u.VacationDays;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
+            ViewBag.Flag = LoadVacationsController.flag;
+            LoadVacationsController.flag = 0;
+            
             return View("InitCalendar");
+            
         }
 
         private DateTime dt;

@@ -13,17 +13,16 @@
 <div class="row" align="center">
     <div class="col-md-4 col-md-offset-4 bg-success">
         <form class="form-signin" role="form" method="POST" action="register" enctype="multipart/form-data">
-            <input type="text" class="form-control" placeholder="Username" name="Username" required autofocus>
-            <input type="password" class="form-control" placeholder="Password" name="Password" required>
-            <input type="password" class="form-control" placeholder="Repeat password" name="repeatPassword" required>
-            <input type="text" class="form-control" placeholder="First name" name="FirstName" required>
-            <input type="text" class="form-control" placeholder="Last name" name="LastName" required>
+            <input type="text" class="form-control" placeholder="Username" name="Username" maxlength="25" required autofocus>
+            <input type="password" class="form-control" placeholder="Password" name="Password" maxlength="25" required>
+            <input type="password" class="form-control" placeholder="Repeat password" name="repeatPassword" maxlength="25" required>
+            <input type="text" class="form-control" placeholder="First name" name="FirstName" maxlength="25" required>
+            <input type="text" class="form-control" placeholder="Last name" name="LastName" maxlength="25" required>
             <input type="email" class="form-control" placeholder="Email" name="Email" required>
 
             <div class="form-group">
                 <input type="file" name="file" id="file" style="width: 100%;" class=" btn btn-default" />
             </div>
-            <br />
             <br />
             <input class="btn btn-lg btn-success btn-block" type="submit" value="Register" />
             <br /><br />
