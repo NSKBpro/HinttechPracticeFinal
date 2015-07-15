@@ -1,135 +1,137 @@
-﻿<br />
-<br />
-<div id="calendar"></div>
-<script>
+﻿
+    <br />
+    <br />
+    <div id="calendar"></div>
+    <script>
 
-    
+    @{
+        var arrayHolidays = @ViewBag.initHolidays;
+    }
+        var arrayss = [];
+        var listOfObjects = [];
+        @foreach (var item in arrayHolidays)
+        {
+            <text>
+        var singleObj = {}
+        singleObj['HolidayId'] = "@item.HolidayId";
+        singleObj['UserId'] = "@item.UserId";
+        singleObj['DateFrom'] = "@item.DateFrom.ToString("MM.dd.yyyy")";
+        singleObj['DateTo'] = "@item.DateTo.ToString("MM.dd.yyyy")";
+        singleObj['Description'] = "@item.Description";
+        listOfObjects.push(singleObj);
+            </text>  
+        }
+        
+        var array = @Html.Raw(Json.Encode(@ViewBag.users));
 
-    $(document).ready(function () {
-        status = 0;
-        datum11 = 0;
-        boja = '#FF0000';
-        flag = 0;
 
         $(document).ready(function () {
+            status = 0;
+            datum11 = 0;
+            boja = '#FF0000';
+            flag = 0;
 
-            $("#tabela").hide();
-            $("#hide").hide();
-            $('#calendar').fullCalendar({
-                header: {
-                    left: 'prev,next',
-                    center: 'title',
-                    right: 'today'
-                },
-                dayClick: function (date, jsEvent, view) {
+            $(document).ready(function () {
 
-                    var datumProvera="@(ViewBag.Datum)";
-                   
+                $("#tabela").hide();
+                $("#hide").hide();
+                $('#calendar').fullCalendar({
+                    header: {
+                        left: 'prev,next',
+                        center: 'title',
+                        right: 'today'
+                    },
+                    dayClick: function (date, jsEvent, view) {
 
-                    // alert('Clicked on: ' + date.format());
-                    @if (Context.User.IsInRole("User")) {<text>
-
-
-
-                    //Vraca esc event, uradio sam hide jer je zbog ifa vracao vise od jednog diajloga
-                    $(document).keyup(function (e) {
-                        if (e.keyCode === 27)
-                            alertify.error("Canceling operation...");
-                        status = 0;
-                        e.hide();
-                    })
-
-                    var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-
-                    if (status == 0) {
-                        var datum1 = date.format();
-                        datum11 = datum1;
-                        status = 1;
-                        alertify.success("Start date:   " + date.format());
+                        var datumProvera="@(ViewBag.Datum)";
 
 
-                    } else if (status == 1) {
-
-                        var datum2 = date.format();
-                        if ((datumProvera > datum2))
-                        {
-                            alertify.error("Date cant be before today " + datumProvera);
-                            return false;
-                        }
-                        status = 0;
-                        alertify.success("End date:   " + date.format());
-                        datum1 = datum11;
-                        var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
-                       
-                    if(new Date(datum2)<new Date(datum1))
-                    {
-                        alertify
-                             .alert("End date is incorrect", function () {
-                                 alertify.error('Please try with new End date');
-                             });
-                        return false;
-
-                    }
-
-                    window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
-                }
-
-                    
-
-                </text>
+                        // alert('Clicked on: ' + date.format());
+                        @if (Context.User.IsInRole("User")) {<text>
 
 
-                    }
 
-            },
-                eventClick: function (calEvent, jsEvent, view) {
-                    var typeOfDialog, tempEndDate;
+                        //Vraca esc event, uradio sam hide jer je zbog ifa vracao vise od jednog diajloga
+                        $(document).keyup(function (e) {
+                            if (e.keyCode === 27)
+                                alertify.error("Canceling operation...");
+                            status = 0;
+                            e.hide();
+                        })
 
-                    if (calEvent.end == null)
-                        tempEndDate = calEvent.start.toString();
-                    else
-                        tempEndDate = calEvent.end.toString();
+                        var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 
-                    var bgColor = $(this).css('background-color');
-                    if (bgColor === 'rgb(55, 138, 191)')
-                        typeOfDialog = BootstrapDialog.TYPE_PRIMARY
-                    else if (bgColor === 'rgb(223, 64, 64)')
-                        typeOfDialog = BootstrapDialog.TYPE_DANGER
-                    else if (bgColor === 'rgb(80, 178, 57)')
-                        typeOfDialog = BootstrapDialog.TYPE_SUCCESS
+                        if (status == 0) {
+                            var datum1 = date.format();
+                            datum11 = datum1;
+                            status = 1;
+                            alertify.success("Start date:   " + date.format());
 
-                    var buttons;
-                    @if(Context.User.IsInRole("Admin")){
-                        <text>
-                    if(typeOfDialog === BootstrapDialog.TYPE_PRIMARY){
-                        
-                            
-                        buttonss = [{
-                            label: 'Edit',
-                            cssClass: 'btn-primary',
-                            action: function () {
 
-                                var f = document.createElement("form");
-                                f.setAttribute('method',"post");
-                                f.setAttribute('action',"EditHolidayRedirect");
+                        } else if (status == 1) {
 
-                                var i = document.createElement("input");
-                                i.type = "hidden";
-                                i.name = "HolidayId";
-                                i.id = "HolidayId";
-                                i.value = calEvent.holidayID;
-
-                                f.appendChild(i);
-                                f.submit();
-                            }
-                        },
+                            var datum2 = date.format();
+                            if ((datumProvera > datum2))
                             {
-                                label: 'Remove',
-                                cssClass: 'btn-danger',
+                                alertify.error("Date cant be before today " + datumProvera);
+                                return false;
+                            }
+                            status = 0;
+                            alertify.success("End date:   " + date.format());
+                            datum1 = datum11;
+                            var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
+
+                            if(new Date(datum2)<new Date(datum1))
+                            {
+                                alertify
+                                     .alert("End date is incorrect", function () {
+                                         alertify.error('Please try with new End date');
+                                     });
+                                return false;
+
+                            }
+
+                            window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
+                        }
+
+
+
+                        </text>
+
+
+                    }
+
+                    },
+                    eventClick: function (calEvent, jsEvent, view) {
+                        var typeOfDialog, tempEndDate;
+
+                        if (calEvent.end == null)
+                            tempEndDate = calEvent.start.toString();
+                        else
+                            tempEndDate = calEvent.end.toString();
+
+                        var bgColor = $(this).css('background-color');
+                        if (bgColor === 'rgb(55, 138, 191)')
+                            typeOfDialog = BootstrapDialog.TYPE_PRIMARY
+                        else if (bgColor === 'rgb(223, 64, 64)')
+                            typeOfDialog = BootstrapDialog.TYPE_DANGER
+                        else if (bgColor === 'rgb(80, 178, 57)')
+                            typeOfDialog = BootstrapDialog.TYPE_SUCCESS
+
+                        var buttons;
+                        @if(Context.User.IsInRole("Admin")){
+                        <text>
+                        if(typeOfDialog === BootstrapDialog.TYPE_PRIMARY){
+
+
+                            buttonss = [{
+                                label: 'Edit',
+                                cssClass: 'btn-primary',
                                 action: function () {
+
                                     var f = document.createElement("form");
                                     f.setAttribute('method',"post");
-                                    f.setAttribute('action',"RemoveHoliday");
+                                    f.setAttribute('action',"EditHolidayRedirect");
 
                                     var i = document.createElement("input");
                                     i.type = "hidden";
@@ -139,26 +141,44 @@
 
                                     f.appendChild(i);
                                     f.submit();
-                                } 
+                                }
                             },
-                            {
-                                label: 'Dismiss',
-                                cssClass: 'btn-default',
-                                action: function (dialogRef) {
-                                    dialogRef.close();
-                                }
-                            }];
-                            
-                    }else{
-                        buttonss = [
-                            {
-                                label: 'Dismiss',
-                                cssClass: 'btn-default',
-                                action: function (dialogRef) {
-                                    dialogRef.close();
-                                }
-                            }];
-                    }</text>}
+                                {
+                                    label: 'Remove',
+                                    cssClass: 'btn-danger',
+                                    action: function () {
+                                        var f = document.createElement("form");
+                                        f.setAttribute('method',"post");
+                                        f.setAttribute('action',"RemoveHoliday");
+
+                                        var i = document.createElement("input");
+                                        i.type = "hidden";
+                                        i.name = "HolidayId";
+                                        i.id = "HolidayId";
+                                        i.value = calEvent.holidayID;
+
+                                        f.appendChild(i);
+                                        f.submit();
+                                    }
+                                },
+                                {
+                                    label: 'Dismiss',
+                                    cssClass: 'btn-default',
+                                    action: function (dialogRef) {
+                                        dialogRef.close();
+                                    }
+                                }];
+
+                        }else{
+                            buttonss = [
+                                {
+                                    label: 'Dismiss',
+                                    cssClass: 'btn-default',
+                                    action: function (dialogRef) {
+                                        dialogRef.close();
+                                    }
+                                }];
+                        }</text>}
                     else
                     {<text>
                         buttonss = [
@@ -169,130 +189,146 @@
                                     dialogRef.close();
                                 }
                             }];
-                    </text>
+                        </text>
                     }
 
-                    BootstrapDialog.show({
-                        type: typeOfDialog,
-                        title: "Description: " + "<b>" + calEvent.title + "</b>",
-                        message:
-                            "Start date: " +
-                            "<b>" +
-                            calEvent.start.toString().substring(0, 10) +
-                            "</b>" +
-                            "<br/>" +
-                            "End date: " +
-                            "<b>" +
-                            tempEndDate.substring(0, 10) +
-                            "</b>" +
-                            "<br/>" +
-                            "User: " +
-                            "<b>" +
-                            getFullNameFromId(calEvent.userID) +
-                            "</b>",
-                        
-                        buttons: 
-                                 
-                                     buttonss
-                                 
-                             
-                    });
+                        BootstrapDialog.show({
+                            type: typeOfDialog,
+                            title: "Description: " + "<b>" + calEvent.title + "</b>",
+                            message:
+                                "Start date: " +
+                                "<b>" +
+                                calEvent.start.toString().substring(0, 10) +
+                                "</b>" +
+                                "<br/>" +
+                                "End date: " +
+                                "<b>" +
+                                tempEndDate.substring(0, 10) +
+                                "</b>" +
+                                "<br/>" +
+                                "User: " +
+                                "<b>" +
+                                getFullNameFromId(calEvent.userID) +
+                                "</b>",
 
-                },
-            /*eventMouseover: function (calEvent, jsEvent, view) {
+                            buttons:
 
-                $(this).css('background-color', '#c3c3c3');
+                                         buttonss
 
-            },
-            eventMouseout: function (calEvent, jsEvent, view) {
 
-                $(this).css('background-color', '#F9C834');
+                        });
 
-            },*/
-            defaultDate: Date(),
-            editable: false,
-            eventLimit: true, // allow "more" link when too many events
-            events:
-            [//init holidays
-            @foreach (var item in ViewBag.initHolidays)
+                    },
+                    /*eventMouseover: function (calEvent, jsEvent, view) {
+
+                        $(this).css('background-color', '#c3c3c3');
+
+                    },
+                    eventMouseout: function (calEvent, jsEvent, view) {
+
+                        $(this).css('background-color', '#F9C834');
+
+                    },*/
+                    defaultDate: Date(),
+                    editable: false,
+                    eventLimit: true, // allow "more" link when too many events
+                    events:
+                    [//init holidays
+                    @foreach (var item in arrayHolidays)
                 {
                 <text>
-                {
-                    title: '@(item.Description)',
-                    start: '@(item.DateFrom)',
-                    end: '@(item.DateTo)',
-                    backgroundColor: '#378abf',
-                    borderColor: '#378abf',
-                    userID: '@(item.UserId)',
-                    holidayID: '@(item.HolidayId)'
-                },
-        </text>
+                        {
+                            title: '@(item.Description)',
+                            start: '@(item.DateFrom)',
+                            end: '@(item.DateTo)',
+                            backgroundColor: '#378abf',
+                            borderColor: '#378abf',
+                            userID: '@(item.UserId)',
+                            holidayID: '@(item.HolidayId)'
+                        },
+                </text>
                 }
 
-        //vacations init
-        @foreach (var item in ViewBag.initVacations)
+                //vacations init
+                @foreach (var item in ViewBag.initVacations)
                     {
 
                           if ((item.IsSickLeave)){
                               <text>
-                {
-                    title: '@(item.Description)',
-                    start: '@(item.DateFrom)',
-                    end: '@(item.DateTo)',
-                    backgroundColor: '#df4040',
-                    borderColor: '#df4040',
-                    userID: '@(item.UserId)'
-                }, </text>  }
+                        {
+                            title: '@(item.Description)',
+                            start: '@(item.DateFrom)',
+                            end: '@(item.DateTo)',
+                            backgroundColor: '#df4040',
+                            borderColor: '#df4040',
+                            userID: '@(item.UserId)'
+                        }, </text>  }
                           else
                           {
                               <text>
-               {
-                   title: '@(item.Description)',
-                   start: '@(item.DateFrom)',
-                   end: '@(item.DateTo)',
-                   backgroundColor: '#50b239',
-                   borderColor: '#50b239',
-                   userID: '@(item.UserId)'
-               }, </text>
+                       {
+                           title: '@(item.Description)',
+                           start: '@(item.DateFrom)',
+                           end: '@(item.DateTo)',
+                           backgroundColor: '#50b239',
+                           borderColor: '#50b239',
+                           userID: '@(item.UserId)'
+                       }, </text>
 
                           }
 
                         }
-            ],
-            selectable: true,
-            timeFormat: ' ',
-            selectHelper: true,
-            select: function (start, end) {
+                    ],
+                    selectable: true,
+                    timeFormat: ' ',
+                    selectHelper: true,
+                    select: function (start, end) {
 
-                @if(Context.User.IsInRole("Admin")) {
-                          <text>
-                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
-                // $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-                </text>
-                      }
-                $('#calendar').fullCalendar('unselect');
-            },
+                        var overlap = false;
+                        for(var i = 0; i < listOfObjects.length; i++) {       
+                            if (start.format("MM.DD.YYYY") < listOfObjects[i].DateTo && listOfObjects[i].DateFrom < end.format("MM.DD.YYYY"))
+                            {
+                                overlap = true;
+                                break;
+                            }
+                            else
+                            {
+                                overlap = false;
+                            }
+
+                        }
+
+                        if(!overlap){
+                            window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                        }else{
+                            alertify.error("There is already a holiday for that date.");
+                        }
+
+
+
+                        $('#calendar').fullCalendar('unselect');
+                    },
+
+                });
 
             });
+        });
 
-    });
-    });
+        function getFullNameFromId(id){
 
-    function getFullNameFromId(id){
-        var array = @Html.Raw(Json.Encode(@ViewBag.users));
 
-        for(var i = 0; i < array.length; i++) {
-            if(array[i].usrId == id){
-                return array[i].firstName + ' ' + array[i].lastName;
+            for(var i = 0; i < array.length; i++) {
+                if(array[i].usrId == id){
+                    return array[i].firstName + ' ' + array[i].lastName;
+                }
             }
         }
-    }
-</script>
-<br />
-<br />
-<div style="float:right">
-    <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday
-    <span class="glyphicon glyphicon-stop" style="color: #df4040;"></span>Sick Leave
-    <span class="glyphicon glyphicon-stop" style="color: #50b239;"></span>Vacation
-</div><br />
-<br />
+    </script>
+    <br />
+    <br />
+    <div style="float:right">
+        <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday
+        <span class="glyphicon glyphicon-stop" style="color: #df4040;"></span>Sick Leave
+        <span class="glyphicon glyphicon-stop" style="color: #50b239;"></span>Vacation
+    </div><br />
+    <br />
