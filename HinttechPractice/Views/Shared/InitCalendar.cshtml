@@ -40,6 +40,10 @@
                     center: 'title',
                     right: 'today'
                 },
+                dayRender: function (date, cell) {
+                    cell.css("background-color", "#F4F3F3");
+                },
+                firstDay: 1,
                 dayClick: function (date, jsEvent, view) {
 
                     var datumProvera="@(ViewBag.Datum)";
@@ -342,37 +346,37 @@
                 selectable: true,
                 timeFormat: ' ',
                 selectHelper: true,
-            @if (Context.User.IsInRole("Admin")) {
-                <text>
-            select: function (start, end) {
+                @if (Context.User.IsInRole("Admin")) {
+                    <text>
+                select: function (start, end) {
 
-                        var overlap = false;
-                        for(var i = 0; i < listOfObjects.length; i++) {
-                            if (start.format("MM.DD.YYYY") < listOfObjects[i].DateTo && listOfObjects[i].DateFrom < end.format("MM.DD.YYYY"))
-                            {
-                                overlap = true;
-                                break;
+                            var overlap = false;
+                            for(var i = 0; i < listOfObjects.length; i++) {
+                                if (start.format("MM.DD.YYYY") < listOfObjects[i].DateTo && listOfObjects[i].DateFrom < end.format("MM.DD.YYYY"))
+                                {
+                                    overlap = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    overlap = false;
+                                }
+
                             }
-                            else
-                            {
-                                overlap = false;
-                            }
 
-                        }
-
-                        if(!overlap){
-                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
-                        }else{
-                            alertify.error("There is already a holiday for that date.");
-                      }
+                            if(!overlap){
+                                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                            }else{
+                                alertify.error("There is already a holiday for that date.");
+                          }
 
 
 
-                $('#calendar').fullCalendar('unselect');
-            },</text>
-            }
+                    $('#calendar').fullCalendar('unselect');
+                },</text>
+                }
 
-            });
+                });
 
     });
     });
