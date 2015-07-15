@@ -185,7 +185,7 @@ namespace HinttechPractice.Controllers
             double oldHolidayVacationCount = DaysIsntCountHoliday(oldVacation);
             double totalHolidayDays = oldHolidayVacationCount - DaysIsntCountHoliday(vacation);
             numDays += totalHolidayDays;
-            if (vacation.IsSickLeave)
+            if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 db.EditVacation(vacation);
                 return SeeVacations(page);
