@@ -46,6 +46,7 @@ namespace HinttechPractice.Controllers
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
             int userId = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             ViewBag.idOfUser = userId;
+            ViewBag.usernameOfUser = usrnmOfUserLoggedIn;
             User u = (User)usr.FindById(userId);
             ViewBag.BrDana = u.VacationDays;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");

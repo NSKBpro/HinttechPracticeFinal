@@ -189,6 +189,7 @@ namespace HinttechPractice.Controllers
             return holidayDaysIsntCount;
         }
 
+        [HttpGet]
         public ActionResult EditVacation(int vacationId)
         {
             UsersService users = new UsersService();

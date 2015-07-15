@@ -119,6 +119,8 @@
                     else if (bgColor === 'rgb(80, 178, 57)')
                         typeOfDialog = BootstrapDialog.TYPE_SUCCESS
 
+                    var usrId = @ViewBag.idOfUser;
+              
                     var buttons;
                     @if(Context.User.IsInRole("Admin")){
                         <text>
@@ -180,8 +182,54 @@
                                 }
                             }];
                     }</text>}
-                    else
+                    @if(Context.User.IsInRole("User"))
                     {<text>
+                    if(usrId == calEvent.userID){
+                        buttonss = [{
+                            label: 'Edit',
+                            cssClass: 'btn-primary',
+                            action: function () {
+
+                                var f = document.createElement("form");
+                                f.setAttribute('method',"get");
+                                f.setAttribute('action',"/LoadVacations/EditVacation");
+
+                                var i = document.createElement("input");
+                                i.type = "hidden";
+                                i.name = "vacationId";
+                                i.id = "vacationId";
+                                i.value = calEvent.vacationID;
+
+                                f.appendChild(i);
+                                f.submit();
+                            }
+                        },
+                            {
+                                label: 'Remove',
+                                cssClass: 'btn-danger',
+                                action: function () {
+                                    var f = document.createElement("form");
+                                    f.setAttribute('method',"get");
+                                    f.setAttribute('action',"/LoadVacations/DeleteVacation");
+
+                                    var i = document.createElement("input");
+                                    i.type = "hidden";
+                                    i.name = "vacationId";
+                                    i.id = "vacationId";
+                                    i.value = calEvent.vacationID;
+
+                                    f.appendChild(i);
+                                    f.submit();
+                                }
+                            },
+                            {
+                                label: 'Dismiss',
+                                cssClass: 'btn-default',
+                                action: function (dialogRef) {
+                                    dialogRef.close();
+                                }
+                            }];
+                    }else{
                         buttonss = [
                             {
                                 label: 'Dismiss',
@@ -190,8 +238,16 @@
                                     dialogRef.close();
                                 }
                             }];
+                    }
                     </text>
                     }
+
+
+
+
+                    
+
+
 
                     BootstrapDialog.show({
                         type: typeOfDialog,
@@ -263,6 +319,7 @@
                     end: '@(item.DateTo)',
                     backgroundColor: '#df4040',
                     borderColor: '#df4040',
+                    vacationID: '@(item.VacationPeriodId)',
                     userID: '@(item.UserId)'
                 }, </text>  }
                           else
@@ -274,6 +331,7 @@
                    end: '@(item.DateTo)',
                    backgroundColor: '#50b239',
                    borderColor: '#50b239',
+                   vacationID: '@(item.VacationPeriodId)',
                    userID: '@(item.UserId)'
                }, </text>
 
