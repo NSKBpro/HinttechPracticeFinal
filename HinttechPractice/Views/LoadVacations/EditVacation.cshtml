@@ -6,10 +6,11 @@
         var datumProvera="@(ViewBag.Datum)";
         var datum1 = "@(ViewBag.editDateFrom)";
         var datum2 = document.getElementById("datum2").value;
+        var sick=document.getElementById("sick").value;
         var oneDay = 24 * 60 * 60 * 1000;
         var dodatak= 20 - proveraDani;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date("@ViewBag.editDateTo")) / (oneDay)));
-        if (diffDays > proveraDani) {
+        if (diffDays > proveraDani && sick=="False") {
             
             alertify
                     .alert("You choose more then " + proveraDani +" days", function () {
@@ -89,7 +90,7 @@
         <div class="form-group">
             
             <div class="col-md-10">
-                @Html.HiddenFor(model => model.IsSickLeave, new { htmlAttributes = new { @class = "checkbox" } })
+                @Html.HiddenFor(model => model.IsSickLeave,new { @id = "sick" } )
                 @Html.ValidationMessageFor(model => model.IsSickLeave)
             </div>
         </div>

@@ -185,24 +185,33 @@ namespace HinttechPractice.Controllers
             double oldHolidayVacationCount = DaysIsntCountHoliday(oldVacation);
             double totalHolidayDays = oldHolidayVacationCount - DaysIsntCountHoliday(vacation);
             numDays += totalHolidayDays;
-
-            if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
+            if (vacation.IsSickLeave)
             {
-                if (ModelState.IsValid)
-                {
-                    int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje;
-                    u.VacationDays = days;
-                    users.Edit(u);
-                    db.EditVacation(vacation);
-                    daniZaVracanje = Convert.ToInt32(numDays);
-                    return SeeVacations(page);
-
-                }
-                return View();
+                db.EditVacation(vacation);
+                return SeeVacations(page);
             }
             else
             {
-                return SeeVacations(page);
+
+                if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
+                {
+                    if (ModelState.IsValid)
+                    {
+
+                        int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje;
+                        u.VacationDays = days;
+                        users.Edit(u);
+                        db.EditVacation(vacation);
+                        daniZaVracanje = Convert.ToInt32(numDays);
+                        return SeeVacations(page);
+
+                    }
+                    return View();
+                }
+                else
+                {
+                    return SeeVacations(page);
+                }
             }
         }
 

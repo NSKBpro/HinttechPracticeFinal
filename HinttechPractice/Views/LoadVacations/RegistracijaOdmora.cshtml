@@ -9,12 +9,7 @@
         var sick=document.getElementById("sick").checked;
         var oneDay = 24 * 60 * 60 * 1000;
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date(datum1)) / (oneDay)));
-        if(sick==true)
-        {
-            alertify.success("Well done you can proceed now");
-            return true;
-        }
-        if (diffDays > proveraDani) {
+        if (diffDays > proveraDani && sick==false) {
 
             alertify
                     .alert("You choose more then " + proveraDani +" days", function () {
