@@ -9,8 +9,8 @@
 <div class="row" align="center">
     <div class="col-md-4 col-md-offset-4 bg-success">
         <form class="form-signin" role="form" method="POST" action="register" enctype="multipart/form-data">
-            <input type="text" class="form-control" placeholder="First name" value="@Model.FirstName" name="FirstName" required>
-            <input type="text" class="form-control" placeholder="Last name" value="@Model.LastName" name="LastName" required>
+            <input type="text" class="form-control" placeholder="First name" value="@Model.FirstName" name="FirstName" maxlength="25" required>
+            <input type="text" class="form-control" placeholder="Last name" value="@Model.LastName" name="LastName" maxlength="25" required>
             <input type="email" class="form-control" placeholder="Email" value="@Model.Email" name="Email" required>
 
             <div class="form-group">
