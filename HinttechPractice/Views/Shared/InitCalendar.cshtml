@@ -7,23 +7,23 @@
     @{
         var arrayHolidays = @ViewBag.initHolidays;
     }
-        var arrayss = [];
-        var listOfObjects = [];
-        @foreach (var item in arrayHolidays)
+    var arrayss = [];
+    var listOfObjects = [];
+    @foreach (var item in arrayHolidays)
         {
             <text>
-        var singleObj = {}
-        singleObj['HolidayId'] = "@item.HolidayId";
-        singleObj['UserId'] = "@item.UserId";
-        singleObj['DateFrom'] = "@item.DateFrom.ToString("MM.dd.yyyy")";
-        singleObj['DateTo'] = "@item.DateTo.ToString("MM.dd.yyyy")";
-        singleObj['Description'] = "@item.Description";
-        listOfObjects.push(singleObj);
-            </text>  
+    var singleObj = {}
+    singleObj['HolidayId'] = "@item.HolidayId";
+    singleObj['UserId'] = "@item.UserId";
+    singleObj['DateFrom'] = "@item.DateFrom.ToString("MM.dd.yyyy")";
+    singleObj['DateTo'] = "@item.DateTo.ToString("MM.dd.yyyy")";
+    singleObj['Description'] = "@item.Description";
+    listOfObjects.push(singleObj);
+    </text>
         }
-        
-        var array = @Html.Raw(Json.Encode(@ViewBag.users));
-    
+
+    var array = @Html.Raw(Json.Encode(@ViewBag.users));
+
 
     $(document).ready(function () {
         status = 0;
@@ -43,9 +43,9 @@
                 dayClick: function (date, jsEvent, view) {
 
                     var datumProvera="@(ViewBag.Datum)";
-                   
 
-                  
+
+
 
                     // alert('Clicked on: ' + date.format());
                     @if (Context.User.IsInRole("User")) {<text>
@@ -81,28 +81,28 @@
                         alertify.success("End date:   " + date.format());
                         datum1 = datum11;
                         var diffDays = Math.round(Math.abs((new Date(datum1) - new Date(datum2)) / (oneDay)));
-                       
-                    if(new Date(datum2)<new Date(datum1))
-                    {
-                        alertify
-                             .alert("End date is incorrect", function () {
-                                 alertify.error('Please try with new End date');
-                             });
-                        return false;
+
+                        if(new Date(datum2)<new Date(datum1))
+                        {
+                            alertify
+                                 .alert("End date is incorrect", function () {
+                                     alertify.error('Please try with new End date');
+                                 });
+                            return false;
+
+                        }
+
+                        window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
+                    }
+
+
+
+                    </text>
+
 
                     }
 
-                    window.location = "/LoadVacations/RegistracijaOdmora?parameterdatum1=" + datum1 + "&parameterdatum2=" + datum2 ;
-                }
-
-                    
-
-                </text>
-
-
-                    }
-
-            },
+                },
                 eventClick: function (calEvent, jsEvent, view) {
                     var typeOfDialog, tempEndDate;
 
@@ -120,13 +120,13 @@
                         typeOfDialog = BootstrapDialog.TYPE_SUCCESS
 
                     var usrId = @ViewBag.idOfUser;
-              
+
                     var buttons;
                     @if(Context.User.IsInRole("Admin")){
                         <text>
                     if(typeOfDialog === BootstrapDialog.TYPE_PRIMARY){
-                        
-                            
+
+
                         buttonss = [{
                             label: 'Edit',
                             cssClass: 'btn-primary',
@@ -162,7 +162,7 @@
 
                                     f.appendChild(i);
                                     f.submit();
-                                } 
+                                }
                             },
                             {
                                 label: 'Dismiss',
@@ -171,7 +171,7 @@
                                     dialogRef.close();
                                 }
                             }];
-                            
+
                     }else{
                         buttonss = [
                             {
@@ -245,7 +245,7 @@
 
 
 
-                    
+
 
 
 
@@ -267,85 +267,87 @@
                             "<b>" +
                             getFullNameFromId(calEvent.userID) +
                             "</b>",
-                        
-                        buttons: 
-                                 
+
+                        buttons:
+
                                      buttonss
-                                 
-                             
+
+
                     });
 
                 },
-            /*eventMouseover: function (calEvent, jsEvent, view) {
+                /*eventMouseover: function (calEvent, jsEvent, view) {
 
-                $(this).css('background-color', '#c3c3c3');
+                    $(this).css('background-color', '#c3c3c3');
 
-            },
-            eventMouseout: function (calEvent, jsEvent, view) {
+                },
+                eventMouseout: function (calEvent, jsEvent, view) {
 
-                $(this).css('background-color', '#F9C834');
+                    $(this).css('background-color', '#F9C834');
 
-            },*/
-            defaultDate: Date(),
-            editable: false,
-            eventLimit: true, // allow "more" link when too many events
-            events:
-            [//init holidays
-                    @foreach (var item in arrayHolidays)
+                },*/
+                defaultDate: Date(),
+                editable: false,
+                eventLimit: true, // allow "more" link when too many events
+                events:
+                [//init holidays
+                        @foreach (var item in arrayHolidays)
                 {
                 <text>
-                {
-                    title: '@(item.Description)',
-                    start: '@(item.DateFrom)',
-                    end: '@(item.DateTo)',
-                    backgroundColor: '#378abf',
-                    borderColor: '#378abf',
-                    userID: '@(item.UserId)',
-                    holidayID: '@(item.HolidayId)'
-                },
-        </text>
+                    {
+                        title: '@(item.Description)',
+                        start: '@(item.DateFrom)',
+                        end: '@(item.DateTo)',
+                        backgroundColor: '#378abf',
+                        borderColor: '#378abf',
+                        userID: '@(item.UserId)',
+                        holidayID: '@(item.HolidayId)'
+                    },
+            </text>
                 }
 
-        //vacations init
-        @ViewBag.Error
-        @foreach (var item in ViewBag.initVacations)
+            //vacations init
+            @ViewBag.Error
+            @foreach (var item in ViewBag.initVacations)
                     {
 
                           if ((item.IsSickLeave)){
                               <text>
-                {
-                    title: '@(item.Description)',
-                    start: '@(item.DateFrom)',
-                    end: '@(item.DateTo)',
-                    backgroundColor: '#df4040',
-                    borderColor: '#df4040',
-                    vacationID: '@(item.VacationPeriodId)',
-                    userID: '@(item.UserId)'
-                }, </text>  }
+                    {
+                        title: '@(item.Description)',
+                        start: '@(item.DateFrom)',
+                        end: '@(item.DateTo)',
+                        backgroundColor: '#df4040',
+                        borderColor: '#df4040',
+                        vacationID: '@(item.VacationPeriodId)',
+                        userID: '@(item.UserId)'
+                    }, </text>  }
                           else
                           {
                               <text>
-               {
-                   title: '@(item.Description)',
-                   start: '@(item.DateFrom)',
-                   end: '@(item.DateTo)',
-                   backgroundColor: '#50b239',
-                   borderColor: '#50b239',
-                   vacationID: '@(item.VacationPeriodId)',
-                   userID: '@(item.UserId)'
-               }, </text>
+                   {
+                       title: '@(item.Description)',
+                       start: '@(item.DateFrom)',
+                       end: '@(item.DateTo)',
+                       backgroundColor: '#50b239',
+                       borderColor: '#50b239',
+                       vacationID: '@(item.VacationPeriodId)',
+                       userID: '@(item.UserId)'
+                   }, </text>
 
                           }
 
                         }
-            ],
-            selectable: true,
-            timeFormat: ' ',
-            selectHelper: true,
+                ],
+                selectable: true,
+                timeFormat: ' ',
+                selectHelper: true,
+            @if (Context.User.IsInRole("Admin")) {
+                <text>
             select: function (start, end) {
 
                         var overlap = false;
-                        for(var i = 0; i < listOfObjects.length; i++) {       
+                        for(var i = 0; i < listOfObjects.length; i++) {
                             if (start.format("MM.DD.YYYY") < listOfObjects[i].DateTo && listOfObjects[i].DateFrom < end.format("MM.DD.YYYY"))
                             {
                                 overlap = true;
@@ -367,7 +369,8 @@
 
 
                 $('#calendar').fullCalendar('unselect');
-            },
+            },</text>
+            }
 
             });
 
