@@ -18,18 +18,58 @@
 
     </div>
 
-    <script>
-        function dateCheck() {
-            var from = document.forms["editAddForma"]["DateFrom"].value;
-            var to = document.forms["editAddForma"]["DateTo"].value;
-            if (from > to) {
+                      <script>
 
-                alertify.error("Start date cannot be greater than end date.");
-                return false;
 
-            } else {
+  @{
+      var arrayHolidays = @ViewBag.initHolidays;
+  }
+    function dateCheck() {
 
-                return true;
+
+        var listOfObjects = [];
+        @foreach (var item in arrayHolidays)
+            {
+                <text>
+        var singleObj = {}
+        singleObj['HolidayId'] = "@item.HolidayId";
+        singleObj['UserId'] = "@item.UserId";
+        singleObj['DateFrom'] = "@item.DateFrom.ToString("yyyy-MM-dd")";
+        singleObj['DateTo'] = "@item.DateTo.ToString("yyyy-MM-dd")";
+        singleObj['Description'] = "@item.Description";
+        listOfObjects.push(singleObj);
+        </text>
             }
+
+        var from = document.forms["editAddForma"]["DateFrom"].value;
+        var to = document.forms["editAddForma"]["DateTo"].value;
+        var holidayId = Number(@ViewBag.holidayForEdit.HolidayId);
+        var overlap = false;
+        for (var i = 0; i < listOfObjects.length; i++) {
+            if (listOfObjects[i].HolidayId == holidayId){
+                continue;
+            }
+            if (from < listOfObjects[i].DateTo && listOfObjects[i].DateFrom < to) {
+                overlap = true;
+                break;
+            }
+            else {
+                overlap = false;
+            }
+
         }
-    </script>
+
+        if (overlap) {
+            alertify.error("There is already a holiday for that date.");
+            return false;
+        }else if (from > to) {
+
+            alertify.error("Start date cannot be greater than end date.");
+            return false;
+
+        } else {
+
+            return true;
+        }
+        }
+       </script>

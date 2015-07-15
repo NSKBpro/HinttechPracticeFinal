@@ -46,6 +46,7 @@ namespace HinttechPractice.Controllers
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
             int userId = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
             ViewBag.idOfUser = userId;
+            ViewBag.usernameOfUser = usrnmOfUserLoggedIn;
             User u = (User)usr.FindById(userId);
             ViewBag.BrDana = u.VacationDays;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
@@ -83,6 +84,8 @@ namespace HinttechPractice.Controllers
                 haus.Add(hau);
             }
 
+            
+           
             bool isEmpty = !db.GetHolidaysForDate(dt).Any();
             if (isEmpty)
             {
@@ -92,6 +95,7 @@ namespace HinttechPractice.Controllers
             {
                 ViewBag.prazanDan = null;
             }
+            ViewBag.initHolidays = db.GetHolidays();
             return View("WindowForDay", haus);
         }
 
@@ -230,12 +234,6 @@ namespace HinttechPractice.Controllers
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult EditHoliday(Holiday h)
         {
-            /*db.EditHoliday(h);
-            ViewBag.initHolidays = db.GetHolidays();
-            ViewBag.initVacations = db2.GetVacations();
-            return View("InitCalendar");*/
-
-
             bool overlap = false;
             Holiday overlapingHoliday = new Holiday();
 
@@ -286,6 +284,7 @@ namespace HinttechPractice.Controllers
             ViewBag.holidayForEditTo = db.GetHolidays().Find(HolidayId).DateTo.ToString("yyyy-MM-dd");
             ViewBag.holidayForEditFrom = db.GetHolidays().Find(HolidayId).DateFrom.ToString("yyyy-MM-dd");
             ViewBag.holidayForEditId = HolidayId;
+            ViewBag.initHolidays = db.GetHolidays();
             return View("EditHoliday");
         }
     }
