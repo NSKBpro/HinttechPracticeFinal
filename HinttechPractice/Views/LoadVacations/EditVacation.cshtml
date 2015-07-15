@@ -10,7 +10,7 @@
         var sick=document.getElementById("sick").value;
         var oneDay = 24 * 60 * 60 * 1000;
         var dodatak= 20 - proveraDani;
-        var diffDays = Math.round(Math.abs((new Date(datum2) - new Date("@ViewBag.editDateTo")) / (oneDay)));
+        var diffDays = Math.round((new Date(datum2) - new Date("@ViewBag.editDateTo")) / (oneDay));
         if (diffDays > proveraDani && sick=="False") {
             
             alertify
