@@ -83,7 +83,8 @@ namespace HinttechPractice.Controllers
                    
                     foreach (Vacation v in vacations)
                     {
-                        if ((vacation.DateFrom > v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo > v.DateFrom && vacation.DateTo < v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                        if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                 
                         {
                             flag = 1;
 
@@ -99,7 +100,12 @@ namespace HinttechPractice.Controllers
                         vacation.DateFrom = vacation.DateFrom;
                         vacation.DateTo = vacation.DateTo;
                         db.AddVacation(vacation);
-                        return RedirectToAction("RegistracijaOdmora");
+                        return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2=vacation.DateTo });
+                    }
+                    else
+                    {
+                        flag = 1;
+                        return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2 = vacation.DateTo });
                     }
 
 
@@ -114,8 +120,9 @@ namespace HinttechPractice.Controllers
                     if (ModelState.IsValid)
                     {
                          foreach (Vacation v in vacations)
-                        {
-                            if ((vacation.DateFrom > v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo > v.DateFrom && vacation.DateTo < v.DateTo)||(vacation.DateFrom<=v.DateFrom && vacation.DateTo>=v.DateTo))
+                        {   
+                            if((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                 
                             {
                                 flag = 1;
                                 
@@ -136,12 +143,12 @@ namespace HinttechPractice.Controllers
                             int days = u.VacationDays - Convert.ToInt32(numDays);
                             u.VacationDays = days;
                             users.Edit(u);
-                            return RedirectToAction("RegistracijaOdmora");
+                            return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2 = vacation.DateTo });
                         }
                          else
                          {
                              flag = 1;
-                             return RedirectToAction("RegistracijaOdmora");
+                             return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2 = vacation.DateTo });
                          }
 
                     }
@@ -194,6 +201,8 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             User u = users.FindUserByUsername(HttpContext.User.Identity.Name);
             ViewBag.BrDana = u.VacationDays;
+            ViewBag.Flag = flag;
+
             TestService ser = new TestService();
             if (ser.FindVacationByUserId(u.UserId, vacationId) == true)
             {
@@ -211,10 +220,12 @@ namespace HinttechPractice.Controllers
                 datumProveraZaEdit = vac.DateTo;
                 ViewBag.editDateFrom = vac.DateFrom.ToString("yyyy-MM-dd");
                 ViewBag.editDateTo = vac.DateTo.ToString("yyyy-MM-dd");
+                flag = 0;
                 return View(vac);
             }
             else
             {
+
                 return RedirectToAction("SeeVacations");
             }
         }
@@ -256,12 +267,14 @@ namespace HinttechPractice.Controllers
                 }
                 if (brojac == vacations.Count)
                 {
+                    flag = 0;
                     db.EditVacation(vacation);
                     return SeeVacations(page);
                 }
                 else
                 {
-                    return SeeVacations(page);
+                    flag = 1;
+                    return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId });
                 }
 
             }
@@ -293,6 +306,7 @@ namespace HinttechPractice.Controllers
                         }
                         if (brojac == vacations.Count)
                         {
+                            flag = 0;
                             int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje;
                             u.VacationDays = days;
                             users.Edit(u);
@@ -302,7 +316,8 @@ namespace HinttechPractice.Controllers
                         }
                         else
                         {
-                            return SeeVacations(page);
+                            flag = 1;
+                            return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId });
                         }
 
                     }
@@ -342,6 +357,8 @@ namespace HinttechPractice.Controllers
 
         public ActionResult SeeVacations(int? page)
         {
+            ViewBag.Flag = flag;
+            flag = 0;
             UsersService users = new UsersService();
             int userId = users.FindUserByUsername(HttpContext.User.Identity.Name).UserId;
             List<Vacation> currentUserVacations = db.GetVacationsForCurrentUser(userId);
