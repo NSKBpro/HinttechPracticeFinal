@@ -100,12 +100,12 @@ namespace HinttechPractice.Controllers
                         vacation.DateFrom = vacation.DateFrom;
                         vacation.DateTo = vacation.DateTo;
                         db.AddVacation(vacation);
-                        return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2=vacation.DateTo });
+                        return RedirectToAction("SeeVacations");
                     }
                     else
                     {
                         flag = 1;
-                        return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2 = vacation.DateTo });
+                        return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom.ToString("yyyy-MM-dd"), parameterdatum2 = vacation.DateTo.ToString("yyyy-MM-dd") });
                     }
 
 
@@ -143,12 +143,12 @@ namespace HinttechPractice.Controllers
                             int days = u.VacationDays - Convert.ToInt32(numDays);
                             u.VacationDays = days;
                             users.Edit(u);
-                            return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2 = vacation.DateTo });
+                            return RedirectToAction("SeeVacations");
                         }
                          else
                          {
                              flag = 1;
-                             return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom, parameterdatum2 = vacation.DateTo });
+                             return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom.ToString("yyyy-MM-dd"), parameterdatum2 = vacation.DateTo.ToString("yyyy-MM-dd") });
                          }
 
                     }
