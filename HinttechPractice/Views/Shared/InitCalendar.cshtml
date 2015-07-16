@@ -74,7 +74,7 @@
 
 
                     } else if (status == 1) {
-
+                       
                         var datum2 = date.format();
                         if ((datumProvera > datum2))
                         {
@@ -346,10 +346,24 @@
                 selectable: true,
                 timeFormat: ' ',
                 selectHelper: true,
+                
                 @if (Context.User.IsInRole("Admin")) {
                     <text>
                 select: function (start, end) {
 
+                    var date = new Date(end);
+                    var d = date.getDate() - 1;
+                    var m = date.getMonth();
+                    var y = date.getFullYear();
+                    var d2 = new Date(y,m,d);
+
+                    var d1 = new Date(start);
+                   
+
+                    if(d1.getDate() == d2.getDate() && d1.getMonth() == d2.getMonth() && d1.getYear() == d2.getYear()){
+                        alertify.error('Start date cannot be the same as end date.');
+                        return;
+                    }
                             var overlap = false;
                             for(var i = 0; i < listOfObjects.length; i++) {
                                 if (start.format("MM.DD.YYYY") < listOfObjects[i].DateTo && listOfObjects[i].DateFrom < end.format("MM.DD.YYYY"))
@@ -365,7 +379,13 @@
                             }
 
                             if(!overlap){
-                                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + end.format() + "";
+                                var date = new Date(end);
+                                var d = date.getDate();
+                                var m = date.getMonth();
+                                var y = date.getFullYear();
+                                var dateTo = new Date(y,m,d);
+
+                                window.location.href = "../LoadHolidays/ViewForDate?dateFrom=" + start.format() + "&dateTo=" + dateTo.toISOString().slice(0, 10) + "";
                             }else{
                                 alertify.error("There is already a holiday for that date.");
                           }

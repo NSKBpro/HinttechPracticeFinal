@@ -106,6 +106,11 @@ namespace HinttechPractice.Controllers
             bool overlap = false;
             Holiday overlapingHoliday = new Holiday();
 
+            if (h.DateFrom == h.DateTo)
+            {
+                return RedirectToAction("initHolidays");
+            }
+
             foreach (Holiday holiday in db.GetHolidays())
             {
                 if (h.DateFrom < holiday.DateTo && holiday.DateFrom < h.DateTo)
@@ -234,6 +239,12 @@ namespace HinttechPractice.Controllers
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult EditHoliday(Holiday h)
         {
+
+            if (h.DateFrom == h.DateTo)
+            {
+                return RedirectToAction("initHolidays");
+            }
+
             bool overlap = false;
             Holiday overlapingHoliday = new Holiday();
 
