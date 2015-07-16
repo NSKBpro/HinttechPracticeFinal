@@ -20,6 +20,8 @@ namespace HinttechPractice.Controllers
         private static string s1;
         private static string s2;
         public static int flag=0;
+        public static int brojacRadnihDanaBezVikenda;
+        public static int brojacRadnihDanaZaEditBezVikenda;
         private static int daniZaVracanje;
         private static DateTime datumProveraZaEdit;
         private HolidayService db2 = new HolidayService();
@@ -66,6 +68,7 @@ namespace HinttechPractice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RegistracijaOdmora(Vacation vacation)
         {
+            int vikend = 0;
             flag = 0;
             UsersService users = new UsersService();
             User u = (User)users.FindById(vacation.UserId);
@@ -75,6 +78,9 @@ namespace HinttechPractice.Controllers
              List<Vacation> vacations=db.GetVacationsForCurrentUser(u.UserId);
             numDays -= DaysIsntCountHoliday(vacation);
 
+            brojacRadnihDanaBezVikenda = GetWorkDays(vacation.DateFrom, vacation.DateTo);
+            vikend = Convert.ToInt32(numDays) - brojacRadnihDanaBezVikenda;
+            numDays -= vikend;
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 int brojac = 0;
@@ -235,6 +241,10 @@ namespace HinttechPractice.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditVacation(Vacation vacation, int? page)
         {
+            int vikend1 = 0;
+            int vikend2 = 0;
+            int razlikaZaVikendDane = 0;
+            brojacRadnihDanaZaEditBezVikenda = 0;
             String datum = DateTime.Now.ToString("yyyy-MM-dd");
             ViewBag.Datum = datum;
             UsersService users = new UsersService();
@@ -246,6 +256,23 @@ namespace HinttechPractice.Controllers
             double oldHolidayVacationCount = DaysIsntCountHoliday(oldVacation);
             double totalHolidayDays = oldHolidayVacationCount - DaysIsntCountHoliday(vacation);
             numDays += totalHolidayDays;
+            if (vacation.DateTo > datumProveraZaEdit)
+            {
+                brojacRadnihDanaZaEditBezVikenda = GetWorkDays(datumProveraZaEdit, vacation.DateTo);
+                vikend1 = Convert.ToInt32(povecavanjeOdmora) - brojacRadnihDanaZaEditBezVikenda;
+                razlikaZaVikendDane += vikend1;
+            }
+            else
+            {
+                brojacRadnihDanaZaEditBezVikenda = GetWorkDays(vacation.DateTo, datumProveraZaEdit);
+                vikend2 = -(Convert.ToInt32(povecavanjeOdmora)) - brojacRadnihDanaZaEditBezVikenda;
+                razlikaZaVikendDane -= vikend2;
+            }
+           
+
+            
+            
+
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 int brojac = 0;
@@ -295,7 +322,7 @@ namespace HinttechPractice.Controllers
                                 brojac++;
                                 continue;
                             }
-                            if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                            if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
                             {
 
                                 flag = 1;
@@ -309,7 +336,7 @@ namespace HinttechPractice.Controllers
                         if (brojac == vacations.Count)
                         {
                             flag = 0;
-                            int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje;
+                            int days = u.VacationDays - Convert.ToInt32(numDays) + daniZaVracanje + razlikaZaVikendDane;
                             u.VacationDays = days;
                             users.Edit(u);
                             db.EditVacation(vacation);
@@ -386,5 +413,20 @@ namespace HinttechPractice.Controllers
             ViewBag.Datum = datum;
             return View("SeeVacations", currentUserVacations.ToList().ToPagedList(page ?? 1, 6));
         }
+        private static int GetWorkDays(DateTime start, DateTime stop)
+        {
+            int days = 0;
+            while (start < stop)
+            {
+                if (start.DayOfWeek != DayOfWeek.Saturday && start.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    ++days;
+                }
+                start = start.AddDays(1);
+            }
+            return days;
+        }
     }
+
+    
 }
