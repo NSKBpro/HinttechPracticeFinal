@@ -83,7 +83,7 @@ namespace HinttechPractice.Controllers
                    
                     foreach (Vacation v in vacations)
                     {
-                        if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                        if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
                  
                         {
                             flag = 1;
@@ -114,14 +114,14 @@ namespace HinttechPractice.Controllers
             }
             else
             {
-                if (Convert.ToInt32(numDays) < u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
+                if (Convert.ToInt32(numDays) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
                 {
                     int brojac = 0;
                     if (ModelState.IsValid)
                     {
                          foreach (Vacation v in vacations)
                         {   
-                            if((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                            if((vacation.DateFrom >= v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
                  
                             {
                                 flag = 1;
@@ -156,7 +156,8 @@ namespace HinttechPractice.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("RegistracijaOdmora");
+                    
+                    return RedirectToAction("RegistracijaOdmora", new { parameterdatum1 = vacation.DateFrom.ToString("yyyy-MM-dd"), parameterdatum2 = vacation.DateTo.ToString("yyyy-MM-dd") });
                 }
                 //provera
             }
