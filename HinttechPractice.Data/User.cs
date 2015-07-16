@@ -30,7 +30,11 @@ namespace HinttechPractice.Data
         public bool IsUserRegistered { get; set; }
         public bool IsUserAdmin { get; set; }
         public byte[] ProfilePicture { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> DateCreated { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> LastLoginDate { get; set; }
         public int VacationDays { get; set; }
 
