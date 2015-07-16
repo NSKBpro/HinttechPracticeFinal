@@ -23,6 +23,7 @@ namespace HinttechPractice.Controllers
         public static int brojacRadnihDanaBezVikenda;
         public static int brojacRadnihDanaZaEditBezVikenda;
         private static int daniZaVracanje;
+        private static int radniDaniZaBrisanje;
         private static DateTime datumProveraZaEdit;
         private HolidayService db2 = new HolidayService();
         TestService db = new TestService();
@@ -370,12 +371,12 @@ namespace HinttechPractice.Controllers
         {
             Vacation vac = (Vacation)db.FindById(vacation.VacationPeriodId);
             double numDays = (vac.DateTo - vac.DateFrom).TotalDays;
-            
+            radniDaniZaBrisanje = GetWorkDays(vac.DateFrom, vac.DateTo);
             UsersService users = new UsersService();
             User u = (User)users.FindUserByUsername(HttpContext.User.Identity.Name);
              if (!vac.IsSickLeave)
             {
-            int days = u.VacationDays + Convert.ToInt32(numDays);
+            int days = u.VacationDays + radniDaniZaBrisanje;
             u.VacationDays = days;
            }
            
