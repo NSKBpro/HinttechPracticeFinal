@@ -9,8 +9,8 @@
 
             <input type="hidden" name="HolidayId" value="@(ViewBag.holidayForEdit.HolidayId)" /><br />
             <input type="hidden" class="form-control" name="UserId" placeholder="UserId" value="@ViewBag.holidayForEdit.UserId" required /><br />
-            <input type="date" class="form-control" name="DateFrom" placeholder="From" value="@ViewBag.holidayForEditFrom" required /><br />
-            <input type="date" class="form-control" name="DateTo" placeholder="To" value="@ViewBag.holidayForEditTo" required /><br />
+            <input type="date" class="form-control" name="DateFrom" id="DateFrom" placeholder="From" value="@ViewBag.holidayForEditFrom" required /><br />
+            <input type="date" class="form-control" name="DateTo" id="DateTo" placeholder="To" value="@ViewBag.holidayForEditTo" required /><br />
             <input type="text" class="form-control" name="Description" maxlength="25" placeholder="Description" value="@ViewBag.holidayForEdit.Description" required /><br />
             <input type="submit" class="btn btn-success btn-block" value="Edit Holiday" /><br />
 
@@ -26,6 +26,21 @@
   }
     function dateCheck() {
 
+        var from = document.getElementById('DateFrom').value;
+        var to = document.getElementById('DateTo').value;
+
+        var date = new Date(to);
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        var d2 = new Date(y, m, d);
+
+        var d1 = new Date(from);
+
+        if (d1.getDate() == d2.getDate() && d1.getMonth() == d2.getMonth() && d1.getYear() == d2.getYear()) {
+            alertify.error('Start date cannot be the same as end date.');
+            return false;
+        }
 
         var listOfObjects = [];
         @foreach (var item in arrayHolidays)
@@ -46,7 +61,7 @@
         var holidayId = Number(@ViewBag.holidayForEdit.HolidayId);
         var overlap = false;
         for (var i = 0; i < listOfObjects.length; i++) {
-            if (listOfObjects[i].HolidayId == holidayId){
+            if (listOfObjects[i].HolidayId == holidayId) {
                 continue;
             }
             if (from < listOfObjects[i].DateTo && listOfObjects[i].DateFrom < to) {
@@ -62,7 +77,7 @@
         if (overlap) {
             alertify.error("There is already a holiday for that date.");
             return false;
-        }else if (from > to) {
+        } else if (from > to) {
 
             alertify.error("Start date cannot be greater than end date.");
             return false;
@@ -71,5 +86,5 @@
 
             return true;
         }
-        }
-       </script>
+    }
+</script>
