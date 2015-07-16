@@ -23,7 +23,7 @@
         }
 
     var array = @Html.Raw(Json.Encode(@ViewBag.users));
-
+    var locked = false;
 
     $(document).ready(function () {
         status = 0;
@@ -31,7 +31,7 @@
         boja = '#FF0000';
 
         $(document).ready(function () {
-
+            
             $("#tabela").hide();
             $("#hide").hide();
             $('#calendar').fullCalendar({
@@ -58,16 +58,24 @@
 
                     //Vraca esc event, uradio sam hide jer je zbog ifa vracao vise od jednog diajloga
                     $(document).keyup(function (e) {
-                        if (e.keyCode === 27)
-                            alertify.error("Canceling operation...");
-                        status = 0;
-                        e.hide();
+                        if (!locked) {
+                            locked = true;
+                            setTimeout(unlock, 2500);
+                            if (e.keyCode === 27)
+                                alertify.error("Canceling operation...");
+                            status = 0;
+                            e.hide();}
                     })
 
                     var oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
 
                     if (status == 0) {
                         var datum1 = date.format();
+                        if ((datum1< datumProvera))
+                        {
+                            alertify.error("Start Date cant be before today  date" + datumProvera);
+                            return false;
+                        }
                         datum11 = datum1;
                         status = 1;
                         alertify.success("Start date:   " + date.format());
@@ -78,9 +86,10 @@
                         var datum2 = date.format();
                         if ((datumProvera > datum2))
                         {
-                            alertify.error("Date cant be before today " + datumProvera);
+                            alertify.error("End Date cant be before today date" + datumProvera);
                             return false;
                         }
+                        
                         status = 0;
                         alertify.success("End date:   " + date.format());
                         datum1 = datum11;
@@ -409,6 +418,10 @@
                 return array[i].firstName + ' ' + array[i].lastName;
             }
         }
+    }
+
+    function unlock () {
+        locked = false;
     }
 </script>
 <br />
