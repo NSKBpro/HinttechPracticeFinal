@@ -78,10 +78,13 @@ namespace HinttechPractice.Controllers
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
             List<Vacation> vacations = db.GetVacationsForCurrentUser(u.UserId);
             numDays -= DaysIsntCountHoliday(vacation);
-
-            brojacRadnihDanaBezVikenda = GetWorkDays(vacation.DateFrom, vacation.DateTo);
-            vikend = Convert.ToInt32(numDays) - brojacRadnihDanaBezVikenda;
-            numDays -= vikend;
+            
+            
+                brojacRadnihDanaBezVikenda = GetWorkDays(vacation.DateFrom, vacation.DateTo);
+                vikend = Convert.ToInt32(numDays) - brojacRadnihDanaBezVikenda;
+                numDays -= vikend;
+            
+            
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 int brojac = 0;
