@@ -4,7 +4,8 @@
     var flag="@(ViewBag.Flag)";
     function funProvera() {
         var proveraDani=@(ViewBag.BrDana);
-        var datumProvera="@(ViewBag.Datum)";  
+        var datumProvera="@(ViewBag.Datum)";
+        var daniZaProveru=@(ViewBag.DaniZaProveru);
         
         var datum1 = document.getElementById("datum1").value;
         var datum2 = document.getElementById("datum2").value;
@@ -14,10 +15,10 @@
         var days =0;
         days= workingDaysBetweenDates(new Date(datum1),new Date(datum2))-1;
 
-        if (days > proveraDani && sick==false) {
+        if (daniZaProveru > proveraDani && sick==false) {
 
             alertify
-                    .alert("You choose more then " + proveraDani +"  WORK days", function () {
+                    .alert("You choose more then " + daniZaProveru +"  WORK days", function () {
                         alertify.error('Please try again');
                     });
             return false;

@@ -25,6 +25,7 @@ namespace HinttechPractice.Controllers
         private static int daniZaVracanje;
         private static int radniDaniZaBrisanje;
         private static DateTime datumProveraZaEdit;
+        private static int daniZaProveru;
         private static HolidayService db2 = new HolidayService();
         TestService db = new TestService();
 
@@ -58,6 +59,8 @@ namespace HinttechPractice.Controllers
             vac.UserId = Int32.Parse(u.UserId.ToString());
             vac.DateFrom = Convert.ToDateTime(parameterdatum1);
             vac.DateTo = Convert.ToDateTime(parameterdatum2);
+            daniZaProveru = GetWorkDays(vac.DateFrom, vac.DateTo);
+            ViewBag.DaniZaProveru = daniZaProveru;
             ViewBag.Flag = flag;
             flag = 0;
 
@@ -80,10 +83,10 @@ namespace HinttechPractice.Controllers
             numDays -= DaysIsntCountHoliday(vacation);
             
             
-                brojacRadnihDanaBezVikenda = GetWorkDays(vacation.DateFrom, vacation.DateTo);
+                brojacRadnihDanaBezVikenda = GetWorkDays(vacation.DateFrom, vacation.DateTo);        
                 vikend = Convert.ToInt32(numDays) - brojacRadnihDanaBezVikenda;
                 numDays -= vikend;
-            
+                
             
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
