@@ -143,6 +143,5 @@ namespace HinttechPractice.App_Start
             }
             return RedirectToAction("ShowAllUsers");
         }
-
     }
 }
