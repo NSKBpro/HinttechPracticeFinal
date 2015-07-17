@@ -6,7 +6,7 @@
         var proveraDani=@(ViewBag.BrDana);
         var datumProvera="@(ViewBag.Datum)";
         var daniZaProveru=@(ViewBag.DaniZaProveru);
-        
+        var opisEdit=document.getElementById("opis").value;
         var datum1 = document.getElementById("datum1").value;
         var datum2 = document.getElementById("datum2").value;
         var sick=document.getElementById("sick").checked;
@@ -14,6 +14,12 @@
         var diffDays = Math.round(Math.abs((new Date(datum2) - new Date(datum1)) / (oneDay)));
         var days =0;
         days= workingDaysBetweenDates(new Date(datum1),new Date(datum2))-1;
+
+        if(opisEdit==null || opisEdit=="")
+        {
+            alertify.error("Description field is empty! ");
+            return false;
+        } 
 
         if (daniZaProveru > proveraDani && sick==false) {
 
@@ -29,6 +35,16 @@
             return false;
         }else if (datum2 < datumProvera) {
             alertify.error("Incorrect.Please try with new date after " + datumProvera);
+            return false;
+
+
+        }else if(datum1>datum2)
+        {
+            alertify.error("Incorrect.Please try with new date after " + datumProvera);
+            return false;
+        }else if(opisEdit==null || opisEdit=="")
+        {
+            alertify.error("Description field is empty! ");
             return false;
         } else {
             alertify.success("Well done you can proceed now");
@@ -123,7 +139,7 @@
                 <div class="form-group">
 
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control text-info", @placeholder = "Description" } })
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control text-info", @placeholder = "Description",@id="opis" } })
                         @Html.ValidationMessageFor(model => model.Description)
                     </div>
                 </div>
