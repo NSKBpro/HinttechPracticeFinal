@@ -241,6 +241,7 @@ namespace HinttechPractice.Controllers
                 flag = 0;
                 ViewBag.ProveraDaniZaEdit = daniZaProveruZaEdit;
                 ViewBag.FlagZaPozivEdita = flagZaPozivEdita;
+                flagZaPozivEdita = 0;
                 return View(vac);
             }
             else
