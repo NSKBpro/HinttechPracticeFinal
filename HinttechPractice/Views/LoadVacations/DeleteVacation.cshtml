@@ -19,6 +19,7 @@
             <input type="hidden" value="@Model.VacationPeriodId" name="VacationPeriodId" />
             <input type="hidden" value="@Model.DateFrom" name="DateFrom" />
             <input type="hidden" value="@Model.DateTo" name="DateTo" />
+            <input type="hidden" value="@Request.QueryString["calendar"]" name="calendar" />
             <div class="form-actions no-color ">
                 <input type="submit" value="Delete" class="btn btn-info btn-block" />
 

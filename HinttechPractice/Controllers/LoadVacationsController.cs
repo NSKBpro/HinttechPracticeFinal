@@ -78,10 +78,13 @@ namespace HinttechPractice.Controllers
             Double numDays = (vacation.DateTo - vacation.DateFrom).TotalDays;
             List<Vacation> vacations = db.GetVacationsForCurrentUser(u.UserId);
             numDays -= DaysIsntCountHoliday(vacation);
-
-            brojacRadnihDanaBezVikenda = GetWorkDays(vacation.DateFrom, vacation.DateTo);
-            vikend = Convert.ToInt32(numDays) - brojacRadnihDanaBezVikenda;
-            numDays -= vikend;
+            
+            
+                brojacRadnihDanaBezVikenda = GetWorkDays(vacation.DateFrom, vacation.DateTo);
+                vikend = Convert.ToInt32(numDays) - brojacRadnihDanaBezVikenda;
+                numDays -= vikend;
+            
+            
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 int brojac = 0;
@@ -236,9 +239,10 @@ namespace HinttechPractice.Controllers
                 return RedirectToAction("SeeVacations");
             }
         }
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditVacation(Vacation vacation, int? page)
+        public ActionResult EditVacation(Vacation vacation, int? page,String calendar)
         {
             int vikend1 = 0;
             int vikend2 = 0;
@@ -268,10 +272,6 @@ namespace HinttechPractice.Controllers
                 razlikaZaVikendDane -= vikend2;
             }
 
-
-
-
-
             if (vacation.IsSickLeave && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
             {
                 int brojac = 0;
@@ -297,7 +297,13 @@ namespace HinttechPractice.Controllers
                 {
                     flag = 0;
                     db.EditVacation(vacation);
-                    return SeeVacations(page);
+                    if (calendar != null && calendar.Equals("true")) {
+                        return RedirectToAction("initHolidays", "LoadHolidays");
+                    }
+                    else
+                    {
+                        return SeeVacations(page);
+                    }
                 }
                 else
                 {
@@ -323,9 +329,7 @@ namespace HinttechPractice.Controllers
                             }
                             if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
                             {
-
                                 flag = 1;
-
                             }
                             else
                             {
@@ -340,7 +344,14 @@ namespace HinttechPractice.Controllers
                             users.Edit(u);
                             db.EditVacation(vacation);
                             daniZaVracanje = Convert.ToInt32(numDays);
-                            return SeeVacations(page);
+                            if (calendar != null && calendar.Equals("true"))
+                            {
+                                return RedirectToAction("initHolidays", "LoadHolidays");
+                            }
+                            else
+                            {
+                                return SeeVacations(page);
+                            }
                         }
                         else
                         {
@@ -353,7 +364,14 @@ namespace HinttechPractice.Controllers
                 }
                 else
                 {
-                    return SeeVacations(page);
+                    if (calendar != null && calendar.Equals("true"))
+                    {
+                        return RedirectToAction("initHolidays", "LoadHolidays");
+                    }
+                    else
+                    {
+                        return SeeVacations(page);
+                    }
                 }
             }
         }
@@ -365,7 +383,7 @@ namespace HinttechPractice.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteVacation(Vacation vacation, int? page)
+        public ActionResult DeleteVacation(Vacation vacation, int? page,String calendar)
         {
             Vacation vac = (Vacation)db.FindById(vacation.VacationPeriodId);
             double numDays = (vac.DateTo - vac.DateFrom).TotalDays;
@@ -380,7 +398,15 @@ namespace HinttechPractice.Controllers
 
             users.Edit(u);
             db.DeleteVacation(vac.VacationPeriodId);
-            return SeeVacationsDelete(page);
+            
+            if (calendar != null && calendar.Equals("true"))
+            {
+                return RedirectToAction("initHolidays", "LoadHolidays");
+            }
+            else
+            {
+                return SeeVacationsDelete(page);
+            }
         }
 
         public ActionResult SeeVacations(int? page)

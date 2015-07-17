@@ -160,7 +160,7 @@
                             }
                         },
                             {
-                                label: 'Remove',
+                                label: 'Delete',
                                 cssClass: 'btn-danger',
                                 action: function () {
                                     var f = document.createElement("form");
@@ -216,12 +216,19 @@
                                     i.id = "vacationId";
                                     i.value = calEvent.vacationID;
 
+                                    var redirect = document.createElement("input");
+                                    redirect.type = "hidden";
+                                    redirect.name = "calendar";
+                                    redirect.id = "calendar";
+                                    redirect.value = "true";
+
                                     f.appendChild(i);
+                                    f.appendChild(redirect);
                                     f.submit();
                                 }
                             },
                                 {
-                                    label: 'Remove',
+                                    label: 'Delete',
                                     cssClass: 'btn-danger',
                                     action: function () {
                                         var f = document.createElement("form");
@@ -234,6 +241,13 @@
                                         i.id = "vacationId";
                                         i.value = calEvent.vacationID;
 
+                                        var redirect = document.createElement("input");
+                                        redirect.type = "hidden";
+                                        redirect.name = "calendar";
+                                        redirect.id = "calendar";
+                                        redirect.value = "true";
+
+                                        f.appendChild(redirect);
                                         f.appendChild(i);
                                         f.submit();
                                     }
@@ -261,13 +275,21 @@
                                     i.id = "vacationId";
                                     i.value = calEvent.vacationID;
 
+                                    var redirect = document.createElement("input");
+                                    redirect.type = "hidden";
+                                    redirect.name = "calendar";
+                                    redirect.id = "calendar";
+                                    redirect.value = "true";
+
+                                    f.appendChild(redirect);
+
                                     f.appendChild(i);
                                     f.submit();
                                 }
                             },
                                 {
-                                    label: 'Remove',
-                                    cssClass: 'btn-danger disabled0',
+                                    label: 'Delete',
+                                    cssClass: 'btn-danger disabled',
                                     action: function () {
                                         var f = document.createElement("form");
                                         f.setAttribute('method',"get");
@@ -278,6 +300,14 @@
                                         i.name = "vacationId";
                                         i.id = "vacationId";
                                         i.value = calEvent.vacationID;
+
+                                        var redirect = document.createElement("input");
+                                        redirect.type = "hidden";
+                                        redirect.name = "calendar";
+                                        redirect.id = "calendar";
+                                        redirect.value = "true";
+
+                                        f.appendChild(redirect);
 
                                         f.appendChild(i);
                                         f.submit();
@@ -453,8 +483,6 @@
     });
 
     function getFullNameFromId(id){
-
-
         for(var i = 0; i < array.length; i++) {
             if(array[i].usrId == id){
                 return array[i].firstName + ' ' + array[i].lastName;
@@ -468,7 +496,7 @@
 </script>
 <br />
 <br />
-<div style="float:right">
+<div style="float:right;margin-right:10%" >
     <span class="glyphicon glyphicon-stop" style="color: #378abf;"></span>Holiday
     <span class="glyphicon glyphicon-stop" style="color: #df4040;"></span>Sick Leave
     <span class="glyphicon glyphicon-stop" style="color: #50b239;"></span>Vacation
