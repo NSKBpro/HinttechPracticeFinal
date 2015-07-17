@@ -276,7 +276,7 @@ namespace HinttechPractice.Controllers
             numDays += totalHolidayDays;
             if (vacation.DateTo > datumProveraZaEdit)
             {
-                brojacRadnihDanaZaEditBezVikenda = GetWorkDays(datumProveraZaEdit, vacation.DateTo);
+                brojacRadnihDanaZaEditBezVikenda += GetWorkDays(datumProveraZaEdit, vacation.DateTo);
                 vikend1 = Convert.ToInt32(povecavanjeOdmora) - brojacRadnihDanaZaEditBezVikenda;
                 razlikaZaVikendDane += vikend1;
                 daniZaProveruZaEdit = brojacRadnihDanaZaEditBezVikenda;
@@ -285,7 +285,7 @@ namespace HinttechPractice.Controllers
             }
             else if (vacation.DateTo < datumProveraZaEdit)
             {
-                brojacRadnihDanaZaEditBezVikenda = GetWorkDays(vacation.DateTo, datumProveraZaEdit);
+                brojacRadnihDanaZaEditBezVikenda += GetWorkDays(vacation.DateTo, datumProveraZaEdit);
                 vikend2 = -(Convert.ToInt32(povecavanjeOdmora)) - brojacRadnihDanaZaEditBezVikenda;
                 razlikaZaVikendDane -= vikend2;
                 /*daniZaProveruZaEdit = brojacRadnihDanaZaEditBezVikenda;
@@ -295,18 +295,20 @@ namespace HinttechPractice.Controllers
 
             if (vacation.DateFrom > datumProveraZaEditPocetak)
             {
-                brojacRadnihDanaZaEditBezVikenda = GetWorkDays(datumProveraZaEditPocetak, vacation.DateFrom);
+                brojacRadnihDanaZaEditBezVikenda += GetWorkDays(datumProveraZaEditPocetak, vacation.DateFrom);
                 vikend3 = (Convert.ToInt32(povecavanjeOdmoraZaPocetak)) - brojacRadnihDanaZaEditBezVikenda;
                 razlikaZaVikendDanePocetak -= vikend3;
-                daniZaProveruZaEdit = brojacRadnihDanaZaEditBezVikenda;
-                flagZaPozivEdita = 1;
+                daniZaProveruZaEdit -= brojacRadnihDanaZaEditBezVikenda;
+                
 
             }
             else
             {
-                brojacRadnihDanaZaEditBezVikenda = GetWorkDays(vacation.DateFrom, datumProveraZaEditPocetak);
+                brojacRadnihDanaZaEditBezVikenda += GetWorkDays(vacation.DateFrom, datumProveraZaEditPocetak);
                 vikend4 = -(Convert.ToInt32(povecavanjeOdmoraZaPocetak)) - brojacRadnihDanaZaEditBezVikenda;
                 razlikaZaVikendDanePocetak += vikend4;
+                daniZaProveruZaEdit += brojacRadnihDanaZaEditBezVikenda;
+                flagZaPozivEdita = 1;
 
             }
          
@@ -353,7 +355,7 @@ namespace HinttechPractice.Controllers
             else
             {
 
-                if (Convert.ToInt32(povecavanjeOdmora) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
+                if (Convert.ToInt32(brojacRadnihDanaZaEditBezVikenda) <= u.VacationDays && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(datum))) && (DateTime.Parse(vacation.DateTo.ToString("yyyy-MM-dd")) > (DateTime.Parse(vacation.DateFrom.ToString("yyyy-MM-dd")))))
                 {
                     int brojac = 0;
                     if (ModelState.IsValid)
