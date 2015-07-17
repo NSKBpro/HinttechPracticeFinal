@@ -197,33 +197,18 @@
                     }</text>}
                     @if(Context.User.IsInRole("User"))
                     {<text>
+                    var today = new Date();
+                    
                     if(usrId == calEvent.userID){
-                        buttonss = [{
-                            label: 'Edit',
-                            cssClass: 'btn-primary',
-                            action: function () {
-
-                                var f = document.createElement("form");
-                                f.setAttribute('method',"get");
-                                f.setAttribute('action',"/LoadVacations/EditVacation");
-
-                                var i = document.createElement("input");
-                                i.type = "hidden";
-                                i.name = "vacationId";
-                                i.id = "vacationId";
-                                i.value = calEvent.vacationID;
-
-                                f.appendChild(i);
-                                f.submit();
-                            }
-                        },
-                            {
-                                label: 'Remove',
-                                cssClass: 'btn-danger',
+                        if(today < calEvent.start){
+                            buttonss = [{
+                                label: 'Edit',
+                                cssClass: 'btn-primary',
                                 action: function () {
+
                                     var f = document.createElement("form");
                                     f.setAttribute('method',"get");
-                                    f.setAttribute('action',"/LoadVacations/DeleteVacation");
+                                    f.setAttribute('action',"/LoadVacations/EditVacation");
 
                                     var i = document.createElement("input");
                                     i.type = "hidden";
@@ -235,13 +220,77 @@
                                     f.submit();
                                 }
                             },
-                            {
-                                label: 'Dismiss',
-                                cssClass: 'btn-default',
-                                action: function (dialogRef) {
-                                    dialogRef.close();
+                                {
+                                    label: 'Remove',
+                                    cssClass: 'btn-danger',
+                                    action: function () {
+                                        var f = document.createElement("form");
+                                        f.setAttribute('method',"get");
+                                        f.setAttribute('action',"/LoadVacations/DeleteVacation");
+
+                                        var i = document.createElement("input");
+                                        i.type = "hidden";
+                                        i.name = "vacationId";
+                                        i.id = "vacationId";
+                                        i.value = calEvent.vacationID;
+
+                                        f.appendChild(i);
+                                        f.submit();
+                                    }
+                                },
+                                {
+                                    label: 'Dismiss',
+                                    cssClass: 'btn-default',
+                                    action: function (dialogRef) {
+                                        dialogRef.close();
+                                    }
+                                }];
+                        }else{
+                            buttonss = [{
+                                label: 'Edit',
+                                cssClass: 'btn-primary',
+                                action: function () {
+
+                                    var f = document.createElement("form");
+                                    f.setAttribute('method',"get");
+                                    f.setAttribute('action',"/LoadVacations/EditVacation");
+
+                                    var i = document.createElement("input");
+                                    i.type = "hidden";
+                                    i.name = "vacationId";
+                                    i.id = "vacationId";
+                                    i.value = calEvent.vacationID;
+
+                                    f.appendChild(i);
+                                    f.submit();
                                 }
-                            }];
+                            },
+                                {
+                                    label: 'Remove',
+                                    cssClass: 'btn-danger disabled',
+                                    action: function () {
+                                        var f = document.createElement("form");
+                                        f.setAttribute('method',"get");
+                                        f.setAttribute('action',"/LoadVacations/DeleteVacation");
+
+                                        var i = document.createElement("input");
+                                        i.type = "hidden";
+                                        i.name = "vacationId";
+                                        i.id = "vacationId";
+                                        i.value = calEvent.vacationID;
+
+                                        f.appendChild(i);
+                                        f.submit();
+                                    }
+                                },
+                                {
+                                    label: 'Dismiss',
+                                    cssClass: 'btn-default',
+                                    action: function (dialogRef) {
+                                        dialogRef.close();
+                                    }
+                                }];
+                        }
                     }else{
                         buttonss = [
                             {
@@ -254,13 +303,6 @@
                     }
                     </text>
                     }
-
-
-
-
-
-
-
 
                     BootstrapDialog.show({
                         type: typeOfDialog,
