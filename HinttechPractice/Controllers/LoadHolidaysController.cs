@@ -235,6 +235,15 @@ namespace HinttechPractice.Controllers
             return RedirectToAction("initHolidays");
         }
 
+        [HttpGet]
+        [MyAuthorizeAtribute(Roles = "Admin")]
+        public ActionResult RemoveHolidayRedirect(int HolidayId)
+        {
+           
+            ViewBag.initHolidays = db.GetHolidays();
+            return View("DeleteHoliday", db.GetHolidays().Find(HolidayId));
+        }
+
         [HttpPost]
         [MyAuthorizeAtribute(Roles = "Admin")]
         public ActionResult EditHoliday(Holiday h)
