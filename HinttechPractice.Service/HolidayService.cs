@@ -31,20 +31,16 @@ namespace HinttechPractice.Service
 
         public void RemoveHoliday(int holidayId)
         {
-            dataContext.Holidays.Remove(dataContext.Holidays.Find(holidayId));
+            Holiday h = dataContext.Holidays.Find(holidayId);
+            if(h!=null)
+                dataContext.Holidays.Remove(h);
             dataContext.SaveChanges();
         }
 
         public DbSet<Holiday> GetHolidays()
         {
             var holidays = dataContext.Holidays;
-            if (holidays != null)
-            {
-                
                 return holidays;
-            }
-            else
-                return null;
         }
 
         public List<Holiday> GetHolidaysForDate(DateTime dt)
@@ -70,7 +66,9 @@ namespace HinttechPractice.Service
 
         public void EditHoliday(Holiday h)
         {
-            dataContext.Entry(dataContext.Holidays.Find(h.HolidayId)).CurrentValues.SetValues(h);
+            Holiday oldHoliday = dataContext.Holidays.Find(h.HolidayId);
+            if(oldHoliday!=null)
+             dataContext.Entry(oldHoliday).CurrentValues.SetValues(h);
             dataContext.SaveChanges();
         }
     }
