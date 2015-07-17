@@ -2,6 +2,7 @@
 
 <script>
     var flag="@(ViewBag.Flag)";
+ 
     function funProvera() {
         var proveraDani=@(ViewBag.BrDana);
         var datumProvera="@(ViewBag.Datum)";
@@ -15,15 +16,6 @@
         days= workingDaysBetweenDates(new Date("@ViewBag.editDateTo"),new Date(datum2))-1;
 
 
-        if (days > proveraDani && sick=="False") {
-            
-            alertify
-                    .alert("You choose more then " + proveraDani +" WORK days", function () {
-                        alertify.error('Please try again');
-                    });
-            return false;
-
-        }
         if (datum2 < datum1) {
             alertify.error("Incorrect.Please try again with new date");
             return false;
@@ -37,13 +29,27 @@
     }
 
     function myFunction(){
+        var radniDaniZaProveru="@(ViewBag.ProveraDaniZaEdit)";
+        var sick=document.getElementById("sick").value;
+        var proveraDani=@(ViewBag.BrDana);
+        var flagZaEdit="@(ViewBag.FlagZaPozivEdita)"
         if(flag==1){
             alertify
-                        .alert("You cant use this date for vacation because you already have vacation in that period", function () {
+                        .alert("You cant use this date for vacation because you already have vacation in that period!!!!", function () {
                             alertify.error('Please try again with new period');
                         });
-            alertify.error("Greska");
+            
         }    
+
+        if (radniDaniZaProveru > proveraDani && sick=="False" && flagZaEdit==1) {
+            
+            alertify
+                    .alert("You choose more then " + proveraDani +" WORK days", function () {
+                        alertify.error('Please try again');
+                    });
+            return false;
+
+        }
        
 
     }
