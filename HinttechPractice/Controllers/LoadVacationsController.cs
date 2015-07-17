@@ -116,7 +116,7 @@ namespace HinttechPractice.Controllers
                         vacation.DateFrom = vacation.DateFrom;
                         vacation.DateTo = vacation.DateTo;
                         db.AddVacation(vacation);
-                        return RedirectToAction("SeeVacations");
+                        return RedirectToAction("initHolidays", "LoadHolidays");
                     }
                     else
                     {
@@ -158,7 +158,7 @@ namespace HinttechPractice.Controllers
                             int days = u.VacationDays - Convert.ToInt32(numDays);
                             u.VacationDays = days;
                             users.Edit(u);
-                            return RedirectToAction("SeeVacations");
+                            return RedirectToAction("initHolidays", "LoadHolidays");
                         }
                         else
                         {
@@ -345,7 +345,15 @@ namespace HinttechPractice.Controllers
                 else
                 {
                     flag = 1;
-                    return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId });
+                    if (calendar != null && calendar.Equals("true"))
+                    {
+                        return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId, calendar = "true" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId });
+                
+                    }
                 }
 
             }
@@ -393,7 +401,15 @@ namespace HinttechPractice.Controllers
                         else
                         {
                             flag = 1;
-                            return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId });
+                            if (calendar != null && calendar.Equals("true"))
+                            {
+                                return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId, calendar = "true" });
+                            }
+                            else
+                            {
+                                return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId });
+
+                            }
                         }
 
                     }
@@ -407,7 +423,7 @@ namespace HinttechPractice.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId });
+                        return RedirectToAction("EditVacation", new { vacationId = vacation.VacationPeriodId, calendar = "true" });
                     }
                 }
             }
