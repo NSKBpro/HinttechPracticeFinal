@@ -8,6 +8,7 @@
         var datumProvera="@(ViewBag.Datum)";
         var datum1 = "@(ViewBag.editDateFrom)";
         var datum2 = document.getElementById("datum2").value;
+        var datum22 = document.getElementById("datum1").value;
         var sick=document.getElementById("sick").value;
         var oneDay = 24 * 60 * 60 * 1000;
         var dodatak= 20 - proveraDani;
@@ -16,7 +17,7 @@
         days= workingDaysBetweenDates(new Date("@ViewBag.editDateTo"),new Date(datum2))-1;
 
 
-        if (datum2 < datum1) {
+        if (datum2 < datum1 || datum2<datum22) {
             alertify.error("Incorrect.Please try again with new date");
             return false;
         }else if (datum2 <= datumProvera) { 
