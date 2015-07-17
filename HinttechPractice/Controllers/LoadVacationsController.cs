@@ -282,7 +282,7 @@ namespace HinttechPractice.Controllers
                         brojac++;
                         continue;
                     }
-                    if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom <= v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
+                    if ((vacation.DateFrom >= v.DateFrom && vacation.DateFrom < v.DateTo) || (vacation.DateTo >= v.DateFrom && vacation.DateTo <= v.DateTo) || (vacation.DateFrom <= v.DateFrom && vacation.DateTo >= v.DateTo))
                     {
 
                         flag = 1;
