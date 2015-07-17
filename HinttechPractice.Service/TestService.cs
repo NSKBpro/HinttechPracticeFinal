@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace HinttechPractice.Service
 {
-    public class TestService: InterfaceVacation
+    public class TestService : InterfaceVacation
     {
         private readonly DataContext dataContext;
 
@@ -29,12 +29,7 @@ namespace HinttechPractice.Service
         public DbSet<Vacation> GetVacations()
         {
             var vacations = dataContext.Vacations;
-            if (vacations != null)
-            {
-                return vacations;
-            }
-            else
-                return null;
+            return vacations;
         }
 
         public List<Vacation> GetVacationsForCurrentUser(int userID)
@@ -58,7 +53,9 @@ namespace HinttechPractice.Service
         }
         public void EditVacation(Vacation testModel)
         {
-            dataContext.Entry(dataContext.Vacations.Find(testModel.VacationPeriodId)).CurrentValues.SetValues(testModel);
+            Vacation oldVacation = dataContext.Vacations.Find(testModel.VacationPeriodId);
+            if (oldVacation != null)
+                dataContext.Entry(oldVacation).CurrentValues.SetValues(testModel);
             dataContext.SaveChanges();
 
 
@@ -73,7 +70,9 @@ namespace HinttechPractice.Service
 
         public void DeleteVacation(int vacationId)
         {
-            dataContext.Vacations.Remove(dataContext.Vacations.Find(vacationId));
+            Vacation v = dataContext.Vacations.Find(vacationId);
+            if (v != null)
+                dataContext.Vacations.Remove(v);
             dataContext.SaveChanges();
         }
 
@@ -90,6 +89,6 @@ namespace HinttechPractice.Service
             }
             return false;
         }
-        
+
     }
 }

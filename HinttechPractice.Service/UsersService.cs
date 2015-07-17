@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HinttechPractice.Service
 {
-   public class UsersService:ICommonOp
+    public class UsersService : ICommonOp
     {
         private readonly DataContext context;
         public UsersService()
@@ -21,22 +21,23 @@ namespace HinttechPractice.Service
         }
         public void Create(object pom)
         {
-                context.Users.Add((User)pom);
-                context.SaveChanges();
+            context.Users.Add((User)pom);
+            context.SaveChanges();
         }
 
         public object FindById(int id)
         {
             User pom = new User();
-                pom = context.Users.Find(id);
-
+            pom = context.Users.Find(id);
             return pom;
         }
 
         public User FindUserByUsername(String username)
         {
-            foreach (User pom in context.Users) {
-                if (pom.Username.Equals(username)) {
+            foreach (User pom in context.Users)
+            {
+                if (pom.Username.Equals(username))
+                {
                     return pom;
                 }
             }
@@ -68,11 +69,14 @@ namespace HinttechPractice.Service
         public void Edit(object user)
         {
             User old = new User();
-                User newUser = (User)user;
-                old = context.Users.Find(newUser.UserId);
+            User newUser = (User)user;
+            old = context.Users.Find(newUser.UserId);
+            if (old != null)
+            {
                 fillFields(old, newUser);
                 context.Entry(old).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
+            }
         }
         private void fillFields(User old, User newUSer)
         {
