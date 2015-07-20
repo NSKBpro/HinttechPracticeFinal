@@ -36,6 +36,7 @@ namespace HinttechPractice.Controllers
         ///Post method for login user(on context).
         ///</summary>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult LoginPage(LoginViewModel user)
         {
             if (user.Password == null || user.UserName == null)

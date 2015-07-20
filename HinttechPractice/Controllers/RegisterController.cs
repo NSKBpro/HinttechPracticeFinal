@@ -17,8 +17,10 @@ namespace HinttechPractice.Controllers
     ///<summary>
     ///Controller for register new users, edit users, change password...
     ///</summary>
+    [Authorize]
     public class RegisterController : Controller
     {
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
@@ -35,6 +37,7 @@ namespace HinttechPractice.Controllers
         ///</summary>
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public ActionResult RegisterPage(RegisterViewModel model, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
@@ -92,7 +95,9 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
-        [Authorize]
+        /// <summary>
+        /// Go to edit page for current Loged in user.
+        /// </summary>
         public ActionResult EditPage(String id)
         {
             UsersService users = new UsersService();
@@ -122,7 +127,7 @@ namespace HinttechPractice.Controllers
         ///Edit users.
         ///</summary>
         [HttpPost]
-        [Authorize]
+        [ValidateAntiForgeryToken]
         public ActionResult EditPage(EditAccountViewModel model, HttpPostedFileBase file)
         {
             UsersService users = new UsersService();
@@ -175,7 +180,9 @@ namespace HinttechPractice.Controllers
             }
         }
 
-        [Authorize]
+        /// <summary>
+        /// Go to change password page for current loged in user.
+        /// </summary>
         public ActionResult ChangePassPage(String id)
         {
             UsersService users = new UsersService();
@@ -193,7 +200,7 @@ namespace HinttechPractice.Controllers
         ///Change user password.
         ///</summary>
         [HttpPost]
-        [Authorize]
+        [ValidateAntiForgeryToken]
         public ActionResult ChangePassPage(ChangePasswordViewModel model)
         {
             UsersService users = new UsersService();
@@ -225,7 +232,6 @@ namespace HinttechPractice.Controllers
         ///<summary>
         ///Show account details.
         ///</summary>
-        [Authorize]
         public ActionResult AccountDetails(String id)
         {
             UsersService users = new UsersService();
