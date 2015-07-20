@@ -11,7 +11,7 @@ namespace HinttechPractice.Security
     ///<summary>
     ///Principal class, for role-based system. 
     ///</summary>
-    public class MyPrincipal:IPrincipal
+    public class MyPrincipal : IPrincipal
     {
         private User account = new User();
 
@@ -36,10 +36,18 @@ namespace HinttechPractice.Security
         ///</summary>
         public bool IsInRole(string role)
         {
-           // var roles = role.Split(new char[] {','});
-            if (role.Equals("Admin") && account.IsUserAdmin && !account.IsUserRegistered) return true;
-            else if (role.Equals("User") && account.IsUserRegistered && !account.IsUserAdmin) return true;
-            else return false;
+            if (role.Equals("Admin") && account.IsUserAdmin && !account.IsUserRegistered)
+            {
+                return true;
+            }
+            else if (role.Equals("User") && account.IsUserRegistered && !account.IsUserAdmin)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

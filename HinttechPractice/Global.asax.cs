@@ -23,6 +23,7 @@ namespace HinttechPractice
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
         {
             HttpCookie ck = Request.Cookies[FormsAuthentication.FormsCookieName];

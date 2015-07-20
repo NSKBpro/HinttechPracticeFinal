@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace HinttechPractice.Service.Intefaces
 {
+    /// <summary>
+    /// Generic interface for common DAL operations.
+    /// </summary>
     interface ICommonOp
     {
         void Create(Object hol);

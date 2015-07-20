@@ -41,6 +41,7 @@ namespace HinttechPractice.Controllers
             {
                 UsersService userService = new UsersService();
                 User currentUser = userService.FindUserByUsername(model.Username);
+
                 if (currentUser != null)
                 {
                     ViewBag.Error = "Username already exist!";
@@ -57,6 +58,7 @@ namespace HinttechPractice.Controllers
                     ViewBag.Error = "Email address already exist!!";
                     return View();
                 }
+
                 User user = new User();
                 user.Email = model.Email;
                 user.FirstName = model.FirstName;
@@ -68,6 +70,7 @@ namespace HinttechPractice.Controllers
                 user.IsUserRegistered = false;
                 user.LastLoginDate = DateTime.Now;
                 user.VacationDays = 20;
+
                 if (file != null)
                 {
                     using (MemoryStream ms = new MemoryStream())
@@ -97,7 +100,11 @@ namespace HinttechPractice.Controllers
             String pom = User.Identity.Name;
             if (u != null)
             {
-                if (!pom.Equals(u.Username)) return RedirectToAction("Index", "Home");
+                if (!pom.Equals(u.Username))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
                 EditAccountViewModel model = new EditAccountViewModel();
                 model.Email = u.Email;
                 model.FirstName = u.FirstName;
@@ -105,7 +112,10 @@ namespace HinttechPractice.Controllers
                 model.removeImage = false;
                 return View(model);
             }
-            else return View();
+            else
+            {
+                return View();
+            }
         }
 
         ///<summary>
@@ -118,10 +128,15 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             String pom = User.Identity.Name;
             User u = (User)users.FindUserByUsername(pom);
+
             if (u != null)
             {
-                if (!pom.Equals(u.Username)) return RedirectToAction("Index", "Home");
+                if (!pom.Equals(u.Username))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
+
             User checkForMail = (User)users.FindUserByEmail(model.Email);
             if (checkForMail == null || checkForMail.Email.Equals(u.Email))
             {
@@ -166,7 +181,10 @@ namespace HinttechPractice.Controllers
             UsersService users = new UsersService();
             User u = (User)users.FindUserByUsername(id);
             String pom = User.Identity.Name;
-            if (!pom.Equals(u.Username)) return RedirectToAction("Index", "Home");
+            if (!pom.Equals(u.Username))
+            {
+                return RedirectToAction("Index", "Home");
+            }
             ChangePasswordViewModel model = new ChangePasswordViewModel();
             return View(model);
         }
@@ -216,7 +234,10 @@ namespace HinttechPractice.Controllers
 
             if (u != null)
             {
-                if (!pom.Equals(u.Username)) return RedirectToAction("Index", "Home");
+                if (!pom.Equals(u.Username))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
                 UserViewModel model = new UserViewModel();
                 model.Email = u.Email;
                 model.FirstName = u.FirstName;
@@ -228,7 +249,10 @@ namespace HinttechPractice.Controllers
                 model.VacationDays = u.VacationDays;
                 return View(model);
             }
-            else return View();
+            else
+            {
+                return View();
+            }
         }
     }
 }

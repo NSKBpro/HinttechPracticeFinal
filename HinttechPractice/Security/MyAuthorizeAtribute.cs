@@ -11,7 +11,7 @@ namespace HinttechPractice.Security
     ///<summary>
     ///Checking authentication roles. For unknown roles, or not exist role, redirect to Login.
     ///</summary>
-    public class MyAuthorizeAtribute:AuthorizeAttribute
+    public class MyAuthorizeAtribute : AuthorizeAttribute
     {
         ///<summary>
         ///Checking authorization roles.
@@ -23,8 +23,11 @@ namespace HinttechPractice.Security
                 MyPrincipal mp = HttpContext.Current.User as MyPrincipal;
                 if (!mp.IsInRole(Roles))
                 {
-                    filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new{
-                        controller = "Login", action="LoginPage"}));
+                    filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary(new
+                    {
+                        controller = "Login",
+                        action = "LoginPage"
+                    }));
                 }
             }
         }

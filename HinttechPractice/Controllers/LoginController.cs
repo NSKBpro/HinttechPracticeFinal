@@ -38,7 +38,11 @@ namespace HinttechPractice.Controllers
         [HttpPost]
         public ActionResult LoginPage(LoginViewModel user)
         {
-            if (user.Password == null || user.UserName == null) return View();
+            if (user.Password == null || user.UserName == null)
+            {
+                return View();
+            }
+
             UsersService userService = new UsersService();
             User currentUser = userService.FindUserByUsername(user.UserName);
 
@@ -54,19 +58,24 @@ namespace HinttechPractice.Controllers
                     ViewBag.Error = "Wrong password combination!";
                     return View();
                 }
+
                 if (!currentUser.IsUserRegistered)
                 {
-                    if (!currentUser.IsUserAdmin) { 
-                    ViewBag.Error = "Your account isn't approved yet.Check your email.";
-                    return View();
+                    if (!currentUser.IsUserAdmin)
+                    {
+                        ViewBag.Error = "Your account isn't approved yet.Check your email.";
+                        return View();
                     }
                 }
-                byte[] tempPicture = currentUser.ProfilePicture; 
+
+                byte[] tempPicture = currentUser.ProfilePicture;
                 currentUser.ProfilePicture = null; // set picture to null, for JsonConverter.
-                ICollection<Vacation> tempVacation =  currentUser.Vacations;
+                ICollection<Vacation> tempVacation = currentUser.Vacations;
                 ICollection<Holiday> tempHolidays = currentUser.Holidays;
+
                 currentUser.Vacations = null;
                 currentUser.Holidays = null;
+
                 FormsAuthenticationTicket fat = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(15), false,
                     JsonConvert.SerializeObject(currentUser, Formatting.None,
                         new JsonSerializerSettings()

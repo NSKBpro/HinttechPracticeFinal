@@ -9,9 +9,13 @@ using System.Threading.Tasks;
 
 namespace HinttechPractice.Service
 {
+    /// <summary>
+    /// DAL class for comunication with database.
+    /// </summary>
     public class UsersService : ICommonOp
     {
         private readonly DataContext context;
+
         public UsersService()
         {
             if (context == null)
@@ -19,26 +23,27 @@ namespace HinttechPractice.Service
                 context = new DataContext();
             }
         }
-        public void Create(object pom)
+
+        public void Create(object userObject)
         {
-            context.Users.Add((User)pom);
+            context.Users.Add((User)userObject);
             context.SaveChanges();
         }
 
-        public object FindById(int id)
+        public object FindById(int userId)
         {
-            User pom = new User();
-            pom = context.Users.Find(id);
-            return pom;
+            User user = new User();
+            user = context.Users.Find(userId);
+            return user;
         }
 
         public User FindUserByUsername(String username)
         {
-            foreach (User pom in context.Users)
+            foreach (User user in context.Users)
             {
-                if (pom.Username.Equals(username))
+                if (user.Username.Equals(username))
                 {
-                    return pom;
+                    return user;
                 }
             }
             return null;
@@ -46,11 +51,11 @@ namespace HinttechPractice.Service
 
         public User FindUserByEmail(String email)
         {
-            foreach (User pom in context.Users)
+            foreach (User user in context.Users)
             {
-                if (pom.Email.Equals(email))
+                if (user.Email.Equals(email))
                 {
-                    return pom;
+                    return user;
                 }
             }
             return null;
@@ -61,31 +66,32 @@ namespace HinttechPractice.Service
             return context.Users.ToList();
         }
 
-        public void Delete(int id)
+        public void Delete(int userId)
         {
             throw new NotImplementedException();
         }
 
-        public void Edit(object user)
+        public void Edit(object userObject)
         {
-            User old = new User();
-            User newUser = (User)user;
-            old = context.Users.Find(newUser.UserId);
-            if (old != null)
+            User oldUser = new User();
+            User newUser = (User)userObject;
+            oldUser = context.Users.Find(newUser.UserId);
+            if (oldUser != null)
             {
-                fillFields(old, newUser);
-                context.Entry(old).State = System.Data.Entity.EntityState.Modified;
+                FillFields(oldUser, newUser);
+                context.Entry(oldUser).State = System.Data.Entity.EntityState.Modified;
                 context.SaveChanges();
             }
         }
-        private void fillFields(User old, User newUSer)
+
+        private void FillFields(User oldUser, User newUSer)
         {
-            old.Email = newUSer.Email;
-            old.FirstName = newUSer.FirstName;
-            old.LastName = newUSer.LastName;
-            old.Password = newUSer.Password;
-            old.Username = newUSer.Username;
-            old.ProfilePicture = newUSer.ProfilePicture;
+            oldUser.Email = newUSer.Email;
+            oldUser.FirstName = newUSer.FirstName;
+            oldUser.LastName = newUSer.LastName;
+            oldUser.Password = newUSer.Password;
+            oldUser.Username = newUSer.Username;
+            oldUser.ProfilePicture = newUSer.ProfilePicture;
         }
     }
 }

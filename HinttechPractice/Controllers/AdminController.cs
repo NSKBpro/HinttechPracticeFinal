@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using PagedList;
 using PagedList.Mvc;
 
-namespace HinttechPractice.App_Start
+namespace HinttechPractice.Controllers
 {
     ///<summary>
     ///Controller for admin actions.
@@ -32,16 +32,42 @@ namespace HinttechPractice.App_Start
         {
             UsersService users = new UsersService();
             List<User> model = users.FindAll().ToList();
-            List<User> bezAdmina = new List<User>();
+            List<User> withoutAdmin = new List<User>();
+
             foreach (User u in model)
             {
-                if (!u.IsUserAdmin) bezAdmina.Add(u);
+                if (!u.IsUserAdmin)
+                {
+                    withoutAdmin.Add(u);
+                }
             }
-            double tempPaginationValue = bezAdmina.Count() / 6;
-            if (bezAdmina.Count() % 6 != 0) tempPaginationValue++;
-            if (tempPaginationValue < page) page = 1;
-            if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == bezAdmina.Count()) page--;
-            return View("ShowAllUsers", bezAdmina.ToList().ToPagedList(page ?? 1, 6));
+            int? currentPage = ReturnPaginationPage(withoutAdmin, page);
+            return View("ShowAllUsers", withoutAdmin.ToList().ToPagedList(currentPage ?? 1, 6));
+        }
+
+        /// <summary>
+        /// Return the current page for pagination.
+        /// </summary>
+        private int? ReturnPaginationPage(List<User> withoutAdmin, int? page)
+        {
+            double tempPaginationValue = withoutAdmin.Count() / 6;
+
+            if (withoutAdmin.Count() % 6 != 0)
+            {
+                tempPaginationValue++;
+            }
+
+            if (tempPaginationValue < page)
+            {
+                page = 1;
+            }
+
+            if (page != 1 && page != tempPaginationValue && 6 * tempPaginationValue == withoutAdmin.Count())
+            {
+                page--;
+            }
+
+            return page;
         }
 
         ///<summary>
@@ -51,12 +77,17 @@ namespace HinttechPractice.App_Start
         {
             UsersService users = new UsersService();
             List<User> model = users.FindAll().ToList();
-            List<User> bezAdmina = new List<User>();
+            List<User> withoutAdmin = new List<User>();
+
             foreach (User u in model)
             {
-                if (!u.IsUserAdmin && u.IsUserRegistered) bezAdmina.Add(u);
+                if (!u.IsUserAdmin && u.IsUserRegistered)
+                {
+                    withoutAdmin.Add(u);
+                }
             }
-            return View(bezAdmina);
+
+            return View(withoutAdmin);
         }
 
         ///<summary>
@@ -66,6 +97,7 @@ namespace HinttechPractice.App_Start
         {
             UsersService users = new UsersService();
             User user = (User)users.FindUserByUsername(id);
+
             if (user != null)
             {
                 if (user.IsUserRegistered)
@@ -84,10 +116,14 @@ namespace HinttechPractice.App_Start
             return ShowAllUsers(page);
         }
 
+        /// <summary>
+        /// Reset all vacation days for registered users to 20.
+        /// </summary>
         public ActionResult ResetVacationDays()
         {
             UsersService users = new UsersService();
             List<User> modelList = users.FindAll();
+
             foreach (User u in modelList)
             {
                 u.VacationDays = 20;
@@ -111,6 +147,7 @@ namespace HinttechPractice.App_Start
                 var message = new MailMessage();
                 message.To.Add(new MailAddress(user.Email));  // replace with valid value 
                 message.From = new MailAddress("eponudaisa@gmail.com");  // replace with valid value
+
                 if (registered)
                 {
                     message.Subject = "Registration to Hinttech";
@@ -132,6 +169,7 @@ namespace HinttechPractice.App_Start
                         UserName = "eponudaisa@gmail.com",  // replace with valid value
                         Password = "ra442011"  // replace with valid value
                     };
+
                     smtp.Credentials = credential;
                     smtp.Host = "smtp.gmail.com";
                     smtp.Port = 587;
