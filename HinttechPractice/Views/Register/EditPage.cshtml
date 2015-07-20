@@ -18,7 +18,7 @@
                 @Html.EditorFor(model => model.removeImage, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.removeImage)
             </div>
-
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <input type="file" name="file" id="file" style="width: 100%;" class=" btn btn-default" />
             </div>

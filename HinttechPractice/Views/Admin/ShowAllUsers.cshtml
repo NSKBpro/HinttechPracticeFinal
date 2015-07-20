@@ -78,7 +78,8 @@
     </tr>
 }
 </table>
-       @Html.PagedListPager(Model, page => Url.Action("ShowAllUsers", new { page }), new PagedListRenderOptions()
+       @Html.AntiForgeryToken()
+        @Html.PagedListPager(Model, page => Url.Action("ShowAllUsers", new { page }), new PagedListRenderOptions()
        {
            Display = PagedListDisplayMode.IfNeeded,
            DisplayPageCountAndCurrentLocation = true

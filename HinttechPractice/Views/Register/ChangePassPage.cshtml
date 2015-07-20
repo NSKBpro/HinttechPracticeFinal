@@ -12,6 +12,7 @@
             <input type="password" class="form-control" placeholder="New password" name="newPassword" maxlength="25" required>
             <input type="password" class="form-control" placeholder="Confirm new password" name="confirmNewPass" maxlength="25" required>
             <br />
+            @Html.AntiForgeryToken()
             <input class="btn btn-lg btn-success btn-block" type="submit" value="Save" />
             <br /><br />
             @if (ViewBag.Error != null)
