@@ -96,19 +96,19 @@ namespace HinttechPractice.Controllers
         public ActionResult EditPage(String id)
         {
             UsersService users = new UsersService();
-            User u = (User)users.FindUserByUsername(id);
-            String pom = User.Identity.Name;
-            if (u != null)
+            User user = (User)users.FindUserByUsername(id);
+            String currentUsername = User.Identity.Name;
+            if (user != null)
             {
-                if (!pom.Equals(u.Username))
+                if (!currentUsername.Equals(user.Username))
                 {
                     return RedirectToAction("Index", "Home");
                 }
 
                 EditAccountViewModel model = new EditAccountViewModel();
-                model.Email = u.Email;
-                model.FirstName = u.FirstName;
-                model.LastName = u.LastName;
+                model.Email = user.Email;
+                model.FirstName = user.FirstName;
+                model.LastName = user.LastName;
                 model.removeImage = false;
                 return View(model);
             }
@@ -126,23 +126,23 @@ namespace HinttechPractice.Controllers
         public ActionResult EditPage(EditAccountViewModel model, HttpPostedFileBase file)
         {
             UsersService users = new UsersService();
-            String pom = User.Identity.Name;
-            User u = (User)users.FindUserByUsername(pom);
+            String currentUsername = User.Identity.Name;
+            User user = (User)users.FindUserByUsername(currentUsername);
 
-            if (u != null)
+            if (user != null)
             {
-                if (!pom.Equals(u.Username))
+                if (!currentUsername.Equals(user.Username))
                 {
                     return RedirectToAction("Index", "Home");
                 }
             }
 
             User checkForMail = (User)users.FindUserByEmail(model.Email);
-            if (checkForMail == null || checkForMail.Email.Equals(u.Email))
+            if (checkForMail == null || checkForMail.Email.Equals(user.Email))
             {
-                u.FirstName = model.FirstName;
-                u.LastName = model.LastName;
-                u.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email;
                 if (!model.removeImage)
                 {
                     if (file != null)
@@ -156,16 +156,16 @@ namespace HinttechPractice.Controllers
                                 ViewBag.Error = "Image size can't be more than ~50Kb!!";
                                 return View(model);
                             }
-                            u.ProfilePicture = array;
+                            user.ProfilePicture = array;
                         }
                     }
                 }
                 else
                 {
-                    u.ProfilePicture = null;
+                    user.ProfilePicture = null;
                 }
 
-                users.Edit(u);
+                users.Edit(user);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -179,9 +179,9 @@ namespace HinttechPractice.Controllers
         public ActionResult ChangePassPage(String id)
         {
             UsersService users = new UsersService();
-            User u = (User)users.FindUserByUsername(id);
-            String pom = User.Identity.Name;
-            if (!pom.Equals(u.Username))
+            User user = (User)users.FindUserByUsername(id);
+            String currentUsername = User.Identity.Name;
+            if (!currentUsername.Equals(user.Username))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -197,15 +197,15 @@ namespace HinttechPractice.Controllers
         public ActionResult ChangePassPage(ChangePasswordViewModel model)
         {
             UsersService users = new UsersService();
-            String pom = User.Identity.Name;
-            User u = (User)users.FindUserByUsername(pom);
+            String currentUsername = User.Identity.Name;
+            User user = (User)users.FindUserByUsername(currentUsername);
 
-            if (u.Password.Equals(model.currentPassword))
+            if (user.Password.Equals(model.currentPassword))
             {
                 if (model.newPassword.Equals(model.confirmNewPass))
                 {
-                    u.Password = model.confirmNewPass;
-                    users.Edit(u);
+                    user.Password = model.confirmNewPass;
+                    users.Edit(user);
                 }
                 else
                 {
@@ -229,24 +229,24 @@ namespace HinttechPractice.Controllers
         public ActionResult AccountDetails(String id)
         {
             UsersService users = new UsersService();
-            User u = (User)users.FindUserByUsername(id);
-            String pom = User.Identity.Name;
+            User user = (User)users.FindUserByUsername(id);
+            String currentUsername = User.Identity.Name;
 
-            if (u != null)
+            if (user != null)
             {
-                if (!pom.Equals(u.Username))
+                if (!currentUsername.Equals(user.Username))
                 {
                     return RedirectToAction("Index", "Home");
                 }
                 UserViewModel model = new UserViewModel();
-                model.Email = u.Email;
-                model.FirstName = u.FirstName;
-                model.LastName = u.LastName;
-                model.DateCreated = (DateTime)u.DateCreated;
-                model.IsUserRegistered = u.IsUserRegistered;
-                model.ProfilePicture = u.ProfilePicture;
-                model.Username = u.Username;
-                model.VacationDays = u.VacationDays;
+                model.Email = user.Email;
+                model.FirstName = user.FirstName;
+                model.LastName = user.LastName;
+                model.DateCreated = (DateTime)user.DateCreated;
+                model.IsUserRegistered = user.IsUserRegistered;
+                model.ProfilePicture = user.ProfilePicture;
+                model.Username = user.Username;
+                model.VacationDays = user.VacationDays;
                 return View(model);
             }
             else

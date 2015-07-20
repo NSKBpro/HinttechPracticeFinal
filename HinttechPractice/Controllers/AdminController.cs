@@ -34,11 +34,11 @@ namespace HinttechPractice.Controllers
             List<User> model = users.FindAll().ToList();
             List<User> withoutAdmin = new List<User>();
 
-            foreach (User u in model)
+            foreach (User user in model)
             {
-                if (!u.IsUserAdmin)
+                if (!user.IsUserAdmin)
                 {
-                    withoutAdmin.Add(u);
+                    withoutAdmin.Add(user);
                 }
             }
             int? currentPage = ReturnPaginationPage(withoutAdmin, page);
@@ -79,11 +79,11 @@ namespace HinttechPractice.Controllers
             List<User> model = users.FindAll().ToList();
             List<User> withoutAdmin = new List<User>();
 
-            foreach (User u in model)
+            foreach (User user in model)
             {
-                if (!u.IsUserAdmin && u.IsUserRegistered)
+                if (!user.IsUserAdmin && user.IsUserRegistered)
                 {
-                    withoutAdmin.Add(u);
+                    withoutAdmin.Add(user);
                 }
             }
 
@@ -121,13 +121,13 @@ namespace HinttechPractice.Controllers
         /// </summary>
         public ActionResult ResetVacationDays()
         {
-            UsersService users = new UsersService();
-            List<User> modelList = users.FindAll();
+            UsersService userService = new UsersService();
+            List<User> users = userService.FindAll();
 
-            foreach (User u in modelList)
+            foreach (User user in users)
             {
-                u.VacationDays = 20;
-                users.Edit(u);
+                user.VacationDays = 20;
+                userService.Edit(user);
             }
 
             return RedirectToAction("ShowAllUsers");
