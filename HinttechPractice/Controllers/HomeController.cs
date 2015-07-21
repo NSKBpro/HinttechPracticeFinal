@@ -64,6 +64,6 @@ namespace HinttechPractice.Controllers
         {
             return View("Accsess_Denied");
         }
-        
-	}
+
+    }
 }

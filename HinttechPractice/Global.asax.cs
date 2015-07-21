@@ -5,12 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Security;
+using System.Web.SessionState;
 using HinttechPractice.Models;
 using HinttechPractice.Security;
 using System.Web.Security;
 using Newtonsoft.Json;
 using HinttechPractice.Data;
 using System.Web.Optimization;
+using Microsoft.AspNet.SignalR;
 
 namespace HinttechPractice
 {
@@ -22,6 +24,7 @@ namespace HinttechPractice
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
         }
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
