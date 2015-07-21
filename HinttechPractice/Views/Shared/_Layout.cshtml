@@ -75,6 +75,7 @@
                     notifications.server.sendNotification('delete', '@Context.User.Identity.Name' + ': ' + $('#DeleteDescription').val());
                 });
                 $('#EditHoliday').click(function () {
+                    if (dateCheck('n')==true)
                     notifications.server.sendNotification('edit', '@Context.User.Identity.Name' + ': ' + $('#EditDescription').val());
                 });
 

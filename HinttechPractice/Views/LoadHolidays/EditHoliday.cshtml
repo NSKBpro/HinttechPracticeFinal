@@ -5,14 +5,14 @@
     </div>
     <div align="center" style="width: 500px; margin: 0 auto;">
 
-        <form id="editAddForma" method="post" action="EditHoliday" onsubmit="return dateCheck()">
+        <form id="editAddForma" method="post" action="EditHoliday" onsubmit="return dateCheck('t')">
 
             <input type="hidden" name="HolidayId" value="@(ViewBag.holidayForEdit.HolidayId)" /><br />
             <input type="hidden" class="form-control" name="UserId" placeholder="UserId" value="@ViewBag.holidayForEdit.UserId" required /><br />
             <input type="date" class="form-control" name="DateFrom" id="DateFrom" placeholder="From" value="@ViewBag.holidayForEditFrom" required /><br />
             <input type="date" class="form-control" name="DateTo" id="DateTo" placeholder="To" value="@ViewBag.holidayForEditTo" required /><br />
             <input type="text" class="form-control" name="Description" maxlength="25" placeholder="Description" id="EditDescription" value="@ViewBag.holidayForEdit.Description" required /><br />
-            <input type="submit" class="btn btn-success btn-block" value="Edit Holiday" id="EditHoliday"/><br />
+            <input type="submit" class="btn btn-success btn-block" value="Edit Holiday" id="EditHoliday" /><br />
 
         </form>
 
@@ -24,7 +24,7 @@
   @{
       var arrayHolidays = @ViewBag.initHolidays;
   }
-    function dateCheck() {
+    function dateCheck(showAlertify) {
 
         var from = document.getElementById('DateFrom').value;
         var to = document.getElementById('DateTo').value;
@@ -36,9 +36,10 @@
         var d2 = new Date(y, m, d);
 
         var d1 = new Date(from);
-
         if (d1.getDate() == d2.getDate() && d1.getMonth() == d2.getMonth() && d1.getYear() == d2.getYear()) {
-            alertify.error('Start date cannot be the same as end date.');
+            if (showAlertify == "t") {
+                alertify.error('Start date cannot be the same as end date.');
+            }
             return false;
         }
 
@@ -75,11 +76,14 @@
         }
 
         if (overlap) {
-            alertify.error("There is already a holiday for that date.");
+            if (showAlertify == "t"){
+                alertify.error("There is already a holiday for that date.");
+            }
             return false;
         } else if (from > to) {
-
-            alertify.error("Start date cannot be greater than end date.");
+            if (showAlertify == "t") {
+                alertify.error("Start date cannot be greater than end date.");
+            }
             return false;
 
         } else {
@@ -87,4 +91,6 @@
             return true;
         }
     }
+
+
 </script>
