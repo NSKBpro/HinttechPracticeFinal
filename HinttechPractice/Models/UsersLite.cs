@@ -7,6 +7,7 @@ namespace HinttechPractice.Models
 {
     public class UsersLite
     {
+        public String username { get; set; }
         public int usrId { get; set; }
         public String firstName { get; set; }
         public String lastName { get; set; }

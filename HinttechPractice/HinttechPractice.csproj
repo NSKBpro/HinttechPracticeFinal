@@ -249,6 +249,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\HolidaysAndUsers.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
@@ -284,6 +285,7 @@
     <Content Include="Views\LoadVacations\SeeVacations.cshtml" />
     <Content Include="Views\Shared\InitCalendar.cshtml" />
     <Content Include="Views\LoadHolidays\DeleteHoliday.cshtml" />
+    <Content Include="Views\Shared\Chat.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -11,6 +11,8 @@ using System.Web.Security;
 using Newtonsoft.Json;
 using HinttechPractice.Data;
 using System.Web.Optimization;
+using Microsoft.AspNet.SignalR.Infrastructure;
+using Microsoft.AspNet.SignalR;
 
 namespace HinttechPractice
 {
@@ -22,6 +24,9 @@ namespace HinttechPractice
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            var idProvider = new PrincipalUserIdProvider();
+            GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => idProvider);
         }
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)
