@@ -28,7 +28,62 @@
 
     <script src="//cdn.jsdelivr.net/alertifyjs/1.4.1/alertify.min.js"></script>
 
-    <!-- CSS -->
+    <!-- SignalR -->
+    <script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <!-- CLIENT -->
+    <script type="text/javascript">
+        @if (User.IsInRole("User")){<text>
+        $(function () {
+            var notifications = $.connection.realTimeNotifierHub;
+            notifications.client.broadcastNotification = function (type, message) {
+                if (type == "add") {
+                    alertify.success(message);
+                }
+                else if (type == "edit") {
+                    alertify.warning(message);
+                }
+                else if (type == "delete") {
+                    alertify.error(message);
+                }
+
+            };
+            $.connection.hub.start().done(function () {
+            });
+        });
+        </text> }
+    </script>
+
+    <!-- ADMIN -->
+    <script type="text/javascript">
+         @if (User.IsInRole("Admin")){<text>
+        $(function () {
+            var notifications = $.connection.realTimeNotifierHub;
+            notifications.client.addNumbers = function (result) {
+                alert("Call recieved! " + result);
+                var encodedName = $('<div />').text(result).html();
+                $('#result').append('<li><strong>' + encodedName
+                    + '</strong></li>');
+            };
+
+            $.connection.hub.start().done(function () {
+                $('#AddHoliday').click(function () {
+                    notifications.server.sendNotification('add', '@Context.User.Identity.Name' + ': ' + $('#HolidayDescription').val());
+                });
+                $('#DeleteHoliday').click(function () {
+                    notifications.server.sendNotification('delete', '@Context.User.Identity.Name' + ': ' + $('#DeleteDescription').val());
+                });
+                $('#EditHoliday').click(function () {
+                    if (dateCheck('n')==true)
+                    notifications.server.sendNotification('edit', '@Context.User.Identity.Name' + ': ' + $('#EditDescription').val());
+                });
+
+            });
+        });
+        </text> }
+    </script>
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top sticky">
@@ -61,12 +116,23 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (Context.User.Identity.IsAuthenticated)
                     {
+                        if (User.IsInRole("User"))
+                        {
+                            <li class="dropdown ">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-info-sign"></span></a>
+                                <ul class="dropdown-menu bullet pull-center">
+                                    <li id="userHover">@Html.ActionLink(" Bozic ", "AccountDetails", "Register", new { id = Context.User.Identity.Name })</li>
+                                    <li id="userHover">@Html.ActionLink(" Nova Godina ", "AccountDetails", "Register", new { id = Context.User.Identity.Name })</li>
+                                </ul>
+                            </li>
+                        }
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome, @Context.User.Identity.Name<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li id="userHover"> @Html.ActionLink(" Profile ", "AccountDetails", "Register", new { id = Context.User.Identity.Name }, new { @class = "glyphicon glyphicon-user" })</li>
                                 <li id="userHover"> @Html.ActionLink(" Edit ", "EditPage", "Register", new { id = Context.User.Identity.Name }, new { @class = "glyphicon glyphicon-edit" })</li>
                                 <li id="userHover"> @Html.ActionLink(" Password ", "ChangePassPage", "Register", new { id = Context.User.Identity.Name }, new { @class = "glyphicon glyphicon-wrench" })</li>
+                                <li class="divider"></li>
                                 <li id="userHover">@Html.ActionLink(" Logout ", "Logout", "Login", null, new { @class = "glyphicon glyphicon-log-out" })</li>
                             </ul>
                         </li>

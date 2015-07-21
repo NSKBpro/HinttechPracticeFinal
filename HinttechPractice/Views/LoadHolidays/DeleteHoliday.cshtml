@@ -13,7 +13,8 @@
         </div>
         <form method="post" action="RemoveHoliday">
             <input type="hidden" value="@Model.HolidayId" name="HolidayId" />
-            <input type="submit" value="Delete" class="btn btn-info btn-block" />
+            <input type="hidden" value="@Model.Description" name="Description" id="DeleteDescription" />
+            <input type="submit" value="Delete" id="DeleteHoliday" class="btn btn-info btn-block" />
         </form>
     </div>
 </div>
