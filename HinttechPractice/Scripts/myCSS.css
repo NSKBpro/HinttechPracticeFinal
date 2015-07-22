@@ -11,4 +11,54 @@ body {
     padding-top: 10px;
 }
 
+.chatProzor{
+    height: 220px;
+    width: 280px;
+    position: fixed;
+    bottom: 0;
+    right:0;
+    background-color:#d3d3d3;
+    border:solid 1px #5f5f5f;
+}
+
+#zaChat{
+    height: 220px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    right:150px;
+}
+
+.myChatInput{
+    position:fixed;
+    bottom:0;
+}
+
+.ChatHeader{
+    position:fixed;
+    top:0;
+    background-color:#ffffff;
+}
+
+.ChatHeaderDiv{
+    background-color:#ffffff;
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:2px;
+    height: 25px;
+    width: 100%;
+}
+
+ul
+{
+    list-style-type: none;
+}
+
+li {
+    padding-left: -2.5em;
+    padding-right: 1em;
+    padding-bottom: 2em;
+    text-indent: -2.5em;
+}
+
 

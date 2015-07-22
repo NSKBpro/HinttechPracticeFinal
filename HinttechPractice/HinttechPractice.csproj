@@ -247,6 +247,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoadHolidaysController.cs" />
     <Compile Include="Controllers\LoadVacationsController.cs" />
@@ -292,7 +293,7 @@
     <Content Include="Views\LoadVacations\SeeVacations.cshtml" />
     <Content Include="Views\Shared\InitCalendar.cshtml" />
     <Content Include="Views\LoadHolidays\DeleteHoliday.cshtml" />
-    <Content Include="Views\Shared\Chat.cshtml" />
+    <Content Include="Views\Chat\Chat.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

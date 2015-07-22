@@ -103,13 +103,13 @@
                     {
                         <li>@Html.ActionLink("Show users", "ShowAllUsers", "Admin")</li>
                         <li>@Html.ActionLink(" Add holidays ", "initHolidays", "LoadHolidays")</li>
-                        <li>@Html.ActionLink(" Chat ", "Chat", "LoadHolidays")</li>
+                        <li>@Html.ActionLink(" Chat ", "Chat", "Chat")</li>
                     }
                     @if (User.IsInRole("User"))
                     {
                         <li>@Html.ActionLink(" See vacations ", "SeeVacations", "LoadVacations")</li>
                         <li>@Html.ActionLink(" Choose vacation ", "initHolidays", "LoadHolidays")</li>
-                        <li>@Html.ActionLink(" Chat ", "Chat", "LoadHolidays")</li>
+                        <li>@Html.ActionLink(" Chat ", "Chat", "Chat")</li>
                     }
                     
                 </ul>

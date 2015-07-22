@@ -1,0 +1,230 @@
+﻿<h2>Chat</h2>
+
+
+
+    <div id="zaChat"></div>
+
+<div class="panel panel-default" style="max-width: 700px; float:inherit">
+    <div class="panel-footer" style="height:600px">
+        <input type="hidden" id="displayName" /> <a id="chatWith"></a>
+        <ul id="discussion"></ul>
+    </div>
+    <div class="panel-body" style="max-width: 700px;" id="chatWindow">
+        <textarea class="form-control" id="message" style="min-width: 100%" rows="3"></textarea>
+        <input class="btn btn-primary  btn-block" type="button" id="sendMessage" value="Send" />
+    </div>
+</div>
+    
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+
+        var chatWith;
+        var usernameFrom;
+        var showHide = 1;
+        var chat = $.connection.chatHub;
+        var messageTemp;
+
+        function doIt(to) {
+            $(function () {
+
+                usernameFrom = "@Context.User.Identity.Name"
+                
+                chat.client.addNewMessageToPage = function (name, message, recipientName) {
+                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                        '</strong>: ' + htmlEncode(message) + '</li>');
+                    
+                };
+
+                $("#" + to + "ChatInput").focus();
+                $.connection.hub.start().done(function () {
+
+                    var chatInputEnter = document.getElementById(to + "ChatInput");
+
+                    messageTemp = $("#" + to + "ChatInput").val();
+                    chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
+                    $('#' + to + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+                    
+                    $("#" + to + "ChatInput").val('').focus();
+                });
+
+            });
+        }
+
+        $(function doIt2() {
+
+            usernameFrom = "@Context.User.Identity.Name"
+
+            //meda
+            chat.client.addNewMessageToPage = function (name, message, recipientName) {
+
+                if (recipientName != null) {
+                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                        '</strong>: ' + htmlEncode(message) + '</li>');
+ 
+                } else {
+
+                    var imageForUser;
+                    @foreach (var u in ViewBag.users)
+                    {
+                        var base64 = Convert.ToBase64String(@u.profilePicture);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                        var usernameFrom2 = "@Context.User.Identity.Name";
+
+                        <text>
+                        if (name == '@u.username') {
+                            imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
+                        }
+                    </text>
+                    }
+
+                    $.connection.hub.start().done(function () {
+                        chat.server.send(usernameFrom, $('#message').val(), null);
+                        $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
+                  '</strong>: ' + htmlEncode(message) + '</li>')
+                    });  
+                }
+            }
+            //meda
+            
+            $('#message').focus();
+            
+
+            $.connection.hub.start().done(function () {
+
+                var chatInputEnter = document.getElementById(chatWith + "ChatInput");
+  
+                chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
+                $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+            });
+        });
+
+        $(function () {
+
+            usernameFrom = "@Context.User.Identity.Name"
+
+            //meda
+            chat.client.addNewMessageToPage = function (name, message, recipientName) {
+
+                if (recipientName != null) {
+                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                        '</strong>: ' + htmlEncode(message) + '</li>');
+ 
+                } else {
+
+                    var imageForUser;
+                    @foreach (var u in ViewBag.users)
+                {
+                    var base64 = Convert.ToBase64String(@u.profilePicture);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    var usernameFrom2 = "@Context.User.Identity.Name";
+
+                    <text>
+                    if (name == '@u.username') {
+                        imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
+                    }
+                    </text>
+                }
+                    $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
+                  '</strong>: ' + htmlEncode(message) + '</li>')
+                }
+            }
+            //meda
+            
+            $('#message').focus();
+            //react on enter Mihajlo M.
+            $.connection.hub.start().done(function () {
+                $('#message').keypress(function (e) {
+                    if (e.which == 13) {
+                        chat.server.send(usernameFrom, $('#message').val(), null);
+                        $('#message').val('').focus();
+                    }
+                });
+            });
+
+            $.connection.hub.start().done(function () {
+
+                var chatInputEnter = document.getElementById(chatWith + "ChatInput");
+  
+                chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
+                $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+            });
+        });
+        
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+
+        var inc = 300;
+        function chatWithFunction(username) {
+            var numItems = $('.chatProzor').length
+            var userWindow = $('' + username + 'Window').length;
+
+            if (showHide === 1) {
+                if (numItems < 3) {
+                    chatWith = username;
+                    var divCheck = document.getElementById('' + username + 'Window');
+
+                    if (divCheck == null) {
+                        document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
+                            "<div id=\"" + username + "Window\" name=\"" + username + "\" style=\"margin-right:" + inc +
+                            "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
+                            "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
+                            username + "ChatInput\"/></div>"
+                        inc += 330;
+                    } else {
+                        return;
+                    }
+                    var divHeader = document.getElementById(username + "Window");
+                    var divHeader2 = document.getElementById("Div" + username);
+                    var childDivs = document.getElementById(username + "Window").getElementsByTagName('div');
+
+                    for (i = 0; i < childDivs.length; i++) {
+                        var child = childDivs[i];
+                        child.innerHTML = "<strong>" + divHeader.getAttribute('name') + "</strong>"
+                    }
+                    divHeader.style.color = "#575757";
+                    divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
+                }
+            } else {
+                dismissChat(username + "Window");
+            }
+        }
+
+        function dismissChat(div) {
+            if (showHide === 1) {
+                $('#' + div).hide();
+                showHide = 2;
+            } else {
+                $('#' + div).show();
+                showHide = 1;
+            }
+        };
+    </script>
+
+<div class="list-group" style="position: fixed; right: 0; top: 50px; padding: 0; margin: 0; width: 250px; height: 100%; background-color: #d3d3d3; ">
+    @foreach (var u in ViewBag.users)
+    {
+
+        var base64 = Convert.ToBase64String(@u.profilePicture);
+        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        var usernameFrom2 = "@Context.User.Identity.Name";
+
+        if (Context.User.Identity.Name == @u.username)
+        {
+            continue;
+        }
+        else
+        {
+            <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName</a>
+        }
+
+    }
+</div>
+
+
+
