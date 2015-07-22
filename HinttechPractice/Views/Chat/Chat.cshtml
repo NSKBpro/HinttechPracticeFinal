@@ -31,7 +31,7 @@
                 usernameFrom = "@Context.User.Identity.Name"
                 
                 chat.client.addNewMessageToPage = function (name, message, recipientName) {
-                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                    $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
                         '</strong>: ' + htmlEncode(message) + '</li>');
                     
                 };
@@ -43,7 +43,7 @@
 
                     messageTemp = $("#" + to + "ChatInput").val();
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
-                    $('#' + to + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
+                    $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
                     
                     $("#" + to + "ChatInput").val('').focus();
@@ -109,7 +109,7 @@
             chat.client.addNewMessageToPage = function (name, message, recipientName) {
 
                 if (recipientName != null) {
-                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                    $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
                         '</strong>: ' + htmlEncode(message) + '</li>');
  
                 } else {

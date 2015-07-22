@@ -54,7 +54,7 @@ ul
     list-style-type: none;
 }
 
-li {
+li.moja  {
     padding-left: -2.5em;
     padding-right: 1em;
     padding-bottom: 2em;
