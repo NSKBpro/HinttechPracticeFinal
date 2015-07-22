@@ -36,7 +36,7 @@
     <script type="text/javascript">
         @if (User.IsInRole("User")){<text>
         $(function () {
-            var notifications = $.connection.realTimeNotifierHub;
+            var notifications = $.connection.notifierHub;
             notifications.client.broadcastNotification = function (type, message) {
                 if (type == "add") {
                     alertify.success(message);
@@ -59,7 +59,7 @@
     <script type="text/javascript">
          @if (User.IsInRole("Admin")){<text>
         $(function () {
-            var notifications = $.connection.realTimeNotifierHub;
+            var notifications = $.connection.notifierHub;
             notifications.client.addNumbers = function (result) {
                 alert("Call recieved! " + result);
                 var encodedName = $('<div />').text(result).html();
@@ -75,8 +75,9 @@
                     notifications.server.sendNotification('delete', '@Context.User.Identity.Name' + ': ' + $('#DeleteDescription').val());
                 });
                 $('#EditHoliday').click(function () {
-                    if (dateCheck('n')==true)
-                    notifications.server.sendNotification('edit', '@Context.User.Identity.Name' + ': ' + $('#EditDescription').val());
+                    if (dateCheck('n') == true) {
+                        notifications.server.sendNotification('edit', '@Context.User.Identity.Name' + ': ' + $('#EditDescription').val());
+                    }
                 });
 
             });

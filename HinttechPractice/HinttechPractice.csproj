@@ -256,8 +256,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="RealTimeNotifierHub.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\NotifierHub.cs" />
     <Compile Include="Models\HolidaysAndUsers.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />

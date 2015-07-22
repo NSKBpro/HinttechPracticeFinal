@@ -2,9 +2,9 @@
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 
-namespace HinttechPractice
+namespace HinttechPractice.Hubs
 {
-    public class RealTimeNotifierHub : Hub
+    public class NotifierHub : Hub
     {
         public void SendNotification(string type, string message)
         {
