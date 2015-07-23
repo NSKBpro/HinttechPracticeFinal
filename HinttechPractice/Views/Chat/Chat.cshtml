@@ -1,4 +1,4 @@
-﻿<h2>Chat</h2>
+﻿<br/>
 <head>
     <title>Chat</title>
     <style>
@@ -13,18 +13,21 @@
 </head>
 
 
-    <div id="zaChat"></div>
+    
 
-<div class="panel panel-default" style="max-width: 700px; float:inherit">
-    <div class="panel-footer" style="height:600px"id="chatRoom">
+<div class="panel panel-default" style="max-width: 700px;z-index:-1; float:inherit; padding-bottom:0px;">
+    <div class="panel-footer" style="height:270px"id="chatRoom">
         <input type="hidden" id="displayName" /> <a id="chatWith"></a>
         <ul id="discussion"></ul>
     </div>
     <div class="panel-body" style="max-width: 700px;" id="chatPanel">
-        <textarea class="form-control" id="message" style="min-width: 100%" rows="3"></textarea>
-        <input class="btn btn-primary  btn-block" type="button" id="sendMessage" value="Send" />
+        <textarea class="form-control" id="message" style="min-width: 500px; float:left; z-index: 1;" rows="2"></textarea>
+        <button class="btn btn-primary" id="sendMessage" style="z-index: 1; float: right;" >Send</button>
     </div>
+    <div id="zaChat"></div>
 </div>
+
+
     
     <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script src="~/signalr/hubs"></script>
@@ -45,7 +48,7 @@
                     $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
                         '</strong>: ' + htmlEncode(message) + '</li>');
                     
-                };
+                };//
 
                 $("#" + to + "ChatInput").focus();
                 $.connection.hub.start().done(function () {
