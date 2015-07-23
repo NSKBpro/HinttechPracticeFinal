@@ -75,9 +75,11 @@
                 if (recipientName != null) {
                     $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
                         '</strong>: ' + htmlEncode(message) + '</li>');
+
+                   
  
                 } else {
-
+                  
                     var imageForUser;
                     @foreach (var u in ViewBag.users)
                     {

@@ -11,5 +11,6 @@ namespace HinttechPractice.Hubs
             Clients.All.broadcastNotification(type, message);
         }
 
+    
     }
 }
