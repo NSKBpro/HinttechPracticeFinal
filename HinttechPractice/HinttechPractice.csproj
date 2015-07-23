@@ -173,6 +173,22 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\dropdown.css" />
+    <Content Include="Content\smile\angel.png" />
+    <Content Include="Content\smile\bigeye.png" />
+    <Content Include="Content\smile\devil.png" />
+    <Content Include="Content\smile\diss.png" />
+    <Content Include="Content\smile\glasses.png" />
+    <Content Include="Content\smile\heart.png" />
+    <Content Include="Content\smile\kiss.png" />
+    <Content Include="Content\smile\offline.png" />
+    <Content Include="Content\smile\ok.png" />
+    <Content Include="Content\smile\online.png" />
+    <Content Include="Content\smile\pacman.png" />
+    <Content Include="Content\smile\simplesmile.png" />
+    <Content Include="Content\smile\smiling.png" />
+    <Content Include="Content\smile\sunglasses.png" />
+    <Content Include="Content\smile\suprise.png" />
+    <Content Include="Content\smile\tonque.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -247,6 +263,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoadHolidaysController.cs" />
     <Compile Include="Controllers\LoadVacationsController.cs" />
@@ -292,7 +309,7 @@
     <Content Include="Views\LoadVacations\SeeVacations.cshtml" />
     <Content Include="Views\Shared\InitCalendar.cshtml" />
     <Content Include="Views\LoadHolidays\DeleteHoliday.cshtml" />
-    <Content Include="Views\Shared\Chat.cshtml" />
+    <Content Include="Views\Chat\Chat.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

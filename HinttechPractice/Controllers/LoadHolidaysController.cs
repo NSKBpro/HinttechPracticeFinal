@@ -25,27 +25,6 @@ namespace HinttechPractice.Controllers
             return View();
         }
 
-        public ActionResult Chat()
-        {
-            string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
-            int userId = usr.FindUserByUsername(usrnmOfUserLoggedIn).UserId;
-            ViewBag.idOfUser = userId;
-            List<UsersLite> users = new List<UsersLite>();
-
-            foreach (User us in usr.FindAll())
-            {
-                UsersLite usl = new UsersLite();
-                usl.usrId = us.UserId;
-                usl.firstName = us.FirstName;
-                usl.lastName = us.LastName;
-                usl.username = us.Username;
-                users.Add(usl);
-            }
-
-            ViewBag.users = users;
-            return View();
-        }
-
         public ActionResult initHolidays(int? page)
         {
             ViewBag.initHolidays = db.GetHolidays();

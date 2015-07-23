@@ -10,10 +10,15 @@ namespace HinttechPractice.Hubs
     {
         public void Send(string name, string message, string recipientName)
         {
-            Clients.User(recipientName).addNewMessageToPage(name, message);
-           // Clients.All.addNewMessageToPage(name, message);
+            if (recipientName != null)
+            {
+                Clients.User(recipientName).addNewMessageToPage(name, message, recipientName);
+            }
+            else
+            {
+                Clients.All.addNewMessageToPage(name, message, recipientName);
+            }
         }
-
 
         /*private List<User> usersLoggedIn = new List<User>();
         private List<User> users = new List<User>();
