@@ -407,16 +407,17 @@
                 }
             }
         }
+       
     </script>
 
-<div class="list-group" style="position: fixed; right: 0; top: 50px; padding: 0; margin: 0; width: 250px; height: 100%; background-color: #d3d3d3; ">
+<div class="scroller" style="position:fixed;top:0; right:0; padding-right:0px;  padding-top:50px; width: 250px; background-color: #d3d3d3; height:100%; ">
+
     @foreach (var u in ViewBag.users)
     {
-
         var imgSrc = "/Content/img/empty.png";
         if (u.profilePicture != null)
         {
-        var base64 = Convert.ToBase64String(@u.profilePicture);
+            var base64 = Convert.ToBase64String(@u.profilePicture);
             imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
         }

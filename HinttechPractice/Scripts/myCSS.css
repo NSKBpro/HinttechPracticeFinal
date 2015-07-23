@@ -68,4 +68,11 @@ li.moja  {
     text-indent: -2.5em;
 }
 
+.scroller{
+    display: inline-block; 
+    overflow-y:scroll;
+
+
+}
+
 
