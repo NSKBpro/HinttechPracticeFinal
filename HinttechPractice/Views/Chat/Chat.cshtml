@@ -123,12 +123,18 @@
 
                     <text>
                     if (name == '@u.username') {
-                        imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
-                    }
+                        imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';       
+                    }  
                     </text>
+               
                 }
-                    $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
-                  '</strong>: ' + htmlEncode(message) + '</li>')
+                    if (message != null) {
+                       // if (message.length > document.getElementById("discussion").value.length) {
+                  
+                       // }
+                        $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
+                      '</strong>: ' + htmlEncode(message) + '</li>')
+                    }
                 }
             }
             //meda
@@ -140,9 +146,12 @@
                     if (e.which == 13) {
                         chat.server.send(usernameFrom, $('#message').val(), null);
                         $('#message').val('').focus();
+                        e.preventDefault();
                     }
                 });
             });
+
+        
 
             $.connection.hub.start().done(function () {
 
