@@ -12,5 +12,6 @@ namespace HinttechPractice.Models
         public String firstName { get; set; }
         public String lastName { get; set; }
         public byte[] profilePicture { get; set; }
+        public bool activity { get; set; }
     }
 }

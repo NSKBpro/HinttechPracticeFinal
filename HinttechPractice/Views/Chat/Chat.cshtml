@@ -161,7 +161,7 @@
                         var characterCount = message.length;
                         if (characterCount < 20) {
                        
-                             $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                            $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '        ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                           '</strong>:   ' + htmlEncode(message) + '</li><br/>')
                              transferTextToSmile();
                              var objDiv = document.getElementById("chatRoom");
@@ -181,12 +181,13 @@
                                      arrayMessage.push(str.substr(0, messageConstraint));
                                      str = str.substr(messageConstraint);
                 }
-            }
+                             }                 
+                             $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                                             '</strong>:   ')
                              for (var i = 0; i < arrayMessage.length; i++) {
                                  //funkcija za smjlije
                                  transferTextToSmile();
-                                 $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                            '</strong>:   ' + htmlEncode(arrayMessage[i]) + '</li><br/>')
+                                 $('#discussion').append( htmlEncode(arrayMessage[i]) + '</li><br/>')
                                  var objDiv = document.getElementById("chatRoom");
                                  objDiv.scrollTop = objDiv.scrollHeight;
                              }
@@ -399,7 +400,7 @@
 <div class="list-group" style="position: fixed; right: 0; top: 50px; padding: 0; margin: 0; width: 250px; height: 100%; background-color: #d3d3d3; ">
     @foreach (var u in ViewBag.users)
     {
-
+        var  activityImage="/Content/smile/online.png";
         var imgSrc = "/Content/img/empty.png";
         if (u.profilePicture != null)
         {
@@ -415,8 +416,19 @@
         }
         else
         {
-            <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName</a>
-        }
+            if (@u.activity==true)
+                {
+                    <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img src="/Content/smile/online.png" height="27" width="27" /></a>   
+                }
+                else
+                {
+                 
+                    <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img src="/Content/smile/offline.png" height="27" width="27" /></a>   
+                }
+            
+            
+             }
+       
 
     }
 </div>
