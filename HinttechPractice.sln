@@ -4,10 +4,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HinttechPractice", "HinttechPractice\HinttechPractice.csproj", "{6BF7E407-C821-4880-AAC6-FC4A5E5A1E2E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73AD38E9-FCCD-42D8-86F9-80D0497967C4} = {73AD38E9-FCCD-42D8-86F9-80D0497967C4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HinttechPractice.Data", "HinttechPractice.Data\HinttechPractice.Data.csproj", "{1D077307-3F78-402D-8143-0C1A876B8D24}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73AD38E9-FCCD-42D8-86F9-80D0497967C4} = {73AD38E9-FCCD-42D8-86F9-80D0497967C4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HinttechPractice.Service", "HinttechPractice.Service\HinttechPractice.Service.csproj", "{449E9B39-BB9D-4BCC-A0F3-6E1B9716AFC5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73AD38E9-FCCD-42D8-86F9-80D0497967C4} = {73AD38E9-FCCD-42D8-86F9-80D0497967C4}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HinttechPractice.Core", "HinttechPractice.Core\HinttechPractice.Core.csproj", "{73AD38E9-FCCD-42D8-86F9-80D0497967C4}"
 EndProject

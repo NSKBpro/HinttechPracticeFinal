@@ -14,13 +14,26 @@ using HinttechPractice.Data;
 using System.Web.Optimization;
 using Microsoft.AspNet.SignalR.Infrastructure;
 using Microsoft.AspNet.SignalR;
+using log4net;
+using HinttechPractice.Core;
+using HinttechPractice.Core.Exceptions;
 
 namespace HinttechPractice
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        //private logger class for MyLogger in this class.
+        private ILog log;
+
         protected void Application_Start()
         {
+
+            //Always call this when need to use logger.
+            log4net.GlobalContext.Properties["LogName"] = DateTime.Now.ToShortDateString().ToString();
+            log = MyLogger.GetLogger(typeof(MvcApplication));
+            log.Info("Aplication started");
+
+
             GlobalFilters.Filters.Add(new System.Web.Mvc.AuthorizeAttribute());
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -42,5 +55,26 @@ namespace HinttechPractice
                 HttpContext.Current.User = mp;
             }
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            log4net.GlobalContext.Properties["LogName"] = DateTime.Now.ToShortDateString().ToString();
+            log = MyLogger.GetLogger(typeof(MvcApplication));
+
+            Exception ex = Server.GetLastError();
+
+            //Checking if exception was 404
+            if (ex.GetType() == typeof(HttpException))
+            {
+                HttpContext.Current.Server.ClearError();
+                HttpContext.Current.Response.RedirectToRoute("error404");
+                throw new Exception404PageNotFound("Error 404, Page not found!", ex);
+            }
+            else
+            {
+                log.Error("Application error caught", ex);
+            }
+        }
+
     }
 }

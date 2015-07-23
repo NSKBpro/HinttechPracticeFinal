@@ -56,6 +56,9 @@
     <Reference Include="FlexHtmlHelper.Mvc">
       <HintPath>..\packages\FlexHtmlHelper.Mvc.1.5.3.0\lib\net45\FlexHtmlHelper.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -324,6 +327,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HinttechPractice.Core\HinttechPractice.Core.csproj">
+      <Project>{73ad38e9-fccd-42d8-86f9-80d0497967c4}</Project>
+      <Name>HinttechPractice.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HinttechPractice.Data\HinttechPractice.Data.csproj">
       <Project>{1d077307-3f78-402d-8143-0c1a876b8d24}</Project>
       <Name>HinttechPractice.Data</Name>
