@@ -163,7 +163,7 @@
                         var characterCount = message.length;
                         if (characterCount < 20) {
                        
-                             $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                            $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '        ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                           '</strong>:   ' + htmlEncode(message) + '</li><br/>')
                              transferTextToSmile();
                              var objDiv = document.getElementById("chatRoom");
@@ -184,11 +184,12 @@
                                      str = str.substr(messageConstraint);
                 }
             }
+                             $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                                             '</strong>:   ')
                              for (var i = 0; i < arrayMessage.length; i++) {
                                  //funkcija za smjlije
                                  transferTextToSmile();
-                                 $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                            '</strong>:   ' + htmlEncode(arrayMessage[i]) + '</li><br/>')
+                                 $('#discussion').append( htmlEncode(arrayMessage[i]) + '</li><br/>')
                                  var objDiv = document.getElementById("chatRoom");
                                  objDiv.scrollTop = objDiv.scrollHeight;
                              }
@@ -274,7 +275,7 @@
                 var dvi2 = [];
                 var elem = $("div[id$='Window']");
                 var element = document.getElementById(div);
-               
+                
                 for (var b = 0; b < elem.length; b++) {
   
                     if (elem[b].style.marginRight > element.style.marginRight) {
@@ -289,9 +290,9 @@
                 if (elem.length == 1) {
                     
                     inc = 300;
-                } else {
+                    } else {
                     inc -= 330;
-                }
+                    }
                 $('#' + div).remove();
                 for (var c = 0; c < dvi2.length; c++) {
                     var windowUsername = dvi2[c].replace("Window", "")
@@ -300,7 +301,7 @@
 
                 if (dvi2.length == 0) {
                     var windowUsername = dvi2[0].replace("Window", "")
-                    $("#" + windowUsername + "ChatInput").focus();
+                $("#" + windowUsername + "ChatInput").focus();
                 }
                 
                 
@@ -416,10 +417,11 @@
 
     @foreach (var u in ViewBag.users)
     {
+        var  activityImage="/Content/smile/online.png";
         var imgSrc = "/Content/img/empty.png";
         if (u.profilePicture != null)
         {
-            var base64 = Convert.ToBase64String(@u.profilePicture);
+        var base64 = Convert.ToBase64String(@u.profilePicture);
             imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
         }
@@ -431,8 +433,19 @@
         }
         else
         {
-            <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName</a>
+            if (@u.activity==true)
+                {
+                    <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img src="/Content/smile/online.png" height="27" width="27" /></a>   
+                }
+                else
+                {
+                 
+                    <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img src="/Content/smile/offline.png" height="27" width="27" /></a>   
+                }
+            
+            
         }
+
 
     }
 </div>
