@@ -129,11 +129,35 @@
                
                 }
                     if (message != null) {
-                       // if (message.length > document.getElementById("discussion").value.length) {
-                  
-                       // }
-                        $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
-                      '</strong>: ' + htmlEncode(message) + '</li>')
+                        var day = new Date();
+                        var hr = day.getHours();
+                        var min = day.getMinutes();
+                        var sec = day.getSeconds();
+                        var characterCount = message.length;
+                         if (characterCount < 20) {
+                             $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                          '</strong>:   ' + htmlEncode(message) + '</li><br/>')
+                         } else {
+                             //Funkcija za prekoracenje karaktera u panelu.Ako prekoraci ide u newLine
+                             var str = message;
+                             var arrayMessage = [];
+                             var messageConstraint = 72;
+
+                             while (str) {
+                                 if (str.length < messageConstraint) {
+                                     arrayMessage.push(str);
+                                     break;
+                                 }
+                                 else {
+                                     arrayMessage.push(str.substr(0, messageConstraint));
+                                     str = str.substr(messageConstraint);
+                                 }
+                             }  
+                             for (var i = 0; i < arrayMessage.length; i++) {
+                                 $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                            '</strong>:   ' + htmlEncode(arrayMessage[i]) + '</li><br/>')
+                             }
+                         }
                     }
                 }
             }
