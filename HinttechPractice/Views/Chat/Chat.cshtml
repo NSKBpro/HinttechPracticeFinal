@@ -1,15 +1,26 @@
 ﻿<h2>Chat</h2>
-
+<head>
+    <title>Chat</title>
+    <style>
+        #chatRoom {
+            height: 300px;
+            overflow-y: scroll;
+            width: 100%;
+           
+        }
+        
+    </style>
+</head>
 
 
     <div id="zaChat"></div>
 
 <div class="panel panel-default" style="max-width: 700px; float:inherit">
-    <div class="panel-footer" style="height:600px">
+    <div class="panel-footer" style="height:600px"id="chatRoom">
         <input type="hidden" id="displayName" /> <a id="chatWith"></a>
         <ul id="discussion"></ul>
     </div>
-    <div class="panel-body" style="max-width: 700px;" id="chatWindow">
+    <div class="panel-body" style="max-width: 700px;" id="chatPanel"  >
         <textarea class="form-control" id="message" style="min-width: 100%" rows="3"></textarea>
         <input class="btn btn-primary  btn-block" type="button" id="sendMessage" value="Send" />
     </div>
@@ -129,6 +140,7 @@
                
                 }
                     if (message != null) {
+                       
                         var day = new Date();
                         var hr = day.getHours();
                         var min = day.getMinutes();
@@ -137,6 +149,8 @@
                          if (characterCount < 20) {
                              $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                           '</strong>:   ' + htmlEncode(message) + '</li><br/>')
+                             var objDiv = document.getElementById("chatRoom");
+                             objDiv.scrollTop = objDiv.scrollHeight;
                          } else {
                              //Funkcija za prekoracenje karaktera u panelu.Ako prekoraci ide u newLine
                              var str = message;
@@ -156,6 +170,8 @@
                              for (var i = 0; i < arrayMessage.length; i++) {
                                  $('#discussion').append('<font size="3"><i>Sent at: [' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                             '</strong>:   ' + htmlEncode(arrayMessage[i]) + '</li><br/>')
+                                 var objDiv = document.getElementById("chatRoom");
+                                 objDiv.scrollTop = objDiv.scrollHeight;
                              }
                          }
                     }
