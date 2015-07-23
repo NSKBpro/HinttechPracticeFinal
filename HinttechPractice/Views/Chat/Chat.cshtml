@@ -9,7 +9,7 @@
         <input type="hidden" id="displayName" /> <a id="chatWith"></a>
         <ul id="discussion"></ul>
     </div>
-    <div class="panel-body" style="max-width: 700px;" id="chatWindow">
+    <div class="panel-body" style="max-width: 700px;" id="chatPanel">
         <textarea class="form-control" id="message" style="min-width: 100%" rows="3"></textarea>
         <input class="btn btn-primary  btn-block" type="button" id="sendMessage" value="Send" />
     </div>
@@ -21,7 +21,7 @@
 
         var chatWith;
         var usernameFrom;
-        var showHide = 1;
+        var showHide = [];
         var chat = $.connection.chatHub;
         var messageTemp;
 
@@ -50,6 +50,8 @@
                 });
 
             });
+            var objDiv = document.getElementById(to + "Window");
+            objDiv.scrollTop = objDiv.scrollHeight;
         }
 
         $(function doIt2() {
@@ -68,9 +70,15 @@
                     var imageForUser;
                     @foreach (var u in ViewBag.users)
                     {
-                        var base64 = Convert.ToBase64String(@u.profilePicture);
-                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                        var imgSrc = "/Content/img/empty.png";
+                        if (u.profilePicture != null)
+                        {
+                            var base64 = Convert.ToBase64String(@u.profilePicture);
+                            imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                        }
                         var usernameFrom2 = "@Context.User.Identity.Name";
+                        
 
                         <text>
                         if (name == '@u.username') {
@@ -116,10 +124,15 @@
 
                     var imageForUser;
                     @foreach (var u in ViewBag.users)
-                {
-                    var base64 = Convert.ToBase64String(@u.profilePicture);
-                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-                    var usernameFrom2 = "@Context.User.Identity.Name";
+                    {
+                        var imgSrc = "/Content/img/empty.png";
+                        if (u.profilePicture != null)
+                        {
+                            var base64 = Convert.ToBase64String(@u.profilePicture);
+                            imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                        }
+                        var usernameFrom2 = "@Context.User.Identity.Name";
 
                     <text>
                     if (name == '@u.username') {
@@ -159,12 +172,15 @@
             return encodedValue;
         }
 
-        var inc = 300;
+        var i = 1;  //flag otvorenog chat prozora
+        var inc = 300; //inkrement desne margine novog chat prozora
         function chatWithFunction(username) {
+            showHide[i-1] = i;
+            
             var numItems = $('.chatProzor').length
             var userWindow = $('' + username + 'Window').length;
-
-            if (showHide === 1) {
+            
+            if (showHide[0] === 1) {
                 if (numItems < 3) {
                     chatWith = username;
                     var divCheck = document.getElementById('' + username + 'Window');
@@ -175,6 +191,7 @@
                             "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
                             "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
                             username + "ChatInput\"/></div>"
+                        
                         inc += 330;
                     } else {
                         return;
@@ -193,15 +210,34 @@
             } else {
                 dismissChat(username + "Window");
             }
+            i++;
         }
 
         function dismissChat(div) {
-            if (showHide === 1) {
-                $('#' + div).hide();
-                showHide = 2;
+            if (showHide[0] === 1) {
+                var dvi2;
+                var elem = $("div[id$='Window']");
+                var element = document.getElementById(div);
+                
+                for (var b = 0; b < elem.length; b++) {
+  
+                    if (elem[b].style.marginRight > element.style.marginRight) {
+                        
+                        var size = parseInt(document.getElementById(elem[b].id).style.marginRight) - 330;
+
+                        
+                        document.getElementById(elem[b].id).style.marginRight = size + "px";
+                        dvi2 = elem[b].id;
+                    } else {
+                        dvi2 = elem[0].id;
+                    }
+                }
+                $('#' + div).remove();
+                var windowUsername = dvi2.replace("Window","")
+                $("#" + windowUsername + "ChatInput").focus();
+                inc -= 330;
             } else {
                 $('#' + div).show();
-                showHide = 1;
             }
         };
     </script>
@@ -210,8 +246,13 @@
     @foreach (var u in ViewBag.users)
     {
 
-        var base64 = Convert.ToBase64String(@u.profilePicture);
-        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        var imgSrc = "/Content/img/empty.png";
+        if (u.profilePicture != null)
+        {
+            var base64 = Convert.ToBase64String(@u.profilePicture);
+            imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+        }
         var usernameFrom2 = "@Context.User.Identity.Name";
 
         if (Context.User.Identity.Name == @u.username)
