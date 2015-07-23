@@ -46,7 +46,8 @@ body {
     padding-right:5px;
     padding-top:2px;
     height: 25px;
-    width: 100%;
+    width: 278px;
+    position: fixed;
 }
 
 ul
@@ -54,11 +55,24 @@ ul
     list-style-type: none;
 }
 
+ul.moja
+{
+    padding-top:25px;
+    padding-bottom:25px;
+    list-style-type: none;
+}
+
 li.moja  {
     padding-left: -2.5em;
     padding-right: 1em;
-    padding-bottom: 2em;
     text-indent: -2.5em;
+}
+
+.scroller{
+    display: inline-block; 
+    overflow-y:scroll;
+
+
 }
 
 

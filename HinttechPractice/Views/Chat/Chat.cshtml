@@ -181,7 +181,7 @@
                                      arrayMessage.push(str.substr(0, messageConstraint));
                                      str = str.substr(messageConstraint);
                 }
-                             }                 
+            }
                              $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                                              '</strong>:   ')
                              for (var i = 0; i < arrayMessage.length; i++) {
@@ -243,7 +243,7 @@
                         document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
                             "<div id=\"" + username + "Window\" name=\"" + username + "\" style=\"margin-right:" + inc +
                             "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
-                            "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
+                            "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
                             username + "ChatInput\"/></div>"
                         
                         inc += 330;
@@ -260,6 +260,7 @@
                     }
                     divHeader.style.color = "#575757";
                     divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
+                    $("#" + username + "ChatInput").focus();
                 }
             } else {
                 dismissChat(username + "Window");
@@ -269,7 +270,7 @@
 
         function dismissChat(div) {
             if (showHide[0] === 1) {
-                var dvi2;
+                var dvi2 = [];
                 var elem = $("div[id$='Window']");
                 var element = document.getElementById(div);
                 
@@ -279,17 +280,29 @@
                         
                         var size = parseInt(document.getElementById(elem[b].id).style.marginRight) - 330;
 
-                        
                         document.getElementById(elem[b].id).style.marginRight = size + "px";
-                        dvi2 = elem[b].id;
-                    } else {
-                        dvi2 = elem[0].id;
+                        
+                        dvi2.push(elem[b].id);
                     }
                 }
+                if (elem.length == 1) {
+                    
+                    inc = 300;
+                    } else {
+                    inc -= 330;
+                    }
                 $('#' + div).remove();
-                var windowUsername = dvi2.replace("Window","")
+                for (var c = 0; c < dvi2.length; c++) {
+                    var windowUsername = dvi2[c].replace("Window", "")
+                    $("#" + windowUsername + "ChatInput").focus();
+                }
+
+                if (dvi2.length == 0) {
+                    var windowUsername = dvi2[0].replace("Window", "")
                 $("#" + windowUsername + "ChatInput").focus();
-                inc -= 330;
+                }
+                
+                
             } else {
                 $('#' + div).show();
             }
@@ -395,9 +408,11 @@
                 }
             }
         }
+       
     </script>
 
-<div class="list-group" style="position: fixed; right: 0; top: 50px; padding: 0; margin: 0; width: 250px; height: 100%; background-color: #d3d3d3; ">
+<div class="scroller" style="position:fixed;top:0; right:0; padding-right:0px;  padding-top:50px; width: 250px; background-color: #d3d3d3; height:100%; ">
+
     @foreach (var u in ViewBag.users)
     {
         var  activityImage="/Content/smile/online.png";
@@ -427,8 +442,8 @@
                 }
             
             
-             }
-       
+        }
+
 
     }
 </div>
