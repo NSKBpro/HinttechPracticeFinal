@@ -177,13 +177,12 @@
         var validUser = 0;
         if (name != null && name != "") {
             @foreach (var u in ViewBag.users)
-                {
-                 <text>
-            if ('@u.username' == name) {
-                validUser = 1;
-            }
-            </text>
-            }
+            { <text>
+                if ('@u.username' == name) {
+                    validUser = 1;
+                }
+            </text> }
+
             if (validUser == 1) {
                 if (name != null && name != "") {
                     chatWithFunction(name,null);

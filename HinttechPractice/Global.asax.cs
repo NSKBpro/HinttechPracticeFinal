@@ -17,6 +17,8 @@ using Microsoft.AspNet.SignalR;
 using log4net;
 using HinttechPractice.Core;
 using HinttechPractice.Core.Exceptions;
+using HinttechPractice.Data.DataContext;
+using HinttechPractice.Service;
 
 namespace HinttechPractice
 {
@@ -41,6 +43,7 @@ namespace HinttechPractice
 
             var idProvider = new PrincipalUserIdProvider();
             GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => idProvider);
+
         }
 
         protected void Application_PostAuthenticateRequest(Object sender, EventArgs e)

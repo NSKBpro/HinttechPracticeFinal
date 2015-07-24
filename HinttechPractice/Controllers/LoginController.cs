@@ -75,10 +75,13 @@ namespace HinttechPractice.Controllers
                 currentUser.ProfilePicture = null; // set picture to null, for JsonConverter.
                 ICollection<Vacation> tempVacation = currentUser.Vacations;
                 ICollection<Holiday> tempHolidays = currentUser.Holidays;
+                ICollection<ChatRoom> tempChatRoom = currentUser.ChatRooms;
+                ICollection<ChatRoomMessage> ChatRoomMessage = currentUser.ChatRoomMessages;
 
                 currentUser.Vacations = null;
                 currentUser.Holidays = null;
-
+                currentUser.ChatRooms = null;
+                currentUser.ChatRoomMessages = null;
                 FormsAuthenticationTicket fat = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(15), false,
                     JsonConvert.SerializeObject(currentUser, Formatting.None,
                         new JsonSerializerSettings()
@@ -94,6 +97,8 @@ namespace HinttechPractice.Controllers
                 currentUser.ProfilePicture = tempPicture;
                 currentUser.Holidays = tempHolidays;
                 currentUser.Vacations = tempVacation;
+                currentUser.ChatRooms = tempChatRoom;
+                currentUser.ChatRoomMessages = ChatRoomMessage;
                 userService.Edit(currentUser);
                 ViewBag.Error = "";
                 return RedirectToRoute("home");
@@ -106,18 +111,19 @@ namespace HinttechPractice.Controllers
         [Authorize]
         public ActionResult Logout()
         {
-            foreach (UsersLite us in ChatController.usersOnline)
+            if (ChatController.usersOnline != null)
             {
-                if (us.username == currentUserOffline)
+                foreach (UsersLite us in ChatController.usersOnline)
                 {
-                    us.activity = true;
-                    ChatController.usersOnline.First(d => d.username == currentUserOffline).activity = false;
+                    if (us.username == currentUserOffline)
+                    {
+                        us.activity = true;
+                        ChatController.usersOnline.First(d => d.username == currentUserOffline).activity = false;
+                    }
+
+                    ViewBag.users = ChatController.usersOnline;
                 }
-
-                ViewBag.users = ChatController.usersOnline;
-                
             }
-
             FormsAuthentication.SignOut();
             HttpCookie ck = Request.Cookies[FormsAuthentication.FormsCookieName];
             ck.Expires = DateTime.Now;

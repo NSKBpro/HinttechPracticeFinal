@@ -5,6 +5,29 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="hinttechPracticeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ChatRoomMessages">
+          <Key>
+            <PropertyRef Name="MessageId" />
+          </Key>
+          <Property Name="MessageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoomId" Type="int" Nullable="false" />
+          <Property Name="Message" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="SentTo" Type="int" />
+        </EntityType>
+        <EntityType Name="ChatRooms">
+          <Key>
+            <PropertyRef Name="RoomId" />
+          </Key>
+          <Property Name="RoomId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoomName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RoomDescription" Type="varchar" MaxLength="500" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="DeletedBy" Type="int" />
+        </EntityType>
         <EntityType Name="Holidays">
           <Key>
             <PropertyRef Name="HolidayId" />
@@ -43,6 +66,42 @@
           <Property Name="Description" Type="ntext" />
           <Property Name="IsSickLeave" Type="bit" Nullable="false" />
         </EntityType>
+        <Association Name="FK_ChatRoomMessages_ChatRooms">
+          <End Role="ChatRooms" Type="Self.ChatRooms" Multiplicity="1" />
+          <End Role="ChatRoomMessages" Type="Self.ChatRoomMessages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChatRooms">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="ChatRoomMessages">
+              <PropertyRef Name="RoomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChatRoomMessages_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ChatRoomMessages" Type="Self.ChatRoomMessages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ChatRoomMessages">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChatRooms_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ChatRooms" Type="Self.ChatRooms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ChatRooms">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Holidays_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Holidays" Type="Self.Holidays" Multiplicity="*" />
@@ -68,9 +127,23 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="hinttechPracticeModelStoreContainer">
+          <EntitySet Name="ChatRoomMessages" EntityType="Self.ChatRoomMessages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChatRooms" EntityType="Self.ChatRooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Holidays" EntityType="Self.Holidays" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vacations" EntityType="Self.Vacations" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ChatRoomMessages_ChatRooms" Association="Self.FK_ChatRoomMessages_ChatRooms">
+            <End Role="ChatRooms" EntitySet="ChatRooms" />
+            <End Role="ChatRoomMessages" EntitySet="ChatRoomMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChatRoomMessages_Users" Association="Self.FK_ChatRoomMessages_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ChatRoomMessages" EntitySet="ChatRoomMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChatRooms_Users" Association="Self.FK_ChatRooms_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ChatRooms" EntitySet="ChatRooms" />
+          </AssociationSet>
           <AssociationSet Name="FK_Holidays_Users" Association="Self.FK_Holidays_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Holidays" EntitySet="Holidays" />
@@ -84,6 +157,60 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="hinttechPracticeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="hinttechPracticeEntities" annotation:LazyLoadingEnabled="true" a:TypeAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration">
+          <EntitySet Name="ChatRoomMessages" EntityType="hinttechPracticeModel.ChatRoomMessage" />
+          <EntitySet Name="ChatRooms" EntityType="hinttechPracticeModel.ChatRoom" />
+          <EntitySet Name="Holidays" EntityType="hinttechPracticeModel.Holiday" />
+          <EntitySet Name="Users" EntityType="hinttechPracticeModel.User" />
+          <EntitySet Name="Vacations" EntityType="hinttechPracticeModel.Vacation" />
+          <AssociationSet Name="FK_ChatRoomMessages_ChatRooms" Association="hinttechPracticeModel.FK_ChatRoomMessages_ChatRooms">
+            <End Role="ChatRoom" EntitySet="ChatRooms" />
+            <End Role="ChatRoomMessage" EntitySet="ChatRoomMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChatRoomMessages_Users" Association="hinttechPracticeModel.FK_ChatRoomMessages_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ChatRoomMessage" EntitySet="ChatRoomMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChatRooms_Users" Association="hinttechPracticeModel.FK_ChatRooms_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ChatRoom" EntitySet="ChatRooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Holidays_Users" Association="hinttechPracticeModel.FK_Holidays_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Holiday" EntitySet="Holidays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vacations_Users" Association="hinttechPracticeModel.FK_Vacations_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Vacation" EntitySet="Vacations" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ChatRoomMessage">
+          <Key>
+            <PropertyRef Name="MessageId" />
+          </Key>
+          <Property Name="MessageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoomId" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="SentTo" Type="Int32" />
+          <NavigationProperty Name="ChatRoom" Relationship="hinttechPracticeModel.FK_ChatRoomMessages_ChatRooms" FromRole="ChatRoomMessage" ToRole="ChatRoom" />
+          <NavigationProperty Name="User" Relationship="hinttechPracticeModel.FK_ChatRoomMessages_Users" FromRole="ChatRoomMessage" ToRole="User" />
+        </EntityType>
+        <EntityType Name="ChatRoom">
+          <Key>
+            <PropertyRef Name="RoomId" />
+          </Key>
+          <Property Name="RoomId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoomName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RoomDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="DeletedBy" Type="Int32" />
+          <NavigationProperty Name="ChatRoomMessages" Relationship="hinttechPracticeModel.FK_ChatRoomMessages_ChatRooms" FromRole="ChatRoom" ToRole="ChatRoomMessage" />
+          <NavigationProperty Name="User" Relationship="hinttechPracticeModel.FK_ChatRooms_Users" FromRole="ChatRoom" ToRole="User" />
+        </EntityType>
         <EntityType Name="Holiday">
           <Key>
             <PropertyRef Name="HolidayId" />
@@ -93,26 +220,28 @@
           <Property Name="DateFrom" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="DateTo" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Holidays_Users" FromRole="Holidays" ToRole="Users" />
+          <NavigationProperty Name="User" Relationship="hinttechPracticeModel.FK_Holidays_Users" FromRole="Holiday" ToRole="User" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsUserRegistered" Type="Boolean" Nullable="false" />
           <Property Name="IsUserAdmin" Type="Boolean" Nullable="false" />
           <Property Name="ProfilePicture" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="DateCreated" Type="DateTime" Precision="0" />
           <Property Name="LastLoginDate" Type="DateTime" Precision="0" />
           <Property Name="VacationDays" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Holidays" Relationship="Self.FK_Holidays_Users" FromRole="Users" ToRole="Holidays" />
-          <NavigationProperty Name="Vacations" Relationship="Self.FK_Vacations_Users" FromRole="Users" ToRole="Vacations" />
+          <NavigationProperty Name="ChatRoomMessages" Relationship="hinttechPracticeModel.FK_ChatRoomMessages_Users" FromRole="User" ToRole="ChatRoomMessage" />
+          <NavigationProperty Name="ChatRooms" Relationship="hinttechPracticeModel.FK_ChatRooms_Users" FromRole="User" ToRole="ChatRoom" />
+          <NavigationProperty Name="Holidays" Relationship="hinttechPracticeModel.FK_Holidays_Users" FromRole="User" ToRole="Holiday" />
+          <NavigationProperty Name="Vacations" Relationship="hinttechPracticeModel.FK_Vacations_Users" FromRole="User" ToRole="Vacation" />
         </EntityType>
         <EntityType Name="Vacation">
           <Key>
@@ -124,89 +253,137 @@
           <Property Name="DateTo" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsSickLeave" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Vacations_Users" FromRole="Vacations" ToRole="Users" />
+          <NavigationProperty Name="User" Relationship="hinttechPracticeModel.FK_Vacations_Users" FromRole="Vacation" ToRole="User" />
         </EntityType>
-        <Association Name="FK_Holidays_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Holidays" Type="Self.Holiday" Multiplicity="*" />
+        <Association Name="FK_ChatRoomMessages_ChatRooms">
+          <End Type="hinttechPracticeModel.ChatRoom" Role="ChatRoom" Multiplicity="1" />
+          <End Type="hinttechPracticeModel.ChatRoomMessage" Role="ChatRoomMessage" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Users">
+            <Principal Role="ChatRoom">
+              <PropertyRef Name="RoomId" />
+            </Principal>
+            <Dependent Role="ChatRoomMessage">
+              <PropertyRef Name="RoomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChatRoomMessages_Users">
+          <End Type="hinttechPracticeModel.User" Role="User" Multiplicity="1" />
+          <End Type="hinttechPracticeModel.ChatRoomMessage" Role="ChatRoomMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
               <PropertyRef Name="UserId" />
             </Principal>
-            <Dependent Role="Holidays">
+            <Dependent Role="ChatRoomMessage">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChatRooms_Users">
+          <End Type="hinttechPracticeModel.User" Role="User" Multiplicity="1" />
+          <End Type="hinttechPracticeModel.ChatRoom" Role="ChatRoom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ChatRoom">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Holidays_Users">
+          <End Type="hinttechPracticeModel.User" Role="User" Multiplicity="1" />
+          <End Type="hinttechPracticeModel.Holiday" Role="Holiday" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Holiday">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Vacations_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Vacations" Type="Self.Vacation" Multiplicity="*" />
+          <End Type="hinttechPracticeModel.User" Role="User" Multiplicity="1" />
+          <End Type="hinttechPracticeModel.Vacation" Role="Vacation" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Users">
+            <Principal Role="User">
               <PropertyRef Name="UserId" />
             </Principal>
-            <Dependent Role="Vacations">
+            <Dependent Role="Vacation">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="hinttechPracticeEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Holidays" EntityType="Self.Holiday" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="Vacations" EntityType="Self.Vacation" />
-          <AssociationSet Name="FK_Holidays_Users" Association="Self.FK_Holidays_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Holidays" EntitySet="Holidays" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Vacations_Users" Association="Self.FK_Vacations_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Vacations" EntitySet="Vacations" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="hinttechPracticeModelStoreContainer" CdmEntityContainer="hinttechPracticeEntities">
+          <EntitySetMapping Name="ChatRoomMessages">
+            <EntityTypeMapping TypeName="hinttechPracticeModel.ChatRoomMessage">
+              <MappingFragment StoreEntitySet="ChatRoomMessages">
+                <ScalarProperty Name="SentTo" ColumnName="SentTo" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChatRooms">
+            <EntityTypeMapping TypeName="hinttechPracticeModel.ChatRoom">
+              <MappingFragment StoreEntitySet="ChatRooms">
+                <ScalarProperty Name="DeletedBy" ColumnName="DeletedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="RoomDescription" ColumnName="RoomDescription" />
+                <ScalarProperty Name="RoomName" ColumnName="RoomName" />
+                <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Holidays">
             <EntityTypeMapping TypeName="hinttechPracticeModel.Holiday">
               <MappingFragment StoreEntitySet="Holidays">
-                <ScalarProperty Name="HolidayId" ColumnName="HolidayId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
-                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="HolidayId" ColumnName="HolidayId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="hinttechPracticeModel.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="IsUserRegistered" ColumnName="IsUserRegistered" />
-                <ScalarProperty Name="IsUserAdmin" ColumnName="IsUserAdmin" />
-                <ScalarProperty Name="ProfilePicture" ColumnName="ProfilePicture" />
-                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
-                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
                 <ScalarProperty Name="VacationDays" ColumnName="VacationDays" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="ProfilePicture" ColumnName="ProfilePicture" />
+                <ScalarProperty Name="IsUserAdmin" ColumnName="IsUserAdmin" />
+                <ScalarProperty Name="IsUserRegistered" ColumnName="IsUserRegistered" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Vacations">
             <EntityTypeMapping TypeName="hinttechPracticeModel.Vacation">
               <MappingFragment StoreEntitySet="Vacations">
-                <ScalarProperty Name="VacationPeriodId" ColumnName="VacationPeriodId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
-                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsSickLeave" ColumnName="IsSickLeave" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateTo" ColumnName="DateTo" />
+                <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="VacationPeriodId" ColumnName="VacationPeriodId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

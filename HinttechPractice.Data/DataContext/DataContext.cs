@@ -17,6 +17,9 @@ namespace HinttechPractice.Data.DataContext
         public virtual DbSet<Holiday> Holidays { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Vacation> Vacations { get; set; }
+        public virtual DbSet<ChatRoom> ChatRooms { get; set; }
+        public virtual DbSet<ChatRoomMessage> ChatRoomMessages { get; set; }
+
     }
   
 }
