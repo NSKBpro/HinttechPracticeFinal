@@ -183,12 +183,15 @@
     <Content Include="Content\smile\glasses.png" />
     <Content Include="Content\smile\heart.png" />
     <Content Include="Content\smile\kiss.png" />
+    <Content Include="Content\smile\namig.png" />
     <Content Include="Content\smile\offline.png" />
     <Content Include="Content\smile\offline1.png" />
     <Content Include="Content\smile\ok.png" />
     <Content Include="Content\smile\online.png" />
     <Content Include="Content\smile\online1.png" />
     <Content Include="Content\smile\pacman.png" />
+    <Content Include="Content\smile\plac.png" />
+    <Content Include="Content\smile\sad.png" />
     <Content Include="Content\smile\simplesmile.png" />
     <Content Include="Content\smile\smiling.png" />
     <Content Include="Content\smile\sunglasses.png" />
@@ -295,7 +298,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Login\LoginPage.cshtml" />
     <Content Include="Views\Shared\Accsess_Denied.cshtml" />
     <Content Include="Views\Register\RegisterPage.cshtml" />
@@ -315,6 +317,7 @@
     <Content Include="Views\Shared\InitCalendar.cshtml" />
     <Content Include="Views\LoadHolidays\DeleteHoliday.cshtml" />
     <Content Include="Views\Chat\Chat.cshtml" />
+    <Content Include="Views\Shared\Error404.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,4 +1,7 @@
-﻿<br/>
+﻿@{
+    ViewBag.Title = "Chat";
+}
+<br />
 <head>
     <title>Chat</title>
     <style>
@@ -6,9 +9,29 @@
             height: 300px;
             overflow-y: scroll;
             width: 100%;
-
+        }
+        #sendMessage {
+            background-color: #ccc;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 7px;
+            color: #fff;
+            font-family: 'Oswald';
+            font-size: 20px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            width: 7em;
+            height: 2.8em;
         }
 
+
+
+            #sendMessage:hover {
+                border: none;
+                background: red;
+                box-shadow: 0px 0px 1px #777;
+            }
     </style>
 </head>
 
@@ -16,13 +39,13 @@
     
 
 <div class="panel panel-default" style="max-width: 700px;z-index:-1; float:inherit; padding-bottom:0px;">
-    <div class="panel-footer" style="height:270px"id="chatRoom">
+    <div class="panel-footer" style="height:270px" id="chatRoom">
         <input type="hidden" id="displayName" /> <a id="chatWith"></a>
         <ul id="discussion"></ul>
     </div>
     <div class="panel-body" style="max-width: 700px;" id="chatPanel">
         <textarea class="form-control" id="message" style="min-width: 500px; float:left; z-index: 1;" rows="2"></textarea>
-        <button class="btn btn-primary" id="sendMessage" style="z-index: 1; float: right;" >Send</button>
+        <button class="btn btn-primary" id="sendMessage" style="z-index: 1; float: right;">Send</button>
     </div>
     <div id="zaChat"></div>
 </div>
@@ -46,8 +69,8 @@
                 
                 chat.client.addNewMessageToPage = function (name, message, recipientName) {
                     
-                        $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
-                            '</strong>: ' + htmlEncode(message) + '</li>');
+                    $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
+                        '</strong>: ' + htmlEncode(message) + '</li>');
                    
                 };
 
@@ -58,11 +81,12 @@
 
                     messageTemp = $("#" + to + "ChatInput").val();
                     if (messageTemp != "") {
-                        chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
-                        $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
-                            '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+                    chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
+                    $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li>');
                     }
                     $("#" + to + "ChatInput").val('').focus();
+                chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
                 });
 
             });
@@ -78,8 +102,8 @@
             chat.client.addNewMessageToPage = function (name, message, recipientName) {
 
                 if (recipientName != null) {
-                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
-                        '</strong>: ' + htmlEncode(message) + '</li>');
+                        $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                            '</strong>: ' + htmlEncode(message) + '</li>');
                    
  
                 } else {
@@ -107,12 +131,12 @@
                     
                     $.connection.hub.start().done(function () {
                         if (message != "") {
-                            chat.server.send(usernameFrom, $('#message').val(), null);
+                        chat.server.send(usernameFrom, $('#message').val(), null);
 
-                            $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
-                      '</strong>: ' + htmlEncode(message) + '</li>')
+                        $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
+                  '</strong>: ' + htmlEncode(message) + '</li>')
                         }
-                        });
+                    });  
                     
                 }
             }
@@ -124,18 +148,21 @@
             $.connection.hub.start().done(function () {
 
                 var chatInputEnter = document.getElementById(chatWith + "ChatInput");
-
+  
                 
-                    chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
-                    $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
-                            '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+                chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
+                $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li>');
                 
             });
         });
 
         $(function () {
-
             usernameFrom = "@Context.User.Identity.Name"
+        var name = '@Request.QueryString["nameTo"]';
+        if (name != null && name != "") {
+            chatWithFunction(name);
+        }
 
             //meda
             chat.client.addNewMessageToPage = function (name, message, recipientName) {
@@ -174,8 +201,8 @@
                         var characterCount = message.length;
                         if (characterCount < 20) {
                        
-                            $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '        ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                          '</strong>:   ' + htmlEncode(message) + '</li><br/>')
+                            $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
                              transferTextToSmile();
                              var objDiv = document.getElementById("chatRoom");
                              objDiv.scrollTop = objDiv.scrollHeight;
@@ -195,12 +222,12 @@
                                      str = str.substr(messageConstraint);
                 }
             }
-                             $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                             $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                                              '</strong>:   ')
                              for (var i = 0; i < arrayMessage.length; i++) {
                                  //funkcija za smjlije
                                  transferTextToSmile();
-                                 $('#discussion').append( htmlEncode(arrayMessage[i]) + '</li><br/>')
+                            $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li><br/>')
                                  var objDiv = document.getElementById("chatRoom");
                                  objDiv.scrollTop = objDiv.scrollHeight;
                              }
@@ -216,11 +243,17 @@
                 $('#message').keypress(function (e) {
                     if (e.which == 13) {
                         if ($('#message').val().trim() != "") {
-                            chat.server.send(usernameFrom, $('#message').val(), null);
-                            $('#message').val('').focus();
-                            e.preventDefault();
-                        }
+                        chat.server.send(usernameFrom, $('#message').val(), null);
+                        $('#message').val('').focus();
+                        e.preventDefault();
                     }
+                    }
+                });
+            });
+            $(document).ready(function () {
+                $("#sendMessage").click(function () {
+                    chat.server.send(usernameFrom, $('#message').val(), null);
+                    $('#message').val('').focus();
                 });
             });
 
@@ -229,10 +262,10 @@
             $.connection.hub.start().done(function () {
 
                 var chatInputEnter = document.getElementById(chatWith + "ChatInput");
-       
-                    chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
-                    $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
-                            '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+  
+                chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
+                $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li>');
               
             });
         });
@@ -245,7 +278,7 @@
         var i = 1;  //flag otvorenog chat prozora
         var inc = 300; //inkrement desne margine novog chat prozora
         function chatWithFunction(username) {
-            showHide[i-1] = i;
+        showHide[i - 1] = i;
             
             var numItems = $('.chatProzor').length
             var userWindow = $('' + username + 'Window').length;
@@ -328,8 +361,7 @@
 
 
 
-        function transferTextToSmile()
-        {
+    function transferTextToSmile() {
             var smiles = {
 
                 "<3": "/Content/smile/heart.png",
@@ -347,6 +379,9 @@
                 "8|": "/Content/smile/sunglasses.png",
                 ":O": "/Content/smile/suprise.png",
                 ":P": "/Content/smile/tonque.png",
+                ":'(": "/Content/smile/plac.png",
+                ";)": "/Content/smile/namig.png",
+                ":(": "/Content/smile/sad.png",
 
             };
             var replacements = [];
@@ -431,7 +466,7 @@
 
     @foreach (var u in ViewBag.users)
     {
-        var  activityImage="/Content/smile/online.png";
+        var activityImage = "/Content/smile/online.png";
         var imgSrc = "/Content/img/empty.png";
         if (u.profilePicture != null)
         {
@@ -447,7 +482,7 @@
         }
         else
         {
-            if (@u.activity==true)
+            if (@u.activity == true)
                 {
                     <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>   
                 }
