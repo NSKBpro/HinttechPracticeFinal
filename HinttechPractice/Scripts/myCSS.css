@@ -11,6 +11,11 @@ body {
     padding-top: 10px;
 }
 
+.lowerCase{
+    margin-left:50px;
+    margin-top:10px;
+}
+
 .chatProzor{
     height: 220px;
     width: 280px;
