@@ -34,6 +34,20 @@
 
     <!-- CLIENT -->
     <script type="text/javascript">
+        var chat = $.connection.chatHub;
+        $(function () {
+            var title = '@ViewBag.Title';
+            chat.client.broadcastNotification = function (name, message, recipientName) {
+                if (title != "Chat") {
+                    alertify.success('New message from ' + name, 5, function (isClicked) {
+                        if (isClicked) {
+                            window.location.href = "/Chat/Chat?nameTo="+name;
+                        }
+                    });
+                }
+            }
+        });
+
         @if (User.IsInRole("User")){<text>
         $(function () {
             var notifications = $.connection.notifierHub;
@@ -60,13 +74,6 @@
          @if (User.IsInRole("Admin")){<text>
         $(function () {
             var notifications = $.connection.notifierHub;
-            notifications.client.addNumbers = function (result) {
-                alert("Call recieved! " + result);
-                var encodedName = $('<div />').text(result).html();
-                $('#result').append('<li><strong>' + encodedName
-                    + '</strong></li>');
-            };
-
             $.connection.hub.start().done(function () {
                 $('#AddHoliday').click(function () {
                     notifications.server.sendNotification('add', '@Context.User.Identity.Name' + ': ' + $('#HolidayDescription').val());
@@ -84,6 +91,9 @@
         });
         </text> }
     </script>
+
+
+
 
 </head>
 <body>
@@ -112,7 +122,7 @@
                         <li>@Html.ActionLink(" Choose vacation ", "initHolidays", "LoadHolidays")</li>
                         <li>@Html.ActionLink(" Chat ", "Chat", "Chat")</li>
                     }
-                    
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (Context.User.Identity.IsAuthenticated)
@@ -151,7 +161,7 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        
+
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Hinttech scheduler</p>

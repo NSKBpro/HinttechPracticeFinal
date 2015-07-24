@@ -293,7 +293,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Login\LoginPage.cshtml" />
     <Content Include="Views\Shared\Accsess_Denied.cshtml" />
     <Content Include="Views\Register\RegisterPage.cshtml" />
@@ -313,6 +312,7 @@
     <Content Include="Views\Shared\InitCalendar.cshtml" />
     <Content Include="Views\LoadHolidays\DeleteHoliday.cshtml" />
     <Content Include="Views\Chat\Chat.cshtml" />
+    <Content Include="Views\Shared\Error404.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -44,6 +44,11 @@ namespace HinttechPractice
                  defaults: new { controller = "Home", action = "AccsessDenied", id = UrlParameter.Optional }
             );
             routes.MapRoute(
+                 name: "error404",
+                 url: "home/error",
+                 defaults: new { controller = "Home", action = "Error404", id = UrlParameter.Optional }
+            );
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

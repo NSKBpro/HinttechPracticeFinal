@@ -65,5 +65,13 @@ namespace HinttechPractice.Controllers
             return View("Accsess_Denied");
         }
 
+        ///<summary>
+        ///Error 404, page not found.
+        ///</summary>
+        public ActionResult Error404()
+        {
+            return View("Error404");
+        }
+
     }
 }
