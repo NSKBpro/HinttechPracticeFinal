@@ -29,7 +29,7 @@ namespace HinttechPractice.Data
         public string Description { get; set; }
 
         public bool IsSickLeave { get; set; }
-    
+
         public virtual User User { get; set; }
     }
 }

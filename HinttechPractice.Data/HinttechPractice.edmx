@@ -27,6 +27,7 @@
           <Property Name="IsDeleted" Type="bit" Nullable="false" />
           <Property Name="CreatedBy" Type="int" Nullable="false" />
           <Property Name="DeletedBy" Type="int" />
+          <Property Name="IsPrivate" Type="bit" />
         </EntityType>
         <EntityType Name="Holidays">
           <Key>
@@ -210,6 +211,7 @@
           <Property Name="DeletedBy" Type="Int32" />
           <NavigationProperty Name="ChatRoomMessages" Relationship="hinttechPracticeModel.FK_ChatRoomMessages_ChatRooms" FromRole="ChatRoom" ToRole="ChatRoomMessage" />
           <NavigationProperty Name="User" Relationship="hinttechPracticeModel.FK_ChatRooms_Users" FromRole="ChatRoom" ToRole="User" />
+          <Property Name="IsPrivate" Type="Boolean" />
         </EntityType>
         <EntityType Name="Holiday">
           <Key>
@@ -336,6 +338,7 @@
           <EntitySetMapping Name="ChatRooms">
             <EntityTypeMapping TypeName="hinttechPracticeModel.ChatRoom">
               <MappingFragment StoreEntitySet="ChatRooms">
+                <ScalarProperty Name="IsPrivate" ColumnName="IsPrivate" />
                 <ScalarProperty Name="DeletedBy" ColumnName="DeletedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />

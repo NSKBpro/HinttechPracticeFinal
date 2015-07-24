@@ -26,7 +26,8 @@ namespace HinttechPractice.Data
         public System.DateTime DateTo { get; set; }
 
         public string Description { get; set; }
-    
+
         public virtual User User { get; set; }
+
     }
 }

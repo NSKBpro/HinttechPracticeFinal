@@ -26,10 +26,11 @@ namespace HinttechPractice.Data
 
         public int CreatedBy { get; set; }
         public Nullable<int> SentTo { get; set; }
-    
+
         public virtual ChatRoom ChatRoom { get; set; }
 
         [ForeignKey("CreatedBy")]
         public virtual User User { get; set; }
+
     }
 }

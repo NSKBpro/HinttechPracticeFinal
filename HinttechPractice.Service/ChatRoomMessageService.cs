@@ -42,6 +42,24 @@ namespace HinttechPractice.Service
             return context.ChatRoomMessages.ToList();
         }
 
+        /// <summary>
+        /// Find all messages for current room.
+        /// </summary>
+        /// <param name="roomId">Current room Id.</param>
+        /// <returns>List of all messages in that room.</returns>
+        public List<ChatRoomMessage> FindAllMessagesForCurrentRoom(int roomId)
+        {
+            List<ChatRoomMessage> messages = new List<ChatRoomMessage>();
+            foreach (ChatRoomMessage message in context.ChatRoomMessages)
+            {
+                if (message.RoomId == roomId)
+                {
+                    messages.Add(message);
+                }
+            }
+            return messages;
+        }
+
         public void Delete(int messageId)
         {
             throw new NotImplementedException();

@@ -20,6 +20,7 @@ namespace HinttechPractice.Data
         {
             this.ChatRoomMessages = new HashSet<ChatRoomMessage>();
         }
+
         [Key]
         public int RoomId { get; set; }
         public string RoomName { get; set; }
@@ -31,10 +32,16 @@ namespace HinttechPractice.Data
         public bool IsDeleted { get; set; }
         public int CreatedBy { get; set; }
         public Nullable<int> DeletedBy { get; set; }
+
+        [Required]
+        public Nullable<bool> IsPrivate { get; set; }
     
         public virtual ICollection<ChatRoomMessage> ChatRoomMessages { get; set; }
 
         [ForeignKey("CreatedBy")]
         public virtual User User { get; set; }
+
+        
+       
     }
 }

@@ -22,7 +22,7 @@ namespace HinttechPractice.Data
             this.Holidays = new HashSet<Holiday>();
             this.Vacations = new HashSet<Vacation>();
         }
-    
+
         [Key]
         public int UserId { get; set; }
         public string Username { get; set; }
@@ -36,10 +36,11 @@ namespace HinttechPractice.Data
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> LastLoginDate { get; set; }
         public int VacationDays { get; set; }
-    
+
         public virtual ICollection<ChatRoomMessage> ChatRoomMessages { get; set; }
         public virtual ICollection<ChatRoom> ChatRooms { get; set; }
         public virtual ICollection<Holiday> Holidays { get; set; }
         public virtual ICollection<Vacation> Vacations { get; set; }
-    }
+
+         }
 }

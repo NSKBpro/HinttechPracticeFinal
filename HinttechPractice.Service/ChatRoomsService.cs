@@ -31,6 +31,18 @@ namespace HinttechPractice.Service
             context.SaveChanges();
         }
 
+        /// <summary>
+        /// Create new room, for private chat.
+        /// </summary>
+        /// <param name="chatRoomObject">Room object to create</param>
+        /// <returns>Current room object ID.</returns>
+        public int CreateWithId(object chatRoomObject)
+        {
+            context.ChatRooms.Add((ChatRoom)chatRoomObject);
+            context.SaveChanges();
+            return ((ChatRoom)chatRoomObject).RoomId;
+        }
+
         public object FindById(int chatRoomId)
         {
             ChatRoom chatRoom = new ChatRoom();
