@@ -68,19 +68,23 @@
                 usernameFrom = "@Context.User.Identity.Name"
                 
                 chat.client.addNewMessageToPage = function (name, message, recipientName) {
+                    
                     $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
                         '</strong>: ' + htmlEncode(message) + '</li>');
-                };//
+                   
+                };
+
                 $("#" + to + "ChatInput").focus();
                 $.connection.hub.start().done(function () {
 
                     var chatInputEnter = document.getElementById(to + "ChatInput");
 
                     messageTemp = $("#" + to + "ChatInput").val();
+                    if (messageTemp != "") {
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
                     $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
-                    
+                    }
                     $("#" + to + "ChatInput").val('').focus();
                 chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
                 });
@@ -98,12 +102,10 @@
             chat.client.addNewMessageToPage = function (name, message, recipientName) {
 
                 if (recipientName != null) {
-                    if (message != null) {
-                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
-                        '</strong>: ' + htmlEncode(message) + '</li>');
-                    }
-
+                        $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                            '</strong>: ' + htmlEncode(message) + '</li>');
                    
+ 
                 } else {
                   
                     var imageForUser;
@@ -126,11 +128,16 @@
                     </text>
                     }
 
+                    
                     $.connection.hub.start().done(function () {
+                        if (message != "") {
                         chat.server.send(usernameFrom, $('#message').val(), null);
+
                         $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
                   '</strong>: ' + htmlEncode(message) + '</li>')
+                        }
                     });  
+                    
                 }
             }
             //meda
@@ -142,9 +149,11 @@
 
                 var chatInputEnter = document.getElementById(chatWith + "ChatInput");
   
+                
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+                
             });
         });
 
@@ -214,7 +223,7 @@
                 }
             }
                              $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                                              '</strong>:   ')
+                                             '</strong>:   ')
                              for (var i = 0; i < arrayMessage.length; i++) {
                                  //funkcija za smjlije
                                  
@@ -234,9 +243,11 @@
             $.connection.hub.start().done(function () {
                 $('#message').keypress(function (e) {
                     if (e.which == 13) {
+                        if ($('#message').val().trim() != "") {
                         chat.server.send(usernameFrom, $('#message').val(), null);
                         $('#message').val('').focus();
                         e.preventDefault();
+                    }
                     }
                 });
             });
@@ -256,6 +267,7 @@
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
+              
             });
         });
         
