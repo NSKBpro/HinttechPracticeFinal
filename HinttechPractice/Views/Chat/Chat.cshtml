@@ -10,6 +10,7 @@
             overflow-y: scroll;
             width: 100%;
         }
+
         #sendMessage {
             background-color: #ccc;
             -moz-border-radius: 5px;
@@ -36,7 +37,7 @@
 </head>
 
 
-    
+
 
 <div class="panel panel-default" style="max-width: 700px;z-index:-1; float:inherit; padding-bottom:0px;">
     <div class="panel-footer" style="height:270px" id="chatRoom">
@@ -51,65 +52,66 @@
 </div>
 
 
-    
-    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
-    <script src="~/signalr/hubs"></script>
-    <script>
 
-        var chatWith;
-        var usernameFrom;
-        var showHide = [];
-        var chat = $.connection.chatHub;
-        var messageTemp;
+<script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script>
 
-        function doIt(to) {
-            $(function () {
+    var chatWith;
+    var usernameFrom;
+    var showHide = [];
+    var chat = $.connection.chatHub;
+    var messageTemp;
 
-                usernameFrom = "@Context.User.Identity.Name"
-                
-                chat.client.addNewMessageToPage = function (name, message, recipientName) {
-                    
+    function doIt(to) {
+        $(function () {
+
+            usernameFrom = "@Context.User.Identity.Name"
+
+            chat.client.addNewMessageToPage = function (name, message, recipientName) {
+                if (message != "" && message != null) {
                     $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
                         '</strong>: ' + htmlEncode(message) + '</li>');
-                   
-                };
+                }
 
-                $("#" + to + "ChatInput").focus();
-                $.connection.hub.start().done(function () {
+            };
 
-                    var chatInputEnter = document.getElementById(to + "ChatInput");
+            $("#" + to + "ChatInput").focus();
+            $.connection.hub.start().done(function () {
 
-                    messageTemp = $("#" + to + "ChatInput").val();
-                    if (messageTemp != "") {
+                var chatInputEnter = document.getElementById(to + "ChatInput");
+
+                messageTemp = $("#" + to + "ChatInput").val();
+                if (messageTemp != "" && messageTemp != null) {
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
                     $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
-                    }
-                    $("#" + to + "ChatInput").val('').focus();
-                chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
-                });
-
+                    chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
+                }
+                $("#" + to + "ChatInput").val('').focus();
             });
-            var objDiv = document.getElementById(to + "Window");
-            objDiv.scrollTop = objDiv.scrollHeight;
-        }
 
-        $(function doIt2() {
+        });
+        var objDiv = document.getElementById(to + "Window");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
 
-            usernameFrom = "@Context.User.Identity.Name";
+    $(function doIt2() {
 
-            //meda
-            chat.client.addNewMessageToPage = function (name, message, recipientName) {
+        usernameFrom = "@Context.User.Identity.Name";
 
-                if (recipientName != null) {
-                        $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
-                            '</strong>: ' + htmlEncode(message) + '</li>');
-                   
- 
-                } else {
-                  
-                    var imageForUser;
-                    @foreach (var u in ViewBag.users)
+        //meda
+        chat.client.addNewMessageToPage = function (name, message, recipientName) {
+
+            if (recipientName != null) {
+                $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                    '</strong>: ' + htmlEncode(message) + '</li>');
+
+
+            } else {
+
+                var imageForUser;
+                @foreach (var u in ViewBag.users)
                     {
                         var imgSrc = "/Content/img/empty.png";
                         if (u.profilePicture != null)
@@ -122,59 +124,73 @@
 
 
                         <text>
-                        if (name == '@u.username') {
-                            imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
-                        }
-                    </text>
+                if (name == '@u.username') {
+                    imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
+                }
+                </text>
                     }
 
-                    
-                    $.connection.hub.start().done(function () {
-                        if (message != "") {
+
+                $.connection.hub.start().done(function () {
+                    if (message != "" && message != null) {
                         chat.server.send(usernameFrom, $('#message').val(), null);
 
                         $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
                   '</strong>: ' + htmlEncode(message) + '</li>')
-                        }
-                    });  
-                    
-                }
+                    }
+                });
+
             }
-            //meda
-            
-            $('#message').focus();
-            
+        }
+        //meda
 
-            $.connection.hub.start().done(function () {
+        $('#message').focus();
 
-                var chatInputEnter = document.getElementById(chatWith + "ChatInput");
-  
-                
+
+        $.connection.hub.start().done(function () {
+            var chatInputEnter = document.getElementById(chatWith + "ChatInput");
+            if ($('#' + usernameFrom + "ChatInput").val() != null) {
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
-                
-            });
-        });
+            }
 
-        $(function () {
-            usernameFrom = "@Context.User.Identity.Name"
+        });
+    });
+
+    $(function () {
+        usernameFrom = "@Context.User.Identity.Name";
         var name = '@Request.QueryString["nameTo"]';
+        var validUser = 0;
         if (name != null && name != "") {
-            chatWithFunction(name);
+            @foreach (var u in ViewBag.users)
+                {
+                 <text>
+            if ('@u.username' == name) {
+                validUser = 1;
+            }
+            </text>
+            }
+            if (validUser == 1) {
+                if (name != null && name != "") {
+                    chatWithFunction(name);
+                }
+            } else {
+                window.location.href = "/Chat/Chat";
+            }
         }
 
-            //meda
-            chat.client.addNewMessageToPage = function (name, message, recipientName) {
+        //meda
+        chat.client.addNewMessageToPage = function (name, message, recipientName) {
 
-                if (recipientName != null) {
-                    $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
-                        '</strong>: ' + htmlEncode(message) + '</li>');
- 
-                } else {
+            if (recipientName != null) {
+                $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
+                    '</strong>: ' + htmlEncode(message) + '</li>');
 
-                    var imageForUser;
-                    @foreach (var u in ViewBag.users)
+            } else {
+
+                var imageForUser;
+                @foreach (var u in ViewBag.users)
                 {
                         var imgSrc = "/Content/img/empty.png";
                         if (u.profilePicture != null)
@@ -186,282 +202,282 @@
                     var usernameFrom2 = "@Context.User.Identity.Name";
 
                     <text>
-                    if (name == '@u.username') {
-                        imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
-                    }
-                    </text>
-               
+                if (name == '@u.username') {
+                    imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
                 }
-                    if (message != null) {
-                       
-                        var day = new Date();
-                        var hr = day.getHours();
-                        var min = day.getMinutes();
-                        var sec = day.getSeconds();
-                        var characterCount = message.length;
-                        if (characterCount < 20) {
-                       
-                            $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                        '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
-                             transferTextToSmile();
-                             var objDiv = document.getElementById("chatRoom");
-                             objDiv.scrollTop = objDiv.scrollHeight;
-                         } else {
-                             //Funkcija za prekoracenje karaktera u panelu.Ako prekoraci ide u newLine
-                             var str = message;
-                             var arrayMessage = [];
-                             var messageConstraint = 72;
+                </text>
 
-                             while (str) {
-                                 if (str.length < messageConstraint) {
-                                     arrayMessage.push(str);
-                                     break;
                 }
-                                 else {
-                                     arrayMessage.push(str.substr(0, messageConstraint));
-                                     str = str.substr(messageConstraint);
-                }
-            }
-                             $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                                             '</strong>:   ')
-                             for (var i = 0; i < arrayMessage.length; i++) {
-                                 //funkcija za smjlije
-                                 
+                if (message != null) {
+
+                    var day = new Date();
+                    var hr = day.getHours();
+                    var min = day.getMinutes();
+                    var sec = day.getSeconds();
+                    var characterCount = message.length;
+                    if (characterCount < 20) {
+
+                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                    '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
+                        transferTextToSmile();
+                        var objDiv = document.getElementById("chatRoom");
+                        objDiv.scrollTop = objDiv.scrollHeight;
+                    } else {
+                        //Funkcija za prekoracenje karaktera u panelu.Ako prekoraci ide u newLine
+                        var str = message;
+                        var arrayMessage = [];
+                        var messageConstraint = 72;
+
+                        while (str) {
+                            if (str.length < messageConstraint) {
+                                arrayMessage.push(str);
+                                break;
+                            }
+                            else {
+                                arrayMessage.push(str.substr(0, messageConstraint));
+                                str = str.substr(messageConstraint);
+                            }
+                        }
+                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                                        '</strong>:   ')
+                        for (var i = 0; i < arrayMessage.length; i++) {
+                            //funkcija za smjlije
+
                             $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li><br/>')
                             var objDiv = document.getElementById("chatRoom");
                             transferTextToSmile();
-                                 objDiv.scrollTop = objDiv.scrollHeight;
-                             }
-                         }
+                            objDiv.scrollTop = objDiv.scrollHeight;
+                        }
                     }
                 }
             }
-            //meda
-            
-            $('#message').focus();
-            //react on enter Mihajlo M.
-            $.connection.hub.start().done(function () {
-                $('#message').keypress(function (e) {
-                    if (e.which == 13) {
-                        if ($('#message').val().trim() != "") {
+        }
+        //meda
+
+        $('#message').focus();
+        //react on enter Mihajlo M.
+        $.connection.hub.start().done(function () {
+            $('#message').keypress(function (e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                    if ($('#message').val().trim() != "") {
                         chat.server.send(usernameFrom, $('#message').val(), null);
                         $('#message').val('').focus();
-                        e.preventDefault();
                     }
-                    }
-                });
+                }
             });
-            $(document).ready(function () {
-                $("#sendMessage").click(function () {
-                    chat.server.send(usernameFrom, $('#message').val(), null);
-                    $('#message').val('').focus();
-                });
+        });
+        $(document).ready(function () {
+            $("#sendMessage").click(function () {
+                chat.server.send(usernameFrom, $('#message').val(), null);
+                $('#message').val('').focus();
             });
+        });
 
-        
 
-            $.connection.hub.start().done(function () {
 
-                var chatInputEnter = document.getElementById(chatWith + "ChatInput");
-  
+        $.connection.hub.start().done(function () {
+            var chatInputEnter = document.getElementById(chatWith + "ChatInput");
+            if ($('#' + usernameFrom + "ChatInput").val() != null) {
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
-              
-            });
+            }
+
         });
-        
-        function htmlEncode(value) {
-            var encodedValue = $('<div />').text(value).html();
-            return encodedValue;
-        }
+    });
 
-        var i = 1;  //flag otvorenog chat prozora
-        var inc = 300; //inkrement desne margine novog chat prozora
-        function chatWithFunction(username) {
+    function htmlEncode(value) {
+        var encodedValue = $('<div />').text(value).html();
+        return encodedValue;
+    }
+
+    var i = 1;  //flag otvorenog chat prozora
+    var inc = 300; //inkrement desne margine novog chat prozora
+    function chatWithFunction(username) {
         showHide[i - 1] = i;
-            
-            var numItems = $('.chatProzor').length
-            var userWindow = $('' + username + 'Window').length;
 
-            if (showHide[0] === 1) {
-                if (numItems < 3) {
-                    chatWith = username;
-                    var divCheck = document.getElementById('' + username + 'Window');
+        var numItems = $('.chatProzor').length
+        var userWindow = $('' + username + 'Window').length;
 
-                    if (divCheck == null) {
-                        document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
-                            "<div id=\"" + username + "Window\" name=\"" + username + "\" style=\"margin-right:" + inc +
-                            "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
-                            "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
-                            username + "ChatInput\"/></div>"
-                        
-                        inc += 330;
-                    } else {
-                        return;
-                    }
-                    var divHeader = document.getElementById(username + "Window");
-                    var divHeader2 = document.getElementById("Div" + username);
-                    var childDivs = document.getElementById(username + "Window").getElementsByTagName('div');
+        if (showHide[0] === 1) {
+            if (numItems < 3) {
+                chatWith = username;
+                var divCheck = document.getElementById('' + username + 'Window');
 
-                    for (i = 0; i < childDivs.length; i++) {
-                        var child = childDivs[i];
-                        child.innerHTML = "<strong>" + divHeader.getAttribute('name') + "</strong>"
-                    }
-                    divHeader.style.color = "#575757";
-                    divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
-                    $("#" + username + "ChatInput").focus();
+                if (divCheck == null) {
+                    document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
+                        "<div id=\"" + username + "Window\" name=\"" + username + "\" style=\"margin-right:" + inc +
+                        "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
+                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
+                        username + "ChatInput\"/></div>"
+
+                    inc += 330;
+                } else {
+                    return;
                 }
-            } else {
-                dismissChat(username + "Window");
+                var divHeader = document.getElementById(username + "Window");
+                var divHeader2 = document.getElementById("Div" + username);
+                var childDivs = document.getElementById(username + "Window").getElementsByTagName('div');
+
+                for (i = 0; i < childDivs.length; i++) {
+                    var child = childDivs[i];
+                    child.innerHTML = "<strong>" + divHeader.getAttribute('name') + "</strong>"
+                }
+                divHeader.style.color = "#575757";
+                divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
+                $("#" + username + "ChatInput").focus();
             }
-            i++;
+        } else {
+            dismissChat(username + "Window");
         }
+        i++;
+    }
 
-        function dismissChat(div) {
-            if (showHide[0] === 1) {
-                var dvi2 = [];
-                var elem = $("div[id$='Window']");
-                var element = document.getElementById(div);
-                
-                for (var b = 0; b < elem.length; b++) {
-  
-                    if (elem[b].style.marginRight > element.style.marginRight) {
-                        
-                        var size = parseInt(document.getElementById(elem[b].id).style.marginRight) - 330;
+    function dismissChat(div) {
+        if (showHide[0] === 1) {
+            var dvi2 = [];
+            var elem = $("div[id$='Window']");
+            var element = document.getElementById(div);
 
-                        document.getElementById(elem[b].id).style.marginRight = size + "px";
-                        
-                        dvi2.push(elem[b].id);
-                    }
-                }
-                if (elem.length == 1) {
-                    
-                    inc = 300;
-                    } else {
-                    inc -= 330;
-                    }
-                $('#' + div).remove();
-                for (var c = 0; c < dvi2.length; c++) {
-                    var windowUsername = dvi2[c].replace("Window", "")
-                    $("#" + windowUsername + "ChatInput").focus();
-                }
+            for (var b = 0; b < elem.length; b++) {
 
-                if (dvi2.length == 0) {
-                    var windowUsername = dvi2[0].replace("Window", "")
-                $("#" + windowUsername + "ChatInput").focus();
+                if (elem[b].style.marginRight > element.style.marginRight) {
+
+                    var size = parseInt(document.getElementById(elem[b].id).style.marginRight) - 330;
+
+                    document.getElementById(elem[b].id).style.marginRight = size + "px";
+
+                    dvi2.push(elem[b].id);
                 }
-                
-                
-            } else {
-                $('#' + div).show();
             }
-        };
+            if (elem.length == 1) {
+
+                inc = 300;
+            } else {
+                inc -= 330;
+            }
+            $('#' + div).remove();
+            for (var c = 0; c < dvi2.length; c++) {
+                var windowUsername = dvi2[c].replace("Window", "")
+                $("#" + windowUsername + "ChatInput").focus();
+            }
+
+            if (dvi2.length == 0) {
+                var windowUsername = dvi2[0].replace("Window", "")
+                $("#" + windowUsername + "ChatInput").focus();
+            }
+
+
+        } else {
+            $('#' + div).show();
+        }
+    };
 
 
 
 
 
     function transferTextToSmile() {
-            var smiles = {
+        var smiles = {
 
-                "<3": "/Content/smile/heart.png",
-                "o:)": "/Content/smile/angel.png",
-                "o.O": "/Content/smile/bigeye.png",
-                "O.o": "/Content/smile/bigeye.png",
-                "3:)": "/Content/smile/devil.png",
-                ":/": "/Content/smile/diss.png",
-                "8)": "/Content/smile/glasses.png",
-                ":*": "/Content/smile/kiss.png",
-                "(y)": "/Content/smile/ok.png",
-                ":v": "/Content/smile/pacman.png",
-                ":)": "/Content/smile/simplesmile.png",
-                ":D": "/Content/smile/smiling.png",
-                "8|": "/Content/smile/sunglasses.png",
-                ":O": "/Content/smile/suprise.png",
-                ":P": "/Content/smile/tonque.png",
-                ":'(": "/Content/smile/plac.png",
-                ";)": "/Content/smile/namig.png",
-                ":(": "/Content/smile/sad.png",
+            "<3": "/Content/smile/heart.png",
+            "o:)": "/Content/smile/angel.png",
+            "o.O": "/Content/smile/bigeye.png",
+            "O.o": "/Content/smile/bigeye.png",
+            "3:)": "/Content/smile/devil.png",
+            ":/": "/Content/smile/diss.png",
+            "8)": "/Content/smile/glasses.png",
+            ":*": "/Content/smile/kiss.png",
+            "(y)": "/Content/smile/ok.png",
+            ":v": "/Content/smile/pacman.png",
+            ":)": "/Content/smile/simplesmile.png",
+            ":D": "/Content/smile/smiling.png",
+            "8|": "/Content/smile/sunglasses.png",
+            ":O": "/Content/smile/suprise.png",
+            ":P": "/Content/smile/tonque.png",
+            ":'(": "/Content/smile/plac.png",
+            ";)": "/Content/smile/namig.png",
+            ":(": "/Content/smile/sad.png",
 
-            };
-            var replacements = [];
+        };
+        var replacements = [];
 
-            onEachTextNode(document.body, function (node) {
-                var newNode = replaceTokensWithImages(node, smiles);
-                replacements.push([node, newNode]);
-            });
+        onEachTextNode(document.body, function (node) {
+            var newNode = replaceTokensWithImages(node, smiles);
+            replacements.push([node, newNode]);
+        });
 
-            replacements.forEach(function (replacement) {
-                var node, newNode;
-                node = replacement[0];
-                newNode = replacement[1];
+        replacements.forEach(function (replacement) {
+            var node, newNode;
+            node = replacement[0];
+            newNode = replacement[1];
 
-                node.parentNode.replaceChild(newNode, node);
-            });
+            node.parentNode.replaceChild(newNode, node);
+        });
 
-            function onEachTextNode(base, cb) {
-                var iterator =
-                    document.createNodeIterator(base, NodeFilter.SHOW_TEXT, nonEmptyText);
+        function onEachTextNode(base, cb) {
+            var iterator =
+                document.createNodeIterator(base, NodeFilter.SHOW_TEXT, nonEmptyText);
 
-                var currentNode = iterator.nextNode();
+            var currentNode = iterator.nextNode();
 
-                while (currentNode !== null) {
-                    cb(currentNode);
-                    currentNode = iterator.nextNode();
-                }
-
-                function nonEmptyText(node) {
-                    return node.textContent.search(/\S/) !== -1 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-                }
+            while (currentNode !== null) {
+                cb(currentNode);
+                currentNode = iterator.nextNode();
             }
 
-            function replaceTokensWithImages(textNode, map) {
-                var fragment = document.createDocumentFragment();
-                fragment.appendChild(textNode.cloneNode(true));
-
-                return Object.keys(map).reduce(function (node, token) {
-                    return replaceTokenWithImage(node, token, map[token]);
-                }, fragment);
-            }
-
-            function replaceTokenWithImage(fragment, token, imageUrl) {
-                var newFragment = document.createDocumentFragment();
-
-                [].forEach.call(fragment.childNodes, function (node) {
-                    if (node.nodeType !== document.TEXT_NODE) {
-                        newFragment.appendChild(node.cloneNode(true));
-                        return;
-                    }
-
-                    var text = node.textContent;
-                    var sections = text.split(token);
-
-                    var current, hasNext;
-                    for (var i = 0; i < sections.length; i++) {
-                        current = sections[i];
-                        hasNext = (i + 1) in sections;
-
-                        newFragment.appendChild(new Text(current));
-
-                        if (hasNext) {
-                            newFragment.appendChild(createImage());
-                        }
-                    }
-                });
-
-                return newFragment;
-
-                function createImage() {
-                    var image = new Image();
-                    image.src = imageUrl;
-                    image.alt = token;
-                    return image;
-                }
+            function nonEmptyText(node) {
+                return node.textContent.search(/\S/) !== -1 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
             }
         }
-       
-    </script>
+
+        function replaceTokensWithImages(textNode, map) {
+            var fragment = document.createDocumentFragment();
+            fragment.appendChild(textNode.cloneNode(true));
+
+            return Object.keys(map).reduce(function (node, token) {
+                return replaceTokenWithImage(node, token, map[token]);
+            }, fragment);
+        }
+
+        function replaceTokenWithImage(fragment, token, imageUrl) {
+            var newFragment = document.createDocumentFragment();
+
+            [].forEach.call(fragment.childNodes, function (node) {
+                if (node.nodeType !== document.TEXT_NODE) {
+                    newFragment.appendChild(node.cloneNode(true));
+                    return;
+                }
+
+                var text = node.textContent;
+                var sections = text.split(token);
+
+                var current, hasNext;
+                for (var i = 0; i < sections.length; i++) {
+                    current = sections[i];
+                    hasNext = (i + 1) in sections;
+
+                    newFragment.appendChild(new Text(current));
+
+                    if (hasNext) {
+                        newFragment.appendChild(createImage());
+                    }
+                }
+            });
+
+            return newFragment;
+
+            function createImage() {
+                var image = new Image();
+                image.src = imageUrl;
+                image.alt = token;
+                return image;
+            }
+        }
+    }
+
+</script>
 
 <div class="scroller" style="position:fixed;top:0; right:0; padding-right:0px;  padding-top:50px; width: 250px; background-color: #d3d3d3; height:100%; ">
 
@@ -471,7 +487,7 @@
         var imgSrc = "/Content/img/empty.png";
         if (u.profilePicture != null)
         {
-        var base64 = Convert.ToBase64String(@u.profilePicture);
+            var base64 = Convert.ToBase64String(@u.profilePicture);
             imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
         }
@@ -484,16 +500,16 @@
         else
         {
             if (@u.activity == true)
-                {
-                    <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>   
-                }
-                else
-                {
-                 
-                    <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>   
-                }
-            
-            
+            {
+                <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
+            }
+            else
+            {
+
+                <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
+            }
+
+
         }
 
 
