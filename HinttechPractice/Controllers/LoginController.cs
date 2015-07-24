@@ -1,5 +1,6 @@
 ﻿using HinttechPractice.Data;
 using HinttechPractice.Data.DataContext;
+using HinttechPractice.Models;
 using HinttechPractice.Security;
 using HinttechPractice.Service;
 using HotelAdvisor.Models;
@@ -20,7 +21,7 @@ namespace HinttechPractice.Controllers
     [AllowAnonymous]
     public class LoginController : Controller
     {
-
+        public static string currentUserOffline;
         public ActionResult Index()
         {
             return View();
@@ -46,6 +47,7 @@ namespace HinttechPractice.Controllers
 
             UsersService userService = new UsersService();
             User currentUser = userService.FindUserByUsername(user.UserName);
+            currentUserOffline = currentUser.Username;
 
             if (currentUser == null)
             {
@@ -104,6 +106,18 @@ namespace HinttechPractice.Controllers
         [Authorize]
         public ActionResult Logout()
         {
+            foreach (UsersLite us in ChatController.usersOnline)
+            {
+                if (us.username == currentUserOffline)
+                {
+                    us.activity = true;
+                    ChatController.usersOnline.First(d => d.username == currentUserOffline).activity = false;
+                }
+
+                ViewBag.users = ChatController.usersOnline;
+                
+            }
+
             FormsAuthentication.SignOut();
             HttpCookie ck = Request.Cookies[FormsAuthentication.FormsCookieName];
             ck.Expires = DateTime.Now;
