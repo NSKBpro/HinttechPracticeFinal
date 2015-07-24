@@ -12,7 +12,7 @@ namespace HinttechPractice.Controllers
     public class ChatController : Controller
     {
         private UsersService usr = new UsersService();
-        private static List<UsersLite> usersOnline;
+        public static List<UsersLite> usersOnline;
         public ActionResult Chat()
         {
             string usrnmOfUserLoggedIn = HttpContext.User.Identity.Name;
