@@ -10,6 +10,28 @@
             overflow-y: scroll;
             width: 100%;
         }
+        #sendMessage {
+            background-color: #ccc;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 7px;
+            color: #fff;
+            font-family: 'Oswald';
+            font-size: 20px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            width: 7em;
+            height: 2.8em;
+        }
+
+
+
+            #sendMessage:hover {
+                border: none;
+                background: red;
+                box-shadow: 0px 0px 1px #777;
+            }
     </style>
 </head>
 
@@ -170,8 +192,8 @@
                         var characterCount = message.length;
                         if (characterCount < 20) {
                        
-                            $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '        ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                          '</strong>:   ' + htmlEncode(message) + '</li><br/>')
+                            $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
                              transferTextToSmile();
                              var objDiv = document.getElementById("chatRoom");
                              objDiv.scrollTop = objDiv.scrollHeight;
@@ -191,8 +213,8 @@
                                      str = str.substr(messageConstraint);
                 }
             }
-                             $('#discussion').append('<font size="2"><i>Sent at: </font>[<font size="3">' + '       ' + '' + hr + ':' + min + ':' + sec + '</font>' + ' ]</i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                                             '</strong>:   ')
+                             $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                                              '</strong>:   ')
                              for (var i = 0; i < arrayMessage.length; i++) {
                                  //funkcija za smjlije
                                  transferTextToSmile();
@@ -215,6 +237,12 @@
                         $('#message').val('').focus();
                         e.preventDefault();
                     }
+                });
+            });
+            $(document).ready(function () {
+                $("#sendMessage").click(function () {
+                    chat.server.send(usernameFrom, $('#message').val(), null);
+                    $('#message').val('').focus();
                 });
             });
 
@@ -339,6 +367,9 @@
                 "8|": "/Content/smile/sunglasses.png",
                 ":O": "/Content/smile/suprise.png",
                 ":P": "/Content/smile/tonque.png",
+                ":'(": "/Content/smile/plac.png",
+                ";)": "/Content/smile/namig.png",
+                ":(": "/Content/smile/sad.png",
 
             };
             var replacements = [];
