@@ -226,9 +226,10 @@
                                              '</strong>:   ')
                              for (var i = 0; i < arrayMessage.length; i++) {
                                  //funkcija za smjlije
-                                 transferTextToSmile();
+                                 
                             $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li><br/>')
-                                 var objDiv = document.getElementById("chatRoom");
+                            var objDiv = document.getElementById("chatRoom");
+                            transferTextToSmile();
                                  objDiv.scrollTop = objDiv.scrollHeight;
                              }
                          }
