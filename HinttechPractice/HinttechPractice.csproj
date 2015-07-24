@@ -184,8 +184,10 @@
     <Content Include="Content\smile\heart.png" />
     <Content Include="Content\smile\kiss.png" />
     <Content Include="Content\smile\offline.png" />
+    <Content Include="Content\smile\offline1.png" />
     <Content Include="Content\smile\ok.png" />
     <Content Include="Content\smile\online.png" />
+    <Content Include="Content\smile\online1.png" />
     <Content Include="Content\smile\pacman.png" />
     <Content Include="Content\smile\simplesmile.png" />
     <Content Include="Content\smile\smiling.png" />
