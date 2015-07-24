@@ -172,7 +172,7 @@
 
             if (validUser == 1) {
                 if (name != null && name != "") {
-                    chatWithFunction(name);
+                    chatWithFunction(name,null);
                 }
             } else {
                 window.location.href = "/Chat/Chat";
@@ -272,16 +272,26 @@
                 $('#message').val('').focus();
             });
         });
-
+        
+        var not = $.connection.chatHub;
+        $(function () {
+            
+            not.client.broadcastNotification = function (name, message, recipientName) {
+                if (message != null) {
+                    chatWithFunction(name, message);
+                }
+            }
+        });
 
 
         $.connection.hub.start().done(function () {
+            
             var chatInputEnter = document.getElementById(chatWith + "ChatInput");
             if ($('#' + usernameFrom + "ChatInput").val() != null) {
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
-            }
+            } 
 
         });
     });
@@ -290,10 +300,10 @@
         var encodedValue = $('<div />').text(value).html();
         return encodedValue;
     }
-
+    var ulaz = 0;
     var i = 1;  //flag otvorenog chat prozora
     var inc = 300; //inkrement desne margine novog chat prozora
-    function chatWithFunction(username) {
+    function chatWithFunction(username, message) {
         showHide[i - 1] = i;
 
         var numItems = $('.chatProzor').length
@@ -310,11 +320,18 @@
                         "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
                         "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
                         username + "ChatInput\"/></div>"
-
+                    
                     inc += 330;
                 } else {
                     return;
                 }
+
+                
+                if (message != null) {
+                    $('#' + username + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(username) +
+                          '</strong>: ' + htmlEncode(message) + '</li>');
+                }
+
                 var divHeader = document.getElementById(username + "Window");
                 var divHeader2 = document.getElementById("Div" + username);
                 var childDivs = document.getElementById(username + "Window").getElementsByTagName('div');
@@ -500,12 +517,12 @@
         {
             if (@u.activity == true)
             {
-                <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
+                <a onclick="chatWithFunction('@u.username',null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
             }
             else
             {
 
-                <a onclick="chatWithFunction('@u.username')" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
+                <a onclick="chatWithFunction('@u.username',null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
             }
 
 
