@@ -12,20 +12,21 @@ namespace HinttechPractice.Data
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Holiday
     {
         [Key]
         public int HolidayId { get; set; }
         public int UserId { get; set; }
-        
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public System.DateTime DateFrom { get; set; }
-        
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public System.DateTime DateTo { get; set; }
-        public string Description { get; set; }
 
+        public string Description { get; set; }
+    
         public virtual User User { get; set; }
     }
 }

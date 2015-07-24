@@ -72,6 +72,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatRoom.cs">
+      <DependentUpon>HinttechPractice.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ChatRoomMessage.cs">
+      <DependentUpon>HinttechPractice.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataContext\DataContext.cs" />
     <Compile Include="HinttechPractice.Context.cs">
       <AutoGen>True</AutoGen>

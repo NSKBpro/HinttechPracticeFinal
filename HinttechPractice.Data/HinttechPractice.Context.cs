@@ -12,19 +12,16 @@ namespace HinttechPractice.Data
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+
     public partial class hinttechPracticeEntities : DbContext
     {
         public hinttechPracticeEntities()
             : base("name=hinttechPracticeEntities")
         {
         }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
-        }
-    
+
+        public virtual DbSet<ChatRoomMessage> ChatRoomMessages { get; set; }
+        public virtual DbSet<ChatRoom> ChatRooms { get; set; }
         public virtual DbSet<Holiday> Holidays { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Vacation> Vacations { get; set; }

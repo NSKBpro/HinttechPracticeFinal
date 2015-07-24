@@ -12,24 +12,29 @@ namespace HinttechPractice.Data
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     
-    public partial class Vacation
+    public partial class ChatRoom
     {
+        public ChatRoom()
+        {
+            this.ChatRoomMessages = new HashSet<ChatRoomMessage>();
+        }
         [Key]
-        public int VacationPeriodId { get; set; }
-        public int UserId { get; set; }
+        public int RoomId { get; set; }
+        public string RoomName { get; set; }
+        public string RoomDescription { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public System.DateTime DateFrom { get; set; }
+        public System.DateTime DateCreated { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public System.DateTime DateTo { get; set; }
-
-        [Required]
-        public string Description { get; set; }
-
-        public bool IsSickLeave { get; set; }
+        public bool IsDeleted { get; set; }
+        public int CreatedBy { get; set; }
+        public Nullable<int> DeletedBy { get; set; }
     
+        public virtual ICollection<ChatRoomMessage> ChatRoomMessages { get; set; }
+
+        [ForeignKey("CreatedBy")]
         public virtual User User { get; set; }
     }
 }
