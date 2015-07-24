@@ -76,9 +76,10 @@
             chat.client.addNewMessageToPage = function (name, message, recipientName) {
 
                 if (recipientName != null) {
-                    $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
-                        '</strong>: ' + htmlEncode(message) + '</li>');
-
+                    if (message != null) {
+                        $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
+                            '</strong>: ' + htmlEncode(message) + '</li>');
+                    }
                    
  
                 } else {
