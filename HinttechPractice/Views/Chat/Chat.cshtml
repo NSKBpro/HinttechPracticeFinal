@@ -98,7 +98,7 @@
                 if (messageTemp != "" && messageTemp != null) {
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
                     $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
-                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase">' + timestamp + '</span>');
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + timestamp + '</small></span>');
                     chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
                 }
                 $("#" + to + "ChatInput").val('').focus();
@@ -354,10 +354,10 @@
 
                 for (i = 0; i < childDivs.length; i++) {
                     var child = childDivs[i];
-                    child.innerHTML = "<strong>" + divHeader.getAttribute('name') + "</strong>"
+                    child.innerHTML = "<small style=\"color:white;font-style:normal;\">" + divHeader.getAttribute('name') + "</small>"
                 }
                 divHeader.style.color = "#575757";
-                divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
+                divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; color:white; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
                 $("#" + username + "ChatInput").focus();
             }
         } else {
