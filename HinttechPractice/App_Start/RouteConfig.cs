@@ -45,7 +45,7 @@ namespace HinttechPractice
             );
             routes.MapRoute(
                  name: "error404",
-                 url: "home/error",
+                 url: "home/error404",
                  defaults: new { controller = "Home", action = "Error404", id = UrlParameter.Optional }
             );
             routes.MapRoute(
