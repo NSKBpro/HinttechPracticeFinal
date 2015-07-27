@@ -1,5 +1,6 @@
 ﻿using HinttechPractice.Data;
 using HinttechPractice.Data.DataContext;
+using HinttechPractice.Data.Models;
 using HinttechPractice.Service.Intefaces;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,27 @@ namespace HinttechPractice.Service
             }
         }
 
+        public IList<ChatMessageModel> LoadPrivateMessagesHistory(string userFrom, string userTo)
+        {
+            UsersService userService = new UsersService();
+            ChatRoomMessageService msgService = new ChatRoomMessageService();
+            User sender = userService.FindUserByUsername(userFrom);
+            User recipient = userService.FindUserByUsername(userTo);
+
+            ChatRoomMessage messageTemp = new ChatRoomMessage();
+            messageTemp.CreatedBy = sender.UserId;
+            messageTemp.SentTo = recipient.UserId;
+
+            int roomId = FindRoomIdForPrivateChat(messageTemp);
+
+            if (roomId != -1)
+            {
+                return msgService.FindAllMessagesForCurrentRoom(roomId).ToList();
+            }
+
+            return null;
+        }
+
         public void Edit(object chatRoom)
         {
             ChatRoom oldChatRoom = context.ChatRooms.Find(((ChatRoom)chatRoom).RoomId);
@@ -101,7 +123,8 @@ namespace HinttechPractice.Service
         /// <returns>True if exist, False if isn't exist.</returns>
         private Boolean isExistPreviousConversation(ChatRoomMessage currentMessage, ChatRoomMessage chatMessage)
         {
-            if (chatMessage.CreatedBy.Equals(currentMessage.CreatedBy) && chatMessage.SentTo.Equals(currentMessage.SentTo))
+            if (chatMessage.CreatedBy.Equals(currentMessage.CreatedBy) && chatMessage.SentTo.Equals(currentMessage.SentTo)
+                || chatMessage.CreatedBy.Equals(currentMessage.SentTo) && chatMessage.SentTo.Equals(currentMessage.CreatedBy))
             {
                 return true;
             }
