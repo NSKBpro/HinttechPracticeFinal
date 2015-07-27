@@ -71,12 +71,13 @@ namespace HinttechPractice
             {
                 HttpContext.Current.Server.ClearError();
                 HttpContext.Current.Response.RedirectToRoute("error404");
-                throw new Exception404PageNotFound("Error 404, Page not found!", ex);
+                //throw new Exception404PageNotFound("Error 404, Page not found!", ex);
             }
             else
             {
                 log.Error("Application error caught", ex);
             }
+            log.Error("Application error caught", ex);
         }
 
     }
