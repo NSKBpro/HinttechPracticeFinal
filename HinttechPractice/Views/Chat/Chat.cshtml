@@ -137,7 +137,7 @@
                 messageTemp = $("#" + to + "ChatInput").val();
                 if (messageTemp != "" && messageTemp != null) {
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
-                    $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
+                    $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(usernameFrom) +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
                     chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
                     
@@ -205,7 +205,7 @@
             var chatInputEnter = document.getElementById(chatWith + "ChatInput");
             if ($('#' + usernameFrom + "ChatInput").val() != null) {
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
-                $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode("Me") +
+                $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode(usernameFrom) +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
                 
             }
@@ -442,7 +442,7 @@
 
             if ($('#' + usernameFrom + "ChatInput").val() != null) {
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
-                $('#' + chatWith + 'UlWindow').append('<p>' + returnTimestamp(dateForTimestamp) + '</p><li><strong>' + htmlEncode("Me") +
+                $('#' + chatWith + 'UlWindow').append('<p>' + returnTimestamp(dateForTimestamp) + '</p><li><strong>' + htmlEncode(usernameFrom) +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
             } 
 
