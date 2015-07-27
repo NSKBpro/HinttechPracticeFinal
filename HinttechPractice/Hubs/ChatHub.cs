@@ -117,5 +117,14 @@ namespace HinttechPractice.Hubs
                  }
              }  
          }
+
+        public void LoadPrivateMessagesHistory(string name, string recipientName)
+        {
+            ChatRoomsService chatRoomsService = new ChatRoomsService();
+            IList<ChatMessageModel> previousMessages;
+            previousMessages = chatRoomsService.LoadPrivateMessagesHistory(name, recipientName);
+
+            Clients.User(recipientName).loadLastMessages(previousMessages);
+        }
         }
     }
