@@ -49,7 +49,6 @@ namespace HinttechPractice.Hubs
                     }
                     messageService.Create(chatRoomMessage);
                     previousMessages = messageService.FindAllMessagesForCurrentRoom(chatRoomMessage.RoomId);
-
                     Clients.User(recipientName).addNewMessageToPage(name, message, recipientName, previousMessages);
                 }
             }
@@ -77,5 +76,46 @@ namespace HinttechPractice.Hubs
             Clients.User(recipientName).broadcastNotification(name, message, recipientName);
         }
 
+        public void InitialCheckUp()
+        {
+          
+            ChatRoomMessageService messageService = new ChatRoomMessageService();
+             ChatRoomsService roomService = new ChatRoomsService();
+             List<ChatMessageModel> previousMessages = new List<ChatMessageModel>();
+
+             ChatRoomMessage chatRoomMessage = new ChatRoomMessage();
+       
+
+             foreach (ChatRoomMessage m in messageService.FindAll())
+             {
+                 if (m.SentTo == null)
+                 {
+                     chatRoomMessage.CreatedBy = m.User.UserId;
+                     chatRoomMessage.DateCreated = m.DateCreated;
+                     chatRoomMessage.Message = m.Message;
+                     chatRoomMessage.SentTo = null;
+                     chatRoomMessage.RoomId = 1; // MASTER ROOM
+                     previousMessages = messageService.FindAllMessagesForCurrentRoom(chatRoomMessage.RoomId);
+
+                     String dateCreated1 = m.DateCreated.ToString("yyyy-MM-dd");   
+                     DayOfWeek dayOfWeek = m.DateCreated.DayOfWeek;
+                     String dayOfWeekS = "";
+                      if(DateTime.Now.DayOfWeek==dayOfWeek)
+                      {
+                          dayOfWeekS = "Today";
+                      }
+                      else
+                      {
+                         dayOfWeekS = dayOfWeek.ToString();
+                      }
+                     String timeCreated = m.DateCreated.ToString("HH:mm:ss");
+                     Clients.All.addNewMessageToPageInitial(m.User.Username, m.Message, dayOfWeekS, timeCreated);
+                 }
+                 else
+                 {
+                     continue;
+                 }
+             }  
+         }
+        }
     }
-}

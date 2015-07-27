@@ -64,6 +64,8 @@
     var messageTemp;
     var dateForTimestamp = new Date();
     var timestamp;
+    var dayOfWeekS;
+    var now = new Date();
     var weekday = new Array(7);
     weekday[0] = "Sunday";
     weekday[1] = "Monday";
@@ -72,10 +74,16 @@
     weekday[4] = "Thursday";
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
-    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes();
-
+    if (days[now.getDay()] == dayTimestamp) {
+        dayOfWeekS = "Today";
+        timestamp = dayOfWeekS + "&nbsp&nbsp " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes();
+    } else
+    {
+        timestamp = dayTimestamp + "&nbsp&nbsp " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes();
+    }
     function doIt(to) {
         $(function () {
 
@@ -192,6 +200,70 @@
             }
         }
 
+        chat.client.addNewMessageToPageInitial = function (name, message, dateCreated, dayOfWeekS)
+        {
+            var imageForUser;
+                @foreach (var u in ViewBag.users)
+            {
+                var imgSrc = "/Content/img/empty.png";
+                if (u.profilePicture != null)
+                {
+                    var base64 = Convert.ToBase64String(@u.profilePicture);
+                    imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                }
+                var usernameFrom2 = "@Context.User.Identity.Name";
+
+                <text>
+            if (name == '@u.username') {
+                imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
+            }
+                </text>
+
+            }
+            if (message != null) {
+
+                var characterCount = message.length;
+                if (characterCount < 20) {
+       
+                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + dateCreated +"&nbsp&nbsp"+dayOfWeekS+ ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+              '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
+
+                    transferTextToSmile();
+                    var objDiv = document.getElementById("chatRoom");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                } else {
+                    //Funkcija za prekoracenje karaktera u panelu.Ako prekoraci ide u newLine
+                    var str = message;
+                    var arrayMessage = [];
+                    var messageConstraint = 72;
+
+                    while (str) {
+                        if (str.length < messageConstraint) {
+                            arrayMessage.push(str);
+                            break;
+                        }
+                        else {
+                            arrayMessage.push(str.substr(0, messageConstraint));
+                            str = str.substr(messageConstraint);
+                        }
+                    }
+                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                                    '</strong>:   ')
+                    for (var i = 0; i < arrayMessage.length; i++) {
+                        //funkcija za smjlije
+
+                        $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li><br/>')
+                        var objDiv = document.getElementById("chatRoom");
+                        transferTextToSmile();
+                        objDiv.scrollTop = objDiv.scrollHeight;
+                    }
+                }
+            
+        }
+
+        }
+
         //meda
         chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
 
@@ -228,9 +300,10 @@
                     var sec = day.getSeconds();
                     var characterCount = message.length;
                     if (characterCount < 20) {
+       
+                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + timestamp +':'+ sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                      '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
 
-                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                    '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
                         transferTextToSmile();
                         var objDiv = document.getElementById("chatRoom");
                         objDiv.scrollTop = objDiv.scrollHeight;
@@ -269,6 +342,7 @@
         $('#message').focus();
         //react on enter Mihajlo M.
         $.connection.hub.start().done(function () {
+            chat.server.initialCheckUp();
             $('#message').keypress(function (e) {
                 if (e.which == 13) {
                     e.preventDefault();
@@ -281,7 +355,7 @@
         });
         $(document).ready(function () {
             $("#sendMessage").click(function () {
-                chat.server.send(usernameFrom, $('#message').val(), null);
+                chat.server.initialCheckUp();
                 $('#message').val('').focus();
             });
         });
