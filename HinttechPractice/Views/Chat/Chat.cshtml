@@ -81,7 +81,7 @@
 
             usernameFrom = "@Context.User.Identity.Name"
 
-            chat.client.addNewMessageToPage = function (name, message, recipientName) {
+            chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
                 if (message != "" && message != null) {
                     $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
                         '</strong>: ' + htmlEncode(message) + '</li>');
@@ -114,7 +114,7 @@
         usernameFrom = "@Context.User.Identity.Name";
 
         //meda
-        chat.client.addNewMessageToPage = function (name, message, recipientName) {
+        chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
 
             if (recipientName != null) {
                 $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
@@ -193,7 +193,7 @@
         }
 
         //meda
-        chat.client.addNewMessageToPage = function (name, message, recipientName) {
+        chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
 
             if (recipientName != null) {
                 $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
@@ -289,7 +289,7 @@
         var not = $.connection.chatHub;
         $(function () {
             
-            not.client.broadcastNotification = function (name, message, recipientName) {
+            not.client.broadcastNotification = function (name, message, recipientName, previousMessages) {
                 if (message != null) {
                     chatWithFunction(name, message);
                 }

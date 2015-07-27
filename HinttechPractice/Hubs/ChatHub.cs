@@ -5,6 +5,8 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using HinttechPractice.Service;
 using HinttechPractice.Data;
+using System.Web.Script.Serialization;
+using HinttechPractice.Data.Models;
 
 namespace HinttechPractice.Hubs
 {
@@ -15,6 +17,7 @@ namespace HinttechPractice.Hubs
             ChatRoomMessageService messageService = new ChatRoomMessageService();
             UsersService userService = new UsersService();
             ChatRoomsService roomService = new ChatRoomsService();
+            List<ChatMessageModel> previousMessages = new List<ChatMessageModel>();
 
             if (recipientName != null)
             {
@@ -45,8 +48,9 @@ namespace HinttechPractice.Hubs
                         chatRoomMessage.RoomId = currentRoomId;
                     }
                     messageService.Create(chatRoomMessage);
-                    //ViewBag.globalMessage = messageService.FindAllMessagesForCurrentRoom(chatRoomMessage.RoomId);
-                    Clients.User(recipientName).addNewMessageToPage(name, message, recipientName);
+                    previousMessages = messageService.FindAllMessagesForCurrentRoom(chatRoomMessage.RoomId);
+
+                    Clients.User(recipientName).addNewMessageToPage(name, message, recipientName, previousMessages);
                 }
             }
             else
@@ -62,8 +66,8 @@ namespace HinttechPractice.Hubs
                     chatRoomMessage.RoomId = 1; // MASTER ROOM
 
                     messageService.Create(chatRoomMessage);
-                    //ViewBag.globalMessage = messageService.FindAllMessagesForCurrentRoom(chatRoomMessage.RoomId);
-                    Clients.All.addNewMessageToPage(name, message, recipientName);
+                    previousMessages = messageService.FindAllMessagesForCurrentRoom(chatRoomMessage.RoomId);
+                    Clients.All.addNewMessageToPage(name, message, recipientName, previousMessages);
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using HinttechPractice.Data;
 using HinttechPractice.Data.DataContext;
+using HinttechPractice.Data.Models;
 using HinttechPractice.Service.Intefaces;
 using System;
 using System.Collections.Generic;
@@ -47,14 +48,32 @@ namespace HinttechPractice.Service
         /// </summary>
         /// <param name="roomId">Current room Id.</param>
         /// <returns>List of all messages in that room.</returns>
-        public List<ChatRoomMessage> FindAllMessagesForCurrentRoom(int roomId)
+        public List<ChatMessageModel> FindAllMessagesForCurrentRoom(int roomId)
         {
-            List<ChatRoomMessage> messages = new List<ChatRoomMessage>();
+            List<ChatMessageModel> messages = new List<ChatMessageModel>();
+
             foreach (ChatRoomMessage message in context.ChatRoomMessages)
             {
                 if (message.RoomId == roomId)
                 {
-                    messages.Add(message);
+                    ChatMessageModel newMessage = new ChatMessageModel();
+                    User sender = null;
+                    User recipient = null;
+                    using (var userContext = new DataContext())
+                    {
+                        sender = userContext.Users.Find(message.CreatedBy);
+                        if (message.SentTo != null)
+                        {
+                            recipient = userContext.Users.Find(message.SentTo);
+                            newMessage.Recipient = recipient.Username;
+                        }
+                    }
+
+                    newMessage.Sender = sender.Username;
+                    newMessage.Message = message.Message;
+                    newMessage.DateCreated = message.DateCreated;
+
+                    messages.Add(newMessage);
                 }
             }
             return messages;

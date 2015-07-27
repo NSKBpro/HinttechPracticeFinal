@@ -97,6 +97,7 @@
     <Compile Include="Holiday.cs">
       <DependentUpon>HinttechPractice.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChatMessageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs">
       <DependentUpon>HinttechPractice.tt</DependentUpon>
