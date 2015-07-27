@@ -63,12 +63,9 @@
     var chat = $.connection.chatHub;
     var messageTemp;
     var loadPrivateMessages = 0;
-    var dateForTimestamp = new Date();
-    var timestamp;
     var dayOfWeekS;
     var now = new Date();
     var weekday = new Array(7);
-
     var notifications = $.connection.notifierHub;
 
     weekday[0] = "Sunday";
@@ -80,9 +77,14 @@
     weekday[6] = "Saturday";
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
-    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
+    
 
+    function returnTimestamp(dateForTimestamp) {
+        var timestamp;
+        var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
+        timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
+        return timestamp;
+    }
     
     function loadPrivateMessagesFunction(to) {
         $(function () {
@@ -111,13 +113,13 @@
     };
     
 
-    if (days[now.getDay()] == dayTimestamp) {
+   /* if (days[now.getDay()] == dayTimestamp) {
         dayOfWeekS = "Today";
         timestamp = dayOfWeekS + "&nbsp";
     } else
     {
         timestamp = dayTimestamp + "&nbsp";
-    }
+    }*/
     function doIt(to) {
         $(function () {
 
@@ -127,6 +129,7 @@
             chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
                 if (message != "" && message != null) {
                     if (previousMessages != null) {
+                        var dateForTimestamp = new Date();
                         if (loadPrivateMessages === 0) {
                             for (var j = 0; j < previousMessages.length - 1; j++) {
                                 $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
@@ -135,7 +138,7 @@
                             }
                         } else {
                             $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
-                                    '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + timestamp + '</small></span>');
+                                    '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
                         }
                     }
                     
@@ -147,12 +150,12 @@
             $.connection.hub.start().done(function () {
 
                 var chatInputEnter = document.getElementById(to + "ChatInput");
-
+                var dateForTimestamp = new Date();
                 messageTemp = $("#" + to + "ChatInput").val();
                 if (messageTemp != "" && messageTemp != null) {
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
                     $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode("Me") +
-                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + timestamp + '</small></span>');
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
                     chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
                     
                 }
@@ -316,6 +319,7 @@
         chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
             
             if (recipientName != null) {
+                var dateForTimestamp = new Date();
                 if (previousMessages != null) {
                     if (loadPrivateMessages === 0) {
                         for (var j = 0; j < previousMessages.length; j++) {
@@ -327,7 +331,7 @@
                         objDiv.scrollTop = objDiv.scrollHeight;
                     } else {
                         $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
-                                '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + timestamp + '</small></span>');
+                                '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
                         var objDiv = document.getElementById(name + "Window");
                         objDiv.scrollTop = objDiv.scrollHeight;
                     }
@@ -436,13 +440,13 @@
         $.connection.hub.start().done(function () {
             
             var chatInputEnter = document.getElementById(chatWith + "ChatInput");
-            
+            var dateForTimestamp = new Date();
 
 
             if ($('#' + usernameFrom + "ChatInput").val() != null) {
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
-                $('#' + chatWith + 'UlWindow').append('<p>' + timestamp + '</p><li><strong>' + htmlEncode("Me") +
-                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + timestamp + '</small></span>');
+                $('#' + chatWith + 'UlWindow').append('<p>' + returnTimestamp(dateForTimestamp) + '</p><li><strong>' + htmlEncode("Me") +
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
             } 
 
         });
@@ -478,10 +482,10 @@
                     return;
                 }
 
-                
+                var dateForTimestamp = new Date();
                 if (message != null) {
                     $('#' + username + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(username) +
-                          '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + timestamp + '</small></span>');
+                          '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
                 }
 
                 var divHeader = document.getElementById(username + "Window");
