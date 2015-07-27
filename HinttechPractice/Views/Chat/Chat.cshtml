@@ -81,35 +81,17 @@
 
     function returnTimestamp(dateForTimestamp) {
         var timestamp;
-        var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
-        timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
+    var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
+    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
         return timestamp;
     }
-    
+
     function loadPrivateMessagesFunction(to) {
         $(function () {
-            usernameFrom = "@Context.User.Identity.Name";
             $.connection.hub.start().done(function () {
-                notifications.server.loadPrivateMessagesHistory(to, usernameFrom); // OVO SI PREPRAVIO!!
+                chat.server.loadPrivateMessagesHistory(to, usernameFrom); // OVO SI PREPRAVIO!!
             });
-            $.connection.hub.start().done(function () {
             });
-        });
-
-        @*$(function () {
-            usernameFrom = "@Context.User.Identity.Name";
-            notifications.client.broadcastNotification = function (previousMessages) {
-                    alert("Uspeo si bato moj!");
-                if (previousMessages != null) {
-                    for (var j = 0; j < previousMessages.length; j++) {
-                        $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
-                            '</strong>: ' + htmlEncode(previousMessages[j].Message) + '</li><span class="badge lowerCase"><small>' + previousMessages[j].DateCreated + '</small></span>');
-                    }
-                }
-            }
-            $.connection.hub.start().done(function () {
-        });
-        });*@
     };
     
 
@@ -251,8 +233,19 @@
             }
         }
 
-        chat.client.addNewMessageToPageInitial = function (name, message, dateCreated, dayOfWeekS)
-        {
+        usernameFrom = "@Context.User.Identity.Name";
+
+        chat.client.loadLastMessages = function (previousMessages) {
+            alert("Uspeo si bajo moj!");
+            if (previousMessages != null) {
+                for (var j = 0; j < previousMessages.length; j++) {
+                    $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
+                        '</strong>: ' + htmlEncode(previousMessages[j].Message) + '</li><span class="badge lowerCase"><small>' + previousMessages[j].DateCreated + '</small></span>');
+                }
+            }
+        }
+
+        chat.client.addNewMessageToPageInitial = function (name, message, dateCreated, dayOfWeekS) {
             var imageForUser;
                 @foreach (var u in ViewBag.users)
             {
@@ -277,7 +270,7 @@
                 var characterCount = message.length;
                 if (characterCount < 20) {
        
-                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + dateCreated +"&nbsp&nbsp"+dayOfWeekS+ ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + dateCreated + "&nbsp&nbsp" + dayOfWeekS + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
               '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
 
                     transferTextToSmile();
