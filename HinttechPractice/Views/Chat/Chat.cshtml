@@ -113,10 +113,10 @@
 
     if (days[now.getDay()] == dayTimestamp) {
         dayOfWeekS = "Today";
-        timestamp = dayOfWeekS + "&nbsp&nbsp " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes();
+        timestamp = dayOfWeekS + "&nbsp";
     } else
     {
-        timestamp = dayTimestamp + "&nbsp&nbsp " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes();
+        timestamp = dayTimestamp + "&nbsp";
     }
     function doIt(to) {
         $(function () {
@@ -296,7 +296,7 @@
                             str = str.substr(messageConstraint);
                         }
                     }
-                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + ''+timestamp + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                                     '</strong>:   ')
                     for (var i = 0; i < arrayMessage.length; i++) {
                         //funkcija za smjlije
@@ -362,7 +362,7 @@
                     var characterCount = message.length;
                     if (characterCount < 20) {
 
-                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + timestamp +':'+ sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + timestamp + hr + ':' + min + ':' + sec  + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                     '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
 
                         transferTextToSmile();
@@ -417,7 +417,7 @@
         });
         $(document).ready(function () {
             $("#sendMessage").click(function () {
-                chat.server.initialCheckUp();
+                chat.server.send(usernameFrom, $('#message').val(), null);
                 $('#message').val('').focus();
             });
         });
