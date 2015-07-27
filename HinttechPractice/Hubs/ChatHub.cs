@@ -104,6 +104,10 @@ namespace HinttechPractice.Hubs
                       {
                           dayOfWeekS = "Today";
                       }
+                      else if(DateTime.Now.AddDays(-1).DayOfWeek==dayOfWeek)
+                      {
+                          dayOfWeekS = "Yesterday";
+                      }
                       else
                       {
                          dayOfWeekS = dayOfWeek.ToString();
