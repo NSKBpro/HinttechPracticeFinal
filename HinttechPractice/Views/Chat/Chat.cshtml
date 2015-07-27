@@ -75,9 +75,7 @@
     weekday[4] = "Thursday";
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
-    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-    
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; 
 
     function returnTimestamp(dateForTimestamp) {
         var timestamp;
@@ -86,15 +84,7 @@
         return timestamp;
     }
 
-    /*function loadPrivateMessagesFunction(to) {
-        $(function () {
-            $.connection.hub.start().done(function () {
-                chat.server.loadPrivateMessagesHistory(to, usernameFrom);
-            });
-        });
-    };*/
-    
-
+   
    /* if (days[now.getDay()] == dayTimestamp) {
         dayOfWeekS = "Today";
         timestamp = dayOfWeekS + "&nbsp";
@@ -102,7 +92,7 @@
     {
         timestamp = dayTimestamp + "&nbsp";
     }*/
-    function doIt(to) {
+    function privateChatSubmitMessage(to) {
         $(function () {
 
             usernameFrom = "@Context.User.Identity.Name"
@@ -124,9 +114,7 @@
                                     '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
                         }
                     }
-                    
                 }
-                
             };
 
             $("#" + to + "ChatInput").focus();
@@ -454,13 +442,11 @@
         return encodedValue;
     }
     var ulaz = 0;
-    var i = 1;  //flag otvorenog chat prozora
-    var inc = 300; //inkrement desne margine novog chat prozora
+    var i = 1;  //flag of opened window
+    var inc = 300; //right margin increment
     function chatWithFunction(username, message, previousMessages) {
+
         showHide[i - 1] = i;
-
-       
-
         var numItems = $('.chatProzor').length
         var userWindow = $('' + username + 'Window').length;
 
@@ -473,7 +459,7 @@
                     document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
                         "<div id=\"" + username + "Window\" name=\"" + username + "\" style=\"margin-right:" + inc +
                         "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
-                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { doIt('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
+                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
                         username + "ChatInput\"/></div>"
                     
                     inc += 330;
@@ -513,7 +499,7 @@
 
     function dismissChat(div) {
         if (showHide[0] === 1) {
-            var dvi2 = [];
+            var tempDiv = [];
             var elem = $("div[id$='Window']");
             var element = document.getElementById(div);
 
@@ -525,27 +511,27 @@
 
                     document.getElementById(elem[b].id).style.marginRight = size + "px";
 
-                    dvi2.push(elem[b].id);
+                    tempDiv.push(elem[b].id);
                 }
             }
             if (elem.length == 1) {
-
                 inc = 300;
             } else {
                 inc -= 330;
             }
             $('#' + div).remove();
             loadPrivateMessages = 0;
-            for (var c = 0; c < dvi2.length; c++) {
-                var windowUsername = dvi2[c].replace("Window", "")
-                $("#" + windowUsername + "ChatInput").focus();
-            }
+            if (tempDiv != null || typeof tempDiv != 'undefined') {
+                for (var c = 0; c < tempDiv.length; c++) {
+                    var windowUsername = tempDiv[c].replace("Window", "")
+                    $("#" + windowUsername + "ChatInput").focus();
+                }
 
-            if (dvi2.length == 0) {
-                var windowUsername = dvi2[0].replace("Window", "")
-                $("#" + windowUsername + "ChatInput").focus();
+                if (tempDiv.length == 1) {
+                    var windowUsername = tempDiv[0].replace("Window", "")
+                    $("#" + windowUsername + "ChatInput").focus();
+                }
             }
-
 
         } else {
             $('#' + div).show();
