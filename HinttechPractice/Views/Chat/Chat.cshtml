@@ -62,10 +62,11 @@
     var showHide = [];
     var chat = $.connection.chatHub;
     var messageTemp;
+    var loadPrivateMessages = 0;
     var dateForTimestamp = new Date();
     var timestamp;
     var weekday = new Array(7);
-    var loadPrivateMessages = 0;
+    
 
     weekday[0] = "Sunday";
     weekday[1] = "Monday";
@@ -76,7 +77,7 @@
     weekday[6] = "Saturday";
 
     var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
-    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes();
+    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
 
     
     function loadPrivateMessagesFunction(to) {
