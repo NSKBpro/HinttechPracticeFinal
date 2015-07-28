@@ -168,7 +168,9 @@
 
         });
         var objDiv = document.getElementById(to + "Window");
-        objDiv.scrollTop = objDiv.scrollHeight;
+        if (objDiv != null) {
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }
     }
 
     $(function doIt2() {
@@ -259,16 +261,16 @@
         
         chat.client.loadLastMessages = function (previousMessages) {
             if (previousMessages != null) {
-                var buffer= "";
                 for (var j = 0; j < previousMessages.length; j++) {
                     var dateTemp = new Date(previousMessages[j].DateCreated);
-                    buffer = buffer.concat('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
+                    $('#' + chatWith + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
                         '</strong>: ' + htmlEncode(previousMessages[j].Message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateTemp) + '</small></span>');
                     
                 }
-                $('#' + chatWith + 'UlWindow').append(buffer);
                 var objDiv = document.getElementById(chatWith + "Window");
-                objDiv.scrollTop = objDiv.scrollHeight;
+                if (objDiv != null) {
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                }
             }
         }
 
@@ -324,12 +326,16 @@
                             loadPrivateMessages = 1;
                         }
                         var objDiv = document.getElementById(name + "Window");
-                        objDiv.scrollTop = objDiv.scrollHeight;
+                        if (objDiv != null) {
+                            objDiv.scrollTop = objDiv.scrollHeight;
+                        }
                     } else {
                         $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
                                 '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
                         var objDiv = document.getElementById(name + "Window");
-                        objDiv.scrollTop = objDiv.scrollHeight;
+                        if (objDiv != null) {
+                            objDiv.scrollTop = objDiv.scrollHeight;
+                        }
                     }
                 }
             } else {
@@ -454,11 +460,9 @@
     var i = 1;  //flag of opened window
     var inc = 300; //right margin increment
     function chatWithFunction(username, message, previousMessages) {
-
         showHide[i - 1] = i;
         var numItems = $('.chatProzor').length
         var userWindow = $('' + username + 'Window').length;
-
         if (showHide[0] === 1) {
             if (numItems < 3) {
                 chatWith = username;
@@ -490,13 +494,22 @@
                 var divHeader2 = document.getElementById("Div" + username);
                 var childDivs = document.getElementById(username + "Window").getElementsByTagName('div');
 
+                var elem = $("div[id$='Window']");
+                var element = document.getElementById("" + username + "Window" + "");
+
+                for (var b = 0; b < elem.length; b++) { //scrolls all open chat divs to bottom
+                    var objDiv = document.getElementById(elem[b].id)
+                    if (objDiv != null) {
+                        objDiv.scrollTop = objDiv.scrollHeight;
+                    }
+                }
+
                 for (i = 0; i < childDivs.length; i++) {
                     var child = childDivs[i];
                     child.innerHTML = "<small style=\"color:white;font-style:normal;\">" + divHeader.getAttribute('name') + "</small>"
                 }
                 divHeader.style.color = "#575757";
                 divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; color:white; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
-
                 
                 $("#" + username + "ChatInput").focus();
             }
@@ -673,12 +686,12 @@
     {
         if (@u.activity == true)
         {
-            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
+            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
         }
         else
         {
 
-            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
+            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
         }
         
 
