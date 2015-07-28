@@ -72,6 +72,7 @@ namespace HinttechPractice.Service
         {
             List<NotificationModel> notifications = new List<NotificationModel>();
             String recipientUsername = null;
+            String senderUsername = null;
             foreach (Notification notification in context.Notifications)
             {
                 if (!notification.IsRead)
@@ -80,15 +81,50 @@ namespace HinttechPractice.Service
                     using (var userContext = new DataContext())
                     {
                         recipientUsername = ((User)userContext.Users.Find(notification.SentTo)).Username;
+                        senderUsername = ((User)userContext.Users.Find(notification.CreatedBy)).Username;
                     }
                     notificationModel.DateCreated = notification.DateCreated;
                     notificationModel.Description = notification.Description;
                     notificationModel.IsRead = true;
                     notificationModel.RecipientUsername = recipientUsername;
+                    notificationModel.SenderUsername = senderUsername;
+                    notificationModel.NotificationId = notification.NotificationId;
+                    if (notification.Description.Contains("New message from"))
+                    {
+                        notificationModel.IsMessage = true;
+                    }
+                    else
+                    {
+                        notificationModel.IsMessage = false;
+                    }
                     notifications.Add(notificationModel);
                 }
             }
             return notifications;
+        }
+
+        /// <summary>
+        /// If one user recive two message with same description, it will count only the last one as
+        /// new notification.
+        /// </summary>
+        public void FixNotificationSpam()
+        {
+            for (int i = 0; i < context.Notifications.ToList().Count(); i++)
+            {
+                if (i == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (context.Notifications.ToList().ElementAt(i - 1).Description.Equals(context.Notifications.ToList().ElementAt(i).Description)
+                        && context.Notifications.ToList().ElementAt(i - 1).SentTo == context.Notifications.ToList().ElementAt(i).SentTo)
+                    {
+                        context.Notifications.ToList().ElementAt(i - 1).IsRead = true;
+                    }
+                }
+            }
+            context.SaveChanges();
         }
     }
 }

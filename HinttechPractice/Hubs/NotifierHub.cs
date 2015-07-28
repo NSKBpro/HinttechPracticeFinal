@@ -10,6 +10,12 @@ namespace HinttechPractice.Hubs
 {
     public class NotifierHub : Hub
     {
+        /// <summary>
+        /// Send notification to all online users when admin change/edit/delete holiday.
+        /// </summary>
+        /// <param name="type">add, edit, delete</param>
+        /// <param name="message">Holiday description.</param>
+        /// <param name="sender">Who change/edit/delete holiday.</param>
         public void SendNotification(string type, string message, string sender)
         {
             NotificationService notificationService = new NotificationService();
@@ -55,13 +61,31 @@ namespace HinttechPractice.Hubs
             return retVal;
         }
 
+        /// <summary>
+        /// Initialization method to fill all notification for user.
+        /// </summary>
         public void SendNotification()
         {
             NotificationService notificationService = new NotificationService();
+            notificationService.FixNotificationSpam();
             List<NotificationModel> previousNotification = notificationService.AllUnreadNotification();
             Clients.All.loadNotificationList(previousNotification);
         }
 
+        /// <summary>
+        /// Find notification by notificationId and change state isRead to true;
+        /// </summary>
+        /// <param name="notificationId">Current notification id</param>
+        public void MarkAsRead(int notificationId)
+        {
+            NotificationService notificationService = new NotificationService();
+            Notification notification = (Notification)notificationService.FindById(notificationId);
+            if (notification != null)
+            {
+                notification.IsRead = true;
+                notificationService.Edit(notification);
+            }
+        }
     }
 
 }
