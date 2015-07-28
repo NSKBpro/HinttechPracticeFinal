@@ -51,6 +51,7 @@
                         var li = document.createElement("li");
                         li.appendChild(document.createTextNode(previousNotification[i].Description));
                         li.setAttribute("id", "userHover");
+                        li.setAttribute("class", "list-group-item")
                         if (previousNotification[i].IsMessage == true) {
                             var username = previousNotification[i].SenderUsername;
                             var notificationId = previousNotification[i].NotificationId;

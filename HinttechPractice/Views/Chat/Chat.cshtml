@@ -231,7 +231,7 @@
                     if (message != "" && message != null) {
                         chat.server.send(usernameFrom, $('#message').val(), null);
 
-                        $('#discussion').append('<li><strong>' + imageForUser + htmlEncode(name) +
+                        $('#discussion').append('<li><strong>' + imageForUser + "&nbsp&nbsp" + htmlEncode(name) +
                   '</strong>: ' + htmlEncode(message) + '</li>')
                     }
                 });
@@ -332,13 +332,13 @@
         }
 
         chat.client.addNewMessageToPageInitial = function (previousMessages) {
-        
+
             for (var j = 0; j < previousMessages.length; j++) {
                 var imageForUser;
                 var dateForGlobalChatUser = new Date(previousMessages[j].DateCreated);
-                
-             
-            @foreach (var u in ViewBag.users)
+
+                if (previousMessages[j].Message.length < 60) {
+                    @foreach (var u in ViewBag.users)
                 {
                     var imgSrc = "/Content/img/empty.png";
                     if (u.profilePicture != null)
@@ -350,20 +350,52 @@
                     var usernameFrom2 = "@Context.User.Identity.Name";
 
                     <text>
-                if (previousMessages[j].Sender == '@u.username') {
-                    imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
-                }
+                    if (previousMessages[j].Sender == '@u.username') {
+                        imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
+                    }
                     </text>
 
                 }
-                $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestamp(dateForGlobalChatUser) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(previousMessages[j].Sender) +
-                 '</strong>:&nbsp   ' + htmlEncode(previousMessages[j].Message) + '</li></div><br/>')
+                    $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestamp(dateForGlobalChatUser) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + "&nbsp&nbsp" + htmlEncode(previousMessages[j].Sender) +
+                     '</strong>:&nbsp   ' + htmlEncode(previousMessages[j].Message) + '</li></div><br/>')
+
+                    transferTextToSmile();
+                    var objDiv = document.getElementById("chatRoom");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                } else {
+                    var dateForGlobalChatUser = new Date(previousMessages[j].DateCreated);
+                    //Funkcija za prekoracenje karaktera u panelu.Ako prekoraci ide u newLine
+                    var str = previousMessages[j].Message;
+                    var arrayMessage = [];
+                    var messageConstraint = 72;
+                   
+                    while (str) {
+                        if (str.length < messageConstraint) {
+                      
+                            break;
+                        }
+                        else {
+                            arrayMessage.push(str.substr(0, messageConstraint));
+                            str = str.substr(messageConstraint);
+                        
+                        }
+                    }
+                    $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + returnTimestamp(dateForGlobalChatUser) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + "&nbsp&nbsp" + htmlEncode(previousMessages[j].Sender) +
+                                    '</strong>:   ')
+                    for (var i = 0; i < arrayMessage.length; i++) {
+                        //funkcija za smjlije
+                     
+                        $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li></div><br/>')
+                        var objDiv = document.getElementById("chatRoom");
+                        transferTextToSmile();
+                        objDiv.scrollTop = objDiv.scrollHeight;
+                    }
+                }
             }
-            transferTextToSmile();
-            var objDiv = document.getElementById("chatRoom");
-            objDiv.scrollTop = objDiv.scrollHeight;
-                 
+
         }
+                 
+    
 
         
 
@@ -422,7 +454,7 @@
                     var characterCount = message.length;
                     if (characterCount < 60) {
 
-                        $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + "&nbsp&nbsp" + htmlEncode(name) +
                     '</strong>:&nbsp   ' + htmlEncode(message) + '</li></div><br/>')
 
                         transferTextToSmile();
@@ -444,7 +476,7 @@
                                 str = str.substr(messageConstraint);
                             }
                         }
-                        $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + "&nbsp&nbsp" + htmlEncode(name) +
                                         '</strong>:   ')
                         for (var i = 0; i < arrayMessage.length; i++) {
                             //funkcija za smjlije
