@@ -226,11 +226,14 @@
         
         chat.client.loadLastMessages = function (previousMessages) {
             if (previousMessages != null) {
+                var buffer= "";
                 for (var j = 0; j < previousMessages.length; j++) {
                     var dateTemp = new Date(previousMessages[j].DateCreated);
-                    $('#' + chatWith + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
+                    buffer = buffer.concat('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
                         '</strong>: ' + htmlEncode(previousMessages[j].Message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateTemp) + '</small></span>');
+                    
                 }
+                $('#' + chatWith + 'UlWindow').append(buffer);
                 var objDiv = document.getElementById(chatWith + "Window");
                 objDiv.scrollTop = objDiv.scrollHeight;
             }
