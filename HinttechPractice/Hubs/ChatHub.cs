@@ -18,7 +18,7 @@ namespace HinttechPractice.Hubs
             ChatRoomMessageService messageService = new ChatRoomMessageService();
             UsersService userService = new UsersService();
             ChatRoomsService roomService = new ChatRoomsService();
-            
+
 
             if (recipientName != null)
             {
@@ -83,25 +83,25 @@ namespace HinttechPractice.Hubs
             Notification notification = new Notification();
             notification.DateCreated = DateTime.Now;
             notification.CreatedBy = createdBy.UserId;
-            notification.Description = message;
+            notification.Description = "New message from " + name;
             notification.IsRead = false;
             notification.SentTo = sentTo.UserId;
-            userService.Create(notification);
+            notificationService.Create(notification);
 
             Clients.User(recipientName).broadcastNotification(name, message, recipientName);
         }
 
         public void InitialCheckUp()
         {
-          
-            ChatRoomMessageService messageService = new ChatRoomMessageService();
-             ChatRoomsService roomService = new ChatRoomsService();
-             List<ChatMessageModel> previousMessages = new List<ChatMessageModel>();
-             ChatRoomMessage chatRoomMessage = new ChatRoomMessage();
 
-                 previousMessages = messageService.FindAllMessagesForCurrentRoom(1);
-                 Clients.All.addNewMessageToPageInitial(previousMessages);
-         }
+            ChatRoomMessageService messageService = new ChatRoomMessageService();
+            ChatRoomsService roomService = new ChatRoomsService();
+            List<ChatMessageModel> previousMessages = new List<ChatMessageModel>();
+            ChatRoomMessage chatRoomMessage = new ChatRoomMessage();
+
+            previousMessages = messageService.FindAllMessagesForCurrentRoom(1);
+            Clients.All.addNewMessageToPageInitial(previousMessages);
+        }
 
         public void LoadPrivateMessagesHistory(string name, string recipientName)
         {
@@ -111,5 +111,5 @@ namespace HinttechPractice.Hubs
 
             Clients.User(recipientName).loadLastMessages(previousMessages);
         }
-        }
     }
+}

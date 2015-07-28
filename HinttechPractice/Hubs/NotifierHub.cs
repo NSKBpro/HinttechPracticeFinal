@@ -16,10 +16,9 @@ namespace HinttechPractice.Hubs
             UsersService userService = new UsersService();
 
             User createdBy = (User)userService.FindUserByUsername(sender);
-
             foreach (User user in userService.FindAll())
             {
-                if (!user.IsUserAdmin)
+                if (!user.IsUserAdmin && user.IsUserRegistered)
                 {
                     Notification notification = new Notification();
                     notification.CreatedBy = createdBy.UserId;
@@ -30,7 +29,6 @@ namespace HinttechPractice.Hubs
                     notificationService.Create(notification);
                 }
             }
-
             Clients.All.broadcastNotification(type, message);
         }
 
@@ -55,6 +53,13 @@ namespace HinttechPractice.Hubs
                     break;
             }
             return retVal;
+        }
+
+        public void SendNotification()
+        {
+            NotificationService notificationService = new NotificationService();
+            List<NotificationModel> previousNotification = notificationService.AllUnreadNotification();
+            Clients.All.loadNotificationList(previousNotification);
         }
 
     }

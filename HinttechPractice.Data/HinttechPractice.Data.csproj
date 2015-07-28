@@ -98,6 +98,7 @@
       <DependentUpon>HinttechPractice.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ChatMessageModel.cs" />
+    <Compile Include="Models\NotificationModel.cs" />
     <Compile Include="Notification.cs">
       <DependentUpon>HinttechPractice.tt</DependentUpon>
     </Compile>

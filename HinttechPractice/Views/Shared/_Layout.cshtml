@@ -35,8 +35,29 @@
     <!-- CLIENT -->
     <script type="text/javascript">
         var chat = $.connection.chatHub;
+        var fillNotification = $.connection.notifierHub;
+        var currentUsername = '@Context.User.Identity.Name';
+
         $(function () {
             var title = '@ViewBag.Title';
+
+            fillNotification.client.loadNotificationList = function (previousNotification) {
+                $("#notifications").empty();
+                var isEmpty = "true";
+                for (var i = 0; i < previousNotification.length; i++) {
+                    if (previousNotification[i].RecipientUsername == currentUsername) {
+                        AddNotification(previousNotification[i].Description);
+                        isEmpty = "false";
+                    }
+                }
+                if (isEmpty == "true") {
+                    var ul = document.getElementById("notifications");
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode("You don't have new notifications"));
+                    ul.appendChild(li);
+                }
+            };
+
             chat.client.broadcastNotification = function (name, message, recipientName) {
                 if (title != "Chat") {
                     alertify.success('New message from ' + name, 5, function (isClicked) {
@@ -45,8 +66,22 @@
                         }
                     });
                 }
-            }
+            };
         });
+
+        function FillDropDownNotifications() {
+            $.connection.hub.start().done(function () {
+                fillNotification.server.sendNotification();
+            });
+        };
+
+        function AddNotification(value) {
+            var ul = document.getElementById("notifications");
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(value));
+            //li.setAttribute("id", "element1");
+            ul.appendChild(li);
+        }
 
         @if (User.IsInRole("User")){<text>
         $(function () {
@@ -139,16 +174,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     @if (Context.User.Identity.IsAuthenticated)
                     {
-                        @*if (User.IsInRole("User"))
-                            {
-                                <li class="dropdown ">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="glyphicon glyphicon-info-sign"></span></a>
-                                    <ul class="dropdown-menu bullet pull-center">
-                                        <li id="userHover">@Html.ActionLink(" Bozic ", "AccountDetails", "Register", new { id = Context.User.Identity.Name })</li>
-                                        <li id="userHover">@Html.ActionLink(" Nova Godina ", "AccountDetails", "Register", new { id = Context.User.Identity.Name })</li>
-                                    </ul>
-                                </li>
-                            }*@
+                        <li class="dropdown ">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" onmouseover="FillDropDownNotifications()"> <span class="glyphicon glyphicon-info-sign"></span></a>
+                            <ul class="dropdown-menu bullet pull-center" id="notifications"></ul>
+                        </li>
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Welcome, @Context.User.Identity.Name<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">

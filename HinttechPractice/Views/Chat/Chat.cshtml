@@ -94,10 +94,7 @@
     }*/
     function privateChatSubmitMessage(to) {
         $(function () {
-
             usernameFrom = "@Context.User.Identity.Name"
-            
-
             chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
                 if (message != "" && message != null) {
                     if (previousMessages != null) {
@@ -127,8 +124,7 @@
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
                     $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(usernameFrom) +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
-                    chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
-                    
+                    chat.server.sendMessageNotification(usernameFrom, messageTemp,to);
                 }
                 $("#" + to + "ChatInput").val('').focus();
             });
