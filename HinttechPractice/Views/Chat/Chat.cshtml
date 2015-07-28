@@ -80,6 +80,7 @@
     var now = new Date();
     var weekday = new Array(7);
     var notifications = $.connection.notifierHub;
+    var locked = false;
 
     weekday[0] = "Sunday";
     weekday[1] = "Monday";
@@ -416,6 +417,11 @@
         
         //meda
 
+        function unlock() {
+            locked = false;
+        }
+
+
         $('#message').focus();
         //react on enter Mihajlo M.
         
@@ -427,15 +433,32 @@
                     if ($('#message').val().trim() != "") {
                         chat.server.send(usernameFrom, $('#message').val(), null);
                         $('#message').val('').focus();
+                    } else
+                    {
+                        if (!locked) {
+                            locked = true;
+                            setTimeout(unlock, 2500);
+                            alertify.error("You cant send empty message");
+                        }
                     }
                 }
             });
         });
+
+       
+
         $(document).ready(function () {
             $("#sendMessage").click(function () {
                 if ($('#message').val().trim() != "") {
                     chat.server.send(usernameFrom, $('#message').val(), null);
                     $('#message').val('').focus();
+                } else
+                {
+                    if (!locked) {
+                        locked = true;
+                        setTimeout(unlock, 2500);
+                        alertify.error("You cant send empty message");
+                    }
                 }
             });
         });
@@ -573,8 +596,6 @@
             $('#' + div).show();
         }
     };
-
-
 
 
 
