@@ -39,6 +39,16 @@
           <Property Name="DateTo" Type="date" Nullable="false" />
           <Property Name="Description" Type="ntext" />
         </EntityType>
+        <EntityType Name="Notifications">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+          </Key>
+          <Property Name="NotificationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="SentTo" Type="int" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+          <Property Name="IsRead" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="UserId" />
@@ -115,6 +125,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Notifications_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Notifications" Type="Self.Notifications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Notifications">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Vacations_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Vacations" Type="Self.Vacations" Multiplicity="*" />
@@ -131,6 +153,7 @@
           <EntitySet Name="ChatRoomMessages" EntityType="Self.ChatRoomMessages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChatRooms" EntityType="Self.ChatRooms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Holidays" EntityType="Self.Holidays" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notifications" EntityType="Self.Notifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Vacations" EntityType="Self.Vacations" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ChatRoomMessages_ChatRooms" Association="Self.FK_ChatRoomMessages_ChatRooms">
@@ -148,6 +171,10 @@
           <AssociationSet Name="FK_Holidays_Users" Association="Self.FK_Holidays_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Holidays" EntitySet="Holidays" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notifications_Users" Association="Self.FK_Notifications_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Notifications" EntitySet="Notifications" />
           </AssociationSet>
           <AssociationSet Name="FK_Vacations_Users" Association="Self.FK_Vacations_Users">
             <End Role="Users" EntitySet="Users" />
@@ -183,6 +210,11 @@
           <AssociationSet Name="FK_Vacations_Users" Association="hinttechPracticeModel.FK_Vacations_Users">
             <End Role="User" EntitySet="Users" />
             <End Role="Vacation" EntitySet="Vacations" />
+          </AssociationSet>
+          <EntitySet Name="Notifications" EntityType="hinttechPracticeModel.Notification" />
+          <AssociationSet Name="FK_Notifications_Users" Association="hinttechPracticeModel.FK_Notifications_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Notification" EntitySet="Notifications" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="ChatRoomMessage">
@@ -244,6 +276,7 @@
           <NavigationProperty Name="ChatRooms" Relationship="hinttechPracticeModel.FK_ChatRooms_Users" FromRole="User" ToRole="ChatRoom" />
           <NavigationProperty Name="Holidays" Relationship="hinttechPracticeModel.FK_Holidays_Users" FromRole="User" ToRole="Holiday" />
           <NavigationProperty Name="Vacations" Relationship="hinttechPracticeModel.FK_Vacations_Users" FromRole="User" ToRole="Vacation" />
+          <NavigationProperty Name="Notifications" Relationship="hinttechPracticeModel.FK_Notifications_Users" FromRole="User" ToRole="Notification" />
         </EntityType>
         <EntityType Name="Vacation">
           <Key>
@@ -317,6 +350,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="NotificationId" />
+          </Key>
+          <Property Name="NotificationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="SentTo" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="hinttechPracticeModel.FK_Notifications_Users" FromRole="Notification" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Notifications_Users">
+          <End Type="hinttechPracticeModel.User" Role="User" Multiplicity="1" />
+          <End Type="hinttechPracticeModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -387,6 +443,17 @@
                 <ScalarProperty Name="DateFrom" ColumnName="DateFrom" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="VacationPeriodId" ColumnName="VacationPeriodId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="hinttechPracticeModel.Notification">
+              <MappingFragment StoreEntitySet="Notifications">
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+                <ScalarProperty Name="SentTo" ColumnName="SentTo" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="NotificationId" ColumnName="NotificationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -12,7 +12,7 @@ namespace HinttechPractice.Data
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    
+
     public partial class User
     {
         public User()
@@ -21,6 +21,7 @@ namespace HinttechPractice.Data
             this.ChatRooms = new HashSet<ChatRoom>();
             this.Holidays = new HashSet<Holiday>();
             this.Vacations = new HashSet<Vacation>();
+            this.Notifications = new HashSet<Notification>();
         }
 
         [Key]
@@ -33,14 +34,19 @@ namespace HinttechPractice.Data
         public bool IsUserRegistered { get; set; }
         public bool IsUserAdmin { get; set; }
         public byte[] ProfilePicture { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> DateCreated { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> LastLoginDate { get; set; }
+
         public int VacationDays { get; set; }
 
         public virtual ICollection<ChatRoomMessage> ChatRoomMessages { get; set; }
         public virtual ICollection<ChatRoom> ChatRooms { get; set; }
         public virtual ICollection<Holiday> Holidays { get; set; }
         public virtual ICollection<Vacation> Vacations { get; set; }
-
-         }
+        public virtual ICollection<Notification> Notifications { get; set; }
+    }
 }

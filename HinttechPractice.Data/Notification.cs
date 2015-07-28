@@ -12,25 +12,21 @@ namespace HinttechPractice.Data
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    
-    public partial class Vacation
+    using System.ComponentModel.DataAnnotations.Schema;
+
+    public partial class Notification
     {
         [Key]
-        public int VacationPeriodId { get; set; }
-        public int UserId { get; set; }
+        public int NotificationId { get; set; }
+        public int CreatedBy { get; set; }
+        public int SentTo { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public System.DateTime DateFrom { get; set; }
-
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public System.DateTime DateTo { get; set; }
-
-        [Required]
+        public System.DateTime DateCreated { get; set; }
+        public bool IsRead { get; set; }
         public string Description { get; set; }
 
-        public bool IsSickLeave { get; set; }
-
-    
+        [ForeignKey("CreatedBy")]
         public virtual User User { get; set; }
     }
 }

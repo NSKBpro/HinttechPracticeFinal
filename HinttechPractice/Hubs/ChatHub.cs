@@ -73,6 +73,20 @@ namespace HinttechPractice.Hubs
 
         public void SendMessageNotification(string name, string message, string recipientName)
         {
+            NotificationService notificationService = new NotificationService();
+            UsersService userService = new UsersService();
+
+            User createdBy = (User)userService.FindUserByUsername(name);
+            User sentTo = (User)userService.FindUserByUsername(recipientName);
+
+            Notification notification = new Notification();
+            notification.DateCreated = DateTime.Now;
+            notification.CreatedBy = createdBy.UserId;
+            notification.Description = message;
+            notification.IsRead = false;
+            notification.SentTo = sentTo.UserId;
+            userService.Create(notification);
+
             Clients.User(recipientName).broadcastNotification(name, message, recipientName);
         }
 

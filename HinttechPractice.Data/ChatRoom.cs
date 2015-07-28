@@ -35,13 +35,11 @@ namespace HinttechPractice.Data
 
         [Required]
         public Nullable<bool> IsPrivate { get; set; }
-    
+
         public virtual ICollection<ChatRoomMessage> ChatRoomMessages { get; set; }
 
         [ForeignKey("CreatedBy")]
         public virtual User User { get; set; }
 
-        
-       
     }
 }

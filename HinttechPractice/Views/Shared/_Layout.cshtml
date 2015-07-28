@@ -53,13 +53,25 @@
             var notifications = $.connection.notifierHub;
             notifications.client.broadcastNotification = function (type, message) {
                 if (type == "add") {
-                    alertify.success(message);
+                    alertify.success(message, 5, function (isClicked) {
+                        if (isClicked) {
+                            window.location.href = "/LoadHolidays/initHolidays";
+                        }
+                    });
                 }
                 else if (type == "edit") {
-                    alertify.warning(message);
+                    alertify.warning(message, 5, function (isClicked) {
+                        if (isClicked) {
+                            window.location.href = "/LoadHolidays/initHolidays";
+                        }
+                    });
                 }
                 else if (type == "delete") {
-                    alertify.error(message);
+                    alertify.error(message, 5, function (isClicked) {
+                        if (isClicked) {
+                            window.location.href = "/LoadHolidays/initHolidays";
+                        }
+                    });
                 }
 
             };
@@ -76,14 +88,14 @@
             var notifications = $.connection.notifierHub;
             $.connection.hub.start().done(function () {
                 $('#AddHoliday').click(function () {
-                    notifications.server.sendNotification('add', '@Context.User.Identity.Name' + ': ' + $('#HolidayDescription').val());
+                    notifications.server.sendNotification('add', '@Context.User.Identity.Name' + ': ' + $('#HolidayDescription').val(), '@Context.User.Identity.Name');
                 });
                 $('#DeleteHoliday').click(function () {
-                    notifications.server.sendNotification('delete', '@Context.User.Identity.Name' + ': ' + $('#DeleteDescription').val());
+                    notifications.server.sendNotification('delete', '@Context.User.Identity.Name' + ': ' + $('#DeleteDescription').val(), '@Context.User.Identity.Name');
                 });
                 $('#EditHoliday').click(function () {
                     if (dateCheck('n') == true) {
-                        notifications.server.sendNotification('edit', '@Context.User.Identity.Name' + ': ' + $('#EditDescription').val());
+                        notifications.server.sendNotification('edit', '@Context.User.Identity.Name' + ': ' + $('#EditDescription').val(), '@Context.User.Identity.Name');
                     }
                 });
 

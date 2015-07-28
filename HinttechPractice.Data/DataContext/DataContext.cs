@@ -19,6 +19,7 @@ namespace HinttechPractice.Data.DataContext
         public virtual DbSet<Vacation> Vacations { get; set; }
         public virtual DbSet<ChatRoom> ChatRooms { get; set; }
         public virtual DbSet<ChatRoomMessage> ChatRoomMessages { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
 
     }
   
