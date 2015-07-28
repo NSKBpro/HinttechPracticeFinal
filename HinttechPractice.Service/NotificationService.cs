@@ -137,12 +137,12 @@ namespace HinttechPractice.Service
         }
 
         /// <summary>
-        /// 
+        /// Find notification in range for current user.
         /// </summary>
-        /// <param name="currentUsername"></param>
-        /// <param name="minNotificationId"></param>
-        /// <param name="maxNotificationId"></param>
-        /// <returns></returns>
+        /// <param name="currentUsername">Username of logged user.</param>
+        /// <param name="minNotificationId">Max - notifcationMessage sent count.</param>
+        /// <param name="maxNotificationId">Max notification id : last</param>
+        /// <returns>My notification.</returns>
         public Notification FindCurrentUserNotificationInRange(string currentUsername, int minNotificationId, int maxNotificationId)
         {
             Notification notification = null;

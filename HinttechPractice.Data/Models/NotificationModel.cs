@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HinttechPractice.Data.Models
 {
+    /// <summary>
+    /// Help model for sending notification model over session.
+    /// </summary>
     public class NotificationModel
     {
         public int NotificationId { get; set; }

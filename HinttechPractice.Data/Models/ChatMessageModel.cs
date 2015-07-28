@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace HinttechPractice.Data.Models
 {
+    /// <summary>
+    /// Help model for sending chatMessage over session.
+    /// </summary>
     public class ChatMessageModel
     {
         public String Sender { get; set; }

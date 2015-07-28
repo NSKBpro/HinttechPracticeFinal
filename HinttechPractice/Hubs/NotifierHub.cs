@@ -92,6 +92,13 @@ namespace HinttechPractice.Hubs
             }
         }
 
+        /// <summary>
+        /// Find notification in range when someone change holiday(send one message to n peole, in range),
+        /// and with his username, change isReady to true.
+        /// </summary>
+        /// <param name="currentUsername">Username of user who clicked.</param>
+        /// <param name="minNotificationId">min range notification.</param>
+        /// <param name="maxNotificationId">max range notification.</param>
         public void MarkAsReadHolidayNotifications(string currentUsername, int minNotificationId, int maxNotificationId)
         {
             NotificationService notificationService = new NotificationService();
