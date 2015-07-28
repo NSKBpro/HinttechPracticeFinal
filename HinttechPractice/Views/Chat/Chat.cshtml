@@ -208,9 +208,9 @@
         if (name != null && name != "") {
             @foreach (var u in ViewBag.users)
             { <text>
-                if ('@u.username' == name) {
-                    validUser = 1;
-                }
+            if ('@u.username' == name) {
+                validUser = 1;
+            }
             </text> }
 
             if (validUser == 1) {
@@ -239,68 +239,38 @@
             }
         }
 
-        chat.client.addNewMessageToPageInitial = function (name, message, dateCreated, dayOfWeekS) {
-            var imageForUser;
-                @foreach (var u in ViewBag.users)
-            {
-                var imgSrc = "/Content/img/empty.png";
-                if (u.profilePicture != null)
+        chat.client.addNewMessageToPageInitial = function (previousMessages) {
+        
+            for (var j = 0; j < previousMessages.length; j++) {
+                var imageForUser;
+            @foreach (var u in ViewBag.users)
                 {
-                    var base64 = Convert.ToBase64String(@u.profilePicture);
-                    imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    var imgSrc = "/Content/img/empty.png";
+                    if (u.profilePicture != null)
+                    {
+                        var base64 = Convert.ToBase64String(@u.profilePicture);
+                        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+
+                    }
+                    var usernameFrom2 = "@Context.User.Identity.Name";
+
+                    <text>
+                if (previousMessages[j].Sender == '@u.username') {
+                    imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
+                }
+                    </text>
 
                 }
-                var usernameFrom2 = "@Context.User.Identity.Name";
-
-                <text>
-            if (name == '@u.username') {
-                imageForUser = '<img src="@imgSrc" height="25" width="25"/ >';
+                $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + previousMessages[j].DateCreated + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(previousMessages[j].Sender) +
+                 '</strong>:&nbsp   ' + htmlEncode(previousMessages[j].Message) + '</li><br/>')
             }
-                </text>
-
-            }
-            if (message != null) {
-
-                var characterCount = message.length;
-                if (characterCount < 20) {
-       
-                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + dateCreated + "&nbsp&nbsp" + dayOfWeekS + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-              '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
-
-                    transferTextToSmile();
-                    var objDiv = document.getElementById("chatRoom");
-                    objDiv.scrollTop = objDiv.scrollHeight;
-                } else {
-                    //Funkcija za prekoracenje karaktera u panelu.Ako prekoraci ide u newLine
-                    var str = message;
-                    var arrayMessage = [];
-                    var messageConstraint = 72;
-
-                    while (str) {
-                        if (str.length < messageConstraint) {
-                            arrayMessage.push(str);
-                            break;
-                        }
-                        else {
-                            arrayMessage.push(str.substr(0, messageConstraint));
-                            str = str.substr(messageConstraint);
-                        }
-                    }
-                    $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + ''+timestamp + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                                    '</strong>:   ')
-                    for (var i = 0; i < arrayMessage.length; i++) {
-                        //funkcija za smjlije
-
-                        $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li><br/>')
-                        var objDiv = document.getElementById("chatRoom");
-                        transferTextToSmile();
-                        objDiv.scrollTop = objDiv.scrollHeight;
-                    }
-                }
-
+            transferTextToSmile();
+                 
         }
 
-        }
+        
+
+   
 
         //meda
         chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
@@ -352,7 +322,7 @@
                     var min = day.getMinutes();
                     var sec = day.getSeconds();
                     var characterCount = message.length;
-                    if (characterCount < 20) {
+                    if (characterCount < 60) {
 
                         $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + timestamp + hr + ':' + min + ':' + sec  + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                     '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
@@ -395,6 +365,7 @@
 
         $('#message').focus();
         //react on enter Mihajlo M.
+        
         $.connection.hub.start().done(function () {
             chat.server.initialCheckUp();
             $('#message').keypress(function (e) {
