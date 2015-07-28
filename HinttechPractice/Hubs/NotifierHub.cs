@@ -22,6 +22,7 @@ namespace HinttechPractice.Hubs
             UsersService userService = new UsersService();
 
             User createdBy = (User)userService.FindUserByUsername(sender);
+            int userCount = 0;
             foreach (User user in userService.FindAll())
             {
                 if (!user.IsUserAdmin && user.IsUserRegistered)
@@ -33,9 +34,13 @@ namespace HinttechPractice.Hubs
                     notification.SentTo = user.UserId;
                     notification.Description = ChoseDescription(type, message, sender);
                     notificationService.Create(notification);
+                    userCount++;
                 }
             }
-            Clients.All.broadcastNotification(type, message);
+            int maxNotificationId = notificationService.FindLastNotificationId();
+            int minNotificationId = maxNotificationId - userCount;
+
+            Clients.All.broadcastNotification(type, message, minNotificationId, maxNotificationId);
         }
 
         /// <summary>
@@ -80,6 +85,17 @@ namespace HinttechPractice.Hubs
         {
             NotificationService notificationService = new NotificationService();
             Notification notification = (Notification)notificationService.FindById(notificationId);
+            if (notification != null)
+            {
+                notification.IsRead = true;
+                notificationService.Edit(notification);
+            }
+        }
+
+        public void MarkAsReadHolidayNotifications(string currentUsername, int minNotificationId, int maxNotificationId)
+        {
+            NotificationService notificationService = new NotificationService();
+            Notification notification = (Notification)notificationService.FindCurrentUserNotificationInRange(currentUsername, minNotificationId, maxNotificationId);
             if (notification != null)
             {
                 notification.IsRead = true;
