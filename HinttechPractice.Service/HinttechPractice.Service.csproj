@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChatRoomMessageService.cs" />
+    <Compile Include="NotificationService.cs" />
     <Compile Include="ChatRoomsService.cs" />
     <Compile Include="HolidayService.cs" />
     <Compile Include="Intefaces\HolidayIntefrace.cs" />

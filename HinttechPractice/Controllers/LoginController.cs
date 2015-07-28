@@ -76,12 +76,14 @@ namespace HinttechPractice.Controllers
                 ICollection<Vacation> tempVacation = currentUser.Vacations;
                 ICollection<Holiday> tempHolidays = currentUser.Holidays;
                 ICollection<ChatRoom> tempChatRoom = currentUser.ChatRooms;
-                ICollection<ChatRoomMessage> ChatRoomMessage = currentUser.ChatRoomMessages;
+                ICollection<ChatRoomMessage> tempChatRoomMessage = currentUser.ChatRoomMessages;
+                ICollection<Notification> tempNotification = currentUser.Notifications;
 
                 currentUser.Vacations = null;
                 currentUser.Holidays = null;
                 currentUser.ChatRooms = null;
                 currentUser.ChatRoomMessages = null;
+                currentUser.Notifications = null;
                 FormsAuthenticationTicket fat = new FormsAuthenticationTicket(1, user.UserName, DateTime.Now, DateTime.Now.AddMinutes(15), false,
                     JsonConvert.SerializeObject(currentUser, Formatting.None,
                         new JsonSerializerSettings()
@@ -98,7 +100,8 @@ namespace HinttechPractice.Controllers
                 currentUser.Holidays = tempHolidays;
                 currentUser.Vacations = tempVacation;
                 currentUser.ChatRooms = tempChatRoom;
-                currentUser.ChatRoomMessages = ChatRoomMessage;
+                currentUser.ChatRoomMessages = tempChatRoomMessage;
+                currentUser.Notifications = tempNotification;
                 userService.Edit(currentUser);
                 ViewBag.Error = "";
                 return RedirectToRoute("home");

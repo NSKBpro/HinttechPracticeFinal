@@ -30,5 +30,6 @@ namespace HinttechPractice.Data
         public virtual DbSet<Holiday> Holidays { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Vacation> Vacations { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
     }
 }
