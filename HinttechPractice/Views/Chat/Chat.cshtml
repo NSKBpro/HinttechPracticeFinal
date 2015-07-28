@@ -12,11 +12,11 @@
         }
 
         #sendMessage {
-            background-color: #ccc;
+            background-color: #33CCFF;
             -moz-border-radius: 5px;
             -webkit-border-radius: 5px;
             border-radius: 7px;
-            color: #fff;
+            color: #5c5b31;
             font-family: 'Oswald';
             font-size: 20px;
             text-decoration: none;
@@ -30,9 +30,22 @@
 
             #sendMessage:hover {
                 border: none;
-                background: red;
+                background: #f1e458;
                 box-shadow: 0px 0px 1px #777;
             }
+        #messageLoad {
+            color: #0a0a0a;
+            font-family: 'cursive';
+            font-size: 16px;
+            text-decoration: none;
+        }
+        textarea#message {
+            border: 3px solid #cccccc;
+            padding: 5px;
+            font-family: Tahoma, sans-serif;
+            background-position: bottom right;
+            background-repeat: no-repeat;
+        }
     </style>
 </head>
 
@@ -45,7 +58,7 @@
         <ul id="discussion"></ul>
     </div>
     <div class="panel-body" style="max-width: 700px;" id="chatPanel">
-        <textarea class="form-control" id="message" style="min-width: 500px; float:left; z-index: 1;" rows="2"></textarea>
+        <textarea class="form-control" id="message" style="min-width: 500px; float:left; z-index: 1;" rows="2" onfocus="this.value=''; setbg('#e5fff3');" onblur="setbg('white')"></textarea>
         <button class="btn btn-primary" id="sendMessage" style="z-index: 1; float: right;">Send</button>
     </div>
     <div id="zaChat"></div>
@@ -77,7 +90,9 @@
     weekday[6] = "Saturday";
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; 
 
-
+    function setbg(color) {
+        document.getElementById("message").style.background = color
+    }
 
     function addDays(date, days) {
         var result = new Date(date);
@@ -296,8 +311,8 @@
                     </text>
 
                 }
-                $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestamp(dateForGlobalChatUser) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(previousMessages[j].Sender) +
-                 '</strong>:&nbsp   ' + htmlEncode(previousMessages[j].Message) + '</li><br/>')
+                $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestamp(dateForGlobalChatUser) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(previousMessages[j].Sender) +
+                 '</strong>:&nbsp   ' + htmlEncode(previousMessages[j].Message) + '</li></div><br/>')
             }
             transferTextToSmile();
             var objDiv = document.getElementById("chatRoom");
@@ -362,8 +377,8 @@
                     var characterCount = message.length;
                     if (characterCount < 60) {
 
-                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
-                    '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
+                        $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                    '</strong>:&nbsp   ' + htmlEncode(message) + '</li></div><br/>')
 
                         transferTextToSmile();
                         var objDiv = document.getElementById("chatRoom");
@@ -384,12 +399,12 @@
                                 str = str.substr(messageConstraint);
                             }
                         }
-                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                                         '</strong>:   ')
                         for (var i = 0; i < arrayMessage.length; i++) {
                             //funkcija za smjlije
 
-                            $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li><br/>')
+                            $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li></div><br/>')
                             var objDiv = document.getElementById("chatRoom");
                             transferTextToSmile();
                             objDiv.scrollTop = objDiv.scrollHeight;
@@ -418,8 +433,10 @@
         });
         $(document).ready(function () {
             $("#sendMessage").click(function () {
-                chat.server.send(usernameFrom, $('#message').val(), null);
-                $('#message').val('').focus();
+                if ($('#message').val().trim() != "") {
+                    chat.server.send(usernameFrom, $('#message').val(), null);
+                    $('#message').val('').focus();
+                }
             });
         });
         
