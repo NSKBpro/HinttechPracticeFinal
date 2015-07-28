@@ -101,6 +101,11 @@
         return result;
     }
 
+    function FillDropDownNotifications() {
+        $.connection.hub.start().done(function () {
+            notifications.server.sendNotification();
+        });
+    };
 
     function returnTimestamp(dateForTimestamp) {
         var timestamp;
@@ -173,6 +178,7 @@
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
                     $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(usernameFrom) +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
+                    //Send notification about message.
                     chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
                     
                 }
@@ -236,7 +242,6 @@
 
         $('#message').focus();
 
-
         $.connection.hub.start().done(function () {
             var chatInputEnter = document.getElementById(chatWith + "ChatInput");
             if ($('#' + usernameFrom + "ChatInput").val() != null) {
@@ -250,6 +255,7 @@
     });
 
     $(function () {
+        //check name of user in url-for automatic open messenger
         usernameFrom = "@Context.User.Identity.Name";
         var name = '@Request.QueryString["nameTo"]';
         var validUser = 0;
@@ -272,6 +278,44 @@
 
         usernameFrom = "@Context.User.Identity.Name";
         
+        //Load notification list in chat
+        notifications.client.loadNotificationList = function (previousNotification) {
+            $("#notifications").empty();
+            var isEmpty = "true";
+            for (var i = 0; i < previousNotification.length; i++) {
+                if (previousNotification[i].RecipientUsername == currentUsername) {
+                    var ul = document.getElementById("notifications");
+                    var li = document.createElement("li");
+                    li.appendChild(document.createTextNode(previousNotification[i].Description));
+                    li.setAttribute("id", "userHover");
+                    if (previousNotification[i].IsMessage == true) {
+                        var username = previousNotification[i].SenderUsername;
+                        var notificationId = previousNotification[i].NotificationId;
+                        li.addEventListener("click", function (event) {
+                            openMessage(username, notificationId, false);
+                            event.preventDefault();
+                        });
+                    } else {
+                        var username = previousNotification[i].SenderUsername;
+                        var notificationId = previousNotification[i].NotificationId;
+                        li.addEventListener("click", function (event) {
+                            openMessage(username, notificationId, true);
+                            event.preventDefault();
+                        });
+                    }
+                    ul.appendChild(li);
+
+                    isEmpty = "false";
+                }
+            }
+            if (isEmpty == "true") {
+                var ul = document.getElementById("notifications");
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode("You don't have new notifications"));
+                ul.appendChild(li);
+            }
+        };
+
         chat.client.loadLastMessages = function (previousMessages) {
             if (previousMessages != null) {
                 for (var j = 0; j < previousMessages.length; j++) {

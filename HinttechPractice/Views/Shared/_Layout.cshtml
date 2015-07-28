@@ -41,6 +41,7 @@
         $(function () {
             var title = '@ViewBag.Title';
 
+            //Load notification list from signalR notifierHub
             fillNotification.client.loadNotificationList = function (previousNotification) {
                 $("#notifications").empty();
                 var isEmpty = "true";
@@ -79,6 +80,8 @@
                     ul.appendChild(li);
                 }
             };
+
+            //recive all notification when someone change holiday.
             chat.client.broadcastNotification = function (name, message, recipientName, notificationId) {
                 if (title != "Chat") {
                     alertify.success('New message from ' + name, 5, function (isClicked) {
@@ -89,10 +92,13 @@
                             openMessage(name, notificationId, false);
                         }
                     });
+                } else {
+                    fillNotification.server.markAsRead(notificationId);
                 }
             };
         });
 
+        //Function for open message from dropdown list of notifications.
         function openMessage(username, notificationId, isCalendar) {
             $.connection.hub.start().done(function () {
                 fillNotification.server.markAsRead(notificationId);
@@ -104,6 +110,7 @@
             }
         };
 
+        //Fill dropdown list of notifications for intial.
         function FillDropDownNotifications() {
             $.connection.hub.start().done(function () {
                 fillNotification.server.sendNotification();
@@ -113,6 +120,7 @@
         @if (User.IsInRole("User")){<text>
         $(function () {
             var notifications = $.connection.notifierHub;
+            //When admin change holiday, allow on alertify click to mark as read notification.
             notifications.client.broadcastNotification = function (type, message, minNotificationId, maxNotificationId) {
                 if (type == "add") {
                     alertify.success(message, 5, function (isClicked) {
@@ -157,6 +165,7 @@
          @if (User.IsInRole("Admin")){<text>
         $(function () {
             var notifications = $.connection.notifierHub;
+            //admin sendint notification when do something with holidays.
             $.connection.hub.start().done(function () {
                 $('#AddHoliday').click(function () {
                     notifications.server.sendNotification('add', '@Context.User.Identity.Name' + ': ' + $('#HolidayDescription').val(), '@Context.User.Identity.Name');
