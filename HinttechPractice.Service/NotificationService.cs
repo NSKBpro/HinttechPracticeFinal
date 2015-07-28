@@ -64,5 +64,31 @@ namespace HinttechPractice.Service
             }
         }
 
+        /// <summary>
+        /// Return all unread notification.
+        /// </summary>
+        /// <returns>List of all unread notification.</returns>
+        public List<NotificationModel> AllUnreadNotification()
+        {
+            List<NotificationModel> notifications = new List<NotificationModel>();
+            String recipientUsername = null;
+            foreach (Notification notification in context.Notifications)
+            {
+                if (!notification.IsRead)
+                {
+                    NotificationModel notificationModel = new NotificationModel();
+                    using (var userContext = new DataContext())
+                    {
+                        recipientUsername = ((User)userContext.Users.Find(notification.SentTo)).Username;
+                    }
+                    notificationModel.DateCreated = notification.DateCreated;
+                    notificationModel.Description = notification.Description;
+                    notificationModel.IsRead = true;
+                    notificationModel.RecipientUsername = recipientUsername;
+                    notifications.Add(notificationModel);
+                }
+            }
+            return notifications;
+        }
     }
 }

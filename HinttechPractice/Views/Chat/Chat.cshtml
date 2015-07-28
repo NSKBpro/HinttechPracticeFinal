@@ -88,7 +88,7 @@
 
     function returnTimestamp(dateForTimestamp) {
         var timestamp;
-        var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
+    var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
         dateForTimestamp.setTime(dateForTimestamp.getTime() + dateForTimestamp.getTimezoneOffset() * 60 * 1000);
         if (days[now.getDay()] == dayTimestamp) {
             dayTimestamp = "Today";
@@ -109,11 +109,11 @@
             dayTimestamp = "Today";
 
         }
-        timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
+    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
         return timestamp;
     }
 
-
+   
 
 
    
@@ -127,10 +127,7 @@
     }*/
     function privateChatSubmitMessage(to) {
         $(function () {
-
             usernameFrom = "@Context.User.Identity.Name"
-            
-
             chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
                 if (message != "" && message != null) {
                     if (previousMessages != null) {
