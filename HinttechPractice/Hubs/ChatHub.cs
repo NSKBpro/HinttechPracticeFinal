@@ -12,12 +12,13 @@ namespace HinttechPractice.Hubs
 {
     public class ChatHub : Hub
     {
+        List<ChatMessageModel> previousMessages = new List<ChatMessageModel>();
         public void Send(string name, string message, string recipientName)
         {
             ChatRoomMessageService messageService = new ChatRoomMessageService();
             UsersService userService = new UsersService();
             ChatRoomsService roomService = new ChatRoomsService();
-            List<ChatMessageModel> previousMessages = new List<ChatMessageModel>();
+            
 
             if (recipientName != null)
             {
@@ -96,44 +97,10 @@ namespace HinttechPractice.Hubs
             ChatRoomMessageService messageService = new ChatRoomMessageService();
              ChatRoomsService roomService = new ChatRoomsService();
              List<ChatMessageModel> previousMessages = new List<ChatMessageModel>();
-
              ChatRoomMessage chatRoomMessage = new ChatRoomMessage();
-       
 
-             foreach (ChatRoomMessage m in messageService.FindAll())
-             {
-                 if (m.SentTo == null)
-                 {
-                     chatRoomMessage.CreatedBy = m.User.UserId;
-                     chatRoomMessage.DateCreated = m.DateCreated;
-                     chatRoomMessage.Message = m.Message;
-                     chatRoomMessage.SentTo = null;
-                     chatRoomMessage.RoomId = 1; // MASTER ROOM
-                     previousMessages = messageService.FindAllMessagesForCurrentRoom(chatRoomMessage.RoomId);
-
-                     String dateCreated1 = m.DateCreated.ToString("yyyy-MM-dd");   
-                     DayOfWeek dayOfWeek = m.DateCreated.DayOfWeek;
-                     String dayOfWeekS = "";
-                      if(DateTime.Now.DayOfWeek==dayOfWeek)
-                      {
-                          dayOfWeekS = "Today";
-                      }
-                      else if(DateTime.Now.AddDays(-1).DayOfWeek==dayOfWeek)
-                      {
-                          dayOfWeekS = "Yesterday";
-                      }
-                      else
-                      {
-                         dayOfWeekS = dayOfWeek.ToString();
-                      }
-                     String timeCreated = m.DateCreated.ToString("HH:mm:ss");
-                     Clients.All.addNewMessageToPageInitial(m.User.Username, m.Message, dayOfWeekS, timeCreated);
-                 }
-                 else
-                 {
-                     continue;
-                 }
-             }  
+                 previousMessages = messageService.FindAllMessagesForCurrentRoom(1);
+                 Clients.All.addNewMessageToPageInitial(previousMessages);
          }
 
         public void LoadPrivateMessagesHistory(string name, string recipientName)
