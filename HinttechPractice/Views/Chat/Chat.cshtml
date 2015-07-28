@@ -77,13 +77,46 @@
     weekday[6] = "Saturday";
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; 
 
+
+
+    function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+
     function returnTimestamp(dateForTimestamp) {
         var timestamp;
     var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
+        dateForTimestamp.setTime(dateForTimestamp.getTime() + dateForTimestamp.getTimezoneOffset() * 60 * 1000);
+        if (days[now.getDay()] == dayTimestamp) {
+            dayTimestamp = "Today";
+            
+        } else if (days[addDays(now, -1).getDay()] == dayTimestamp) {
+            dayTimestamp = "Yesterday";
+        }
+
     timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
         return timestamp;
     }
 
+
+    function returnTimestampNow(dateForTimestamp) {
+        var timestamp;
+        var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
+        if (days[now.getDay()] == dayTimestamp) {
+            dayTimestamp = "Today";
+
+        }
+    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
+        return timestamp;
+    }
+
+   
+
+
+   
    
    /* if (days[now.getDay()] == dayTimestamp) {
         dayOfWeekS = "Today";
@@ -108,7 +141,7 @@
                             }
                         } else {
                             $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
-                                    '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
+                                    '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
                         }
                     }
                 }
@@ -123,8 +156,9 @@
                 if (messageTemp != "" && messageTemp != null) {
                     chat.server.send(usernameFrom, $("#" + to + "ChatInput").val(), to);
                     $('#' + to + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(usernameFrom) +
-                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
-                    chat.server.sendMessageNotification(usernameFrom, messageTemp,to);
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
+                    chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
+                    
                 }
                 $("#" + to + "ChatInput").val('').focus();
             });
@@ -239,6 +273,9 @@
         
             for (var j = 0; j < previousMessages.length; j++) {
                 var imageForUser;
+                var dateForGlobalChatUser = new Date(previousMessages[j].DateCreated);
+                
+             
             @foreach (var u in ViewBag.users)
                 {
                     var imgSrc = "/Content/img/empty.png";
@@ -257,10 +294,12 @@
                     </text>
 
                 }
-                $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + previousMessages[j].DateCreated + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(previousMessages[j].Sender) +
+                $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestamp(dateForGlobalChatUser) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(previousMessages[j].Sender) +
                  '</strong>:&nbsp   ' + htmlEncode(previousMessages[j].Message) + '</li><br/>')
             }
             transferTextToSmile();
+            var objDiv = document.getElementById("chatRoom");
+            objDiv.scrollTop = objDiv.scrollHeight;
                  
         }
 
@@ -285,7 +324,7 @@
                         objDiv.scrollTop = objDiv.scrollHeight;
                     } else {
                         $('#' + name + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(name) +
-                                '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
+                                '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
                         var objDiv = document.getElementById(name + "Window");
                         objDiv.scrollTop = objDiv.scrollHeight;
                     }
@@ -313,14 +352,11 @@
                 }
                 if (message != null) {
 
-                    var day = new Date();
-                    var hr = day.getHours();
-                    var min = day.getMinutes();
-                    var sec = day.getSeconds();
+                    var dateForTimestamp = new Date();
                     var characterCount = message.length;
                     if (characterCount < 60) {
 
-                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + timestamp + hr + ':' + min + ':' + sec  + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp [</font><font size="2">' + '        ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                     '</strong>:&nbsp   ' + htmlEncode(message) + '</li><br/>')
 
                         transferTextToSmile();
@@ -342,7 +378,7 @@
                                 str = str.substr(messageConstraint);
                             }
                         }
-                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + hr + ':' + min + ':' + sec + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
+                        $('#discussion').append('<font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + returnTimestampNow(dateForTimestamp) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + htmlEncode(name) +
                                         '</strong>:   ')
                         for (var i = 0; i < arrayMessage.length; i++) {
                             //funkcija za smjlije
@@ -401,7 +437,7 @@
             if ($('#' + usernameFrom + "ChatInput").val() != null) {
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<p>' + returnTimestamp(dateForTimestamp) + '</p><li><strong>' + htmlEncode(usernameFrom) +
-                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
+                        '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
             } 
 
         });
@@ -444,7 +480,7 @@
                 var dateForTimestamp = new Date();
                 if (message != null) {
                     $('#' + username + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(username) +
-                          '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateForTimestamp) + '</small></span>');
+                          '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
                 }
 
                 var divHeader = document.getElementById(username + "Window");
