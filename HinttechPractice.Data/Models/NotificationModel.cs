@@ -8,12 +8,18 @@ namespace HinttechPractice.Data.Models
 {
     public class NotificationModel
     {
+        public int NotificationId { get; set; }
+
         public String RecipientUsername { get; set; }
+
+        public String SenderUsername { get; set; }
 
         public DateTime DateCreated { get; set; }
 
         public String Description { get; set; }
 
         public Boolean IsRead { get; set; }
+
+        public Boolean IsMessage { get; set; }
     }
 }
