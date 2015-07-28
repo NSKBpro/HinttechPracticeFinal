@@ -54,7 +54,14 @@
                             var username = previousNotification[i].SenderUsername;
                             var notificationId = previousNotification[i].NotificationId;
                             li.addEventListener("click", function (event) {
-                                openMessage(username, notificationId);
+                                openMessage(username, notificationId, false);
+                                event.preventDefault();
+                            });
+                        } else {
+                            var username = previousNotification[i].SenderUsername;
+                            var notificationId = previousNotification[i].NotificationId;
+                            li.addEventListener("click", function (event) {
+                                openMessage(username, notificationId, true);
                                 event.preventDefault();
                             });
                         }
@@ -70,23 +77,31 @@
                     ul.appendChild(li);
                 }
             };
-            chat.client.broadcastNotification = function (name, message, recipientName) {
+            chat.client.broadcastNotification = function (name, message, recipientName, notificationId) {
                 if (title != "Chat") {
                     alertify.success('New message from ' + name, 5, function (isClicked) {
                         if (isClicked) {
-                            window.location.href = "/Chat/Chat?nameTo=" + name;
+                            $.connection.hub.start().done(function () {
+                                fillNotification.server.markAsRead(notificationId);
+                            });
+                            openMessage(name, notificationId, false);
                         }
                     });
                 }
             };
         });
 
-        function openMessage(username, notificationId) {
+        function openMessage(username, notificationId, isCalendar) {
             $.connection.hub.start().done(function () {
                 fillNotification.server.markAsRead(notificationId);
             });
-            window.location.href = "/Chat/Chat?nameTo=" + username;
+            if (isCalendar == true) {
+                window.location.href = "/LoadHolidays/initHolidays";
+            } else {
+                window.location.href = "/Chat/Chat?nameTo=" + username;
+            }
         };
+
         function FillDropDownNotifications() {
             $.connection.hub.start().done(function () {
                 fillNotification.server.sendNotification();
@@ -96,10 +111,13 @@
         @if (User.IsInRole("User")){<text>
         $(function () {
             var notifications = $.connection.notifierHub;
-            notifications.client.broadcastNotification = function (type, message) {
+            notifications.client.broadcastNotification = function (type, message, minNotificationId, maxNotificationId) {
                 if (type == "add") {
                     alertify.success(message, 5, function (isClicked) {
                         if (isClicked) {
+                            $.connection.hub.start().done(function () {
+                                fillNotification.server.markAsReadHolidayNotifications(currentUsername, minNotificationId, maxNotificationId);
+                            });
                             window.location.href = "/LoadHolidays/initHolidays";
                         }
                     });
@@ -107,6 +125,9 @@
                 else if (type == "edit") {
                     alertify.warning(message, 5, function (isClicked) {
                         if (isClicked) {
+                            $.connection.hub.start().done(function () {
+                                fillNotification.server.markAsReadHolidayNotifications(currentUsername, minNotificationId, maxNotificationId);
+                            });
                             window.location.href = "/LoadHolidays/initHolidays";
                         }
                     });
@@ -114,6 +135,9 @@
                 else if (type == "delete") {
                     alertify.error(message, 5, function (isClicked) {
                         if (isClicked) {
+                            $.connection.hub.start().done(function () {
+                                fillNotification.server.markAsReadHolidayNotifications(currentUsername, minNotificationId, maxNotificationId);
+                            });
                             window.location.href = "/LoadHolidays/initHolidays";
                         }
                     });

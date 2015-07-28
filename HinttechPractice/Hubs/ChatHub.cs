@@ -87,8 +87,9 @@ namespace HinttechPractice.Hubs
             notification.IsRead = false;
             notification.SentTo = sentTo.UserId;
             notificationService.Create(notification);
+            int notificationId = notification.NotificationId;
 
-            Clients.User(recipientName).broadcastNotification(name, message, recipientName);
+            Clients.User(recipientName).broadcastNotification(name, message, recipientName, notificationId);
         }
 
         public void InitialCheckUp()

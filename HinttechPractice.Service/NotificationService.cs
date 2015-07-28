@@ -126,5 +126,42 @@ namespace HinttechPractice.Service
             }
             context.SaveChanges();
         }
+
+        /// <summary>
+        /// Find max notificationId
+        /// </summary>
+        /// <returns> max notificationId - last one</returns>
+        public int FindLastNotificationId()
+        {
+            return context.Notifications.OrderByDescending(u => u.NotificationId).FirstOrDefault().NotificationId;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentUsername"></param>
+        /// <param name="minNotificationId"></param>
+        /// <param name="maxNotificationId"></param>
+        /// <returns></returns>
+        public Notification FindCurrentUserNotificationInRange(string currentUsername, int minNotificationId, int maxNotificationId)
+        {
+            Notification notification = null;
+            UsersService userService = new UsersService();
+            while (minNotificationId <= maxNotificationId)
+            {
+                notification = context.Notifications.Find(minNotificationId);
+                User user = userService.FindUserByUsername(currentUsername);
+                if (user != null)
+                {
+                    if (user.UserId == notification.SentTo)
+                    {
+                        return notification;
+                    }
+                }
+                minNotificationId++;
+            }
+            return notification;
+
+        }
     }
 }
