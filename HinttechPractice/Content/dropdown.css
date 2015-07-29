@@ -13,6 +13,7 @@
 				
 	#userHover  a:hover{
 			background-color:#122221;
+            color: white;
 			}
 			
 	#adminHover a:hover{
