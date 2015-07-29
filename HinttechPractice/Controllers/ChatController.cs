@@ -29,8 +29,13 @@ namespace HinttechPractice.Controllers
                     {
                         us.activity = true;
                         usersOnline.First(d => d.username == usrnmOfUserLoggedIn).activity = true;
+                       
+
                     }
-                    
+                    if (us.lastSeenOn == DateTime.Now.ToString("yyyy-MM-dd"))
+                    {
+                        us.lastSeenOn = "Today";
+                    }
                 
                     ViewBag.users = usersOnline;
                 }
@@ -50,7 +55,18 @@ namespace HinttechPractice.Controllers
                     {
                         usl.activity = true;
                     }
+                    if (((DateTime)us.LastLoginDate).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+                    {
+                        usl.lastSeenOn = "Today";
+                    }
+                    else if (((DateTime)us.LastLoginDate).ToString("yyyy-MM-dd") == (DateTime.Now.AddDays(-1)).ToString("yyyy-MM-dd"))
+                    {
+                        usl.lastSeenOn = "Yesterday";
 
+                    }else
+                    {
+                        usl.lastSeenOn = ((DateTime)us.LastLoginDate).ToString("yyyy-MM-dd");
+                    }
                     users.Add(usl);
                 }
                 usersOnline = new List<UsersLite>();

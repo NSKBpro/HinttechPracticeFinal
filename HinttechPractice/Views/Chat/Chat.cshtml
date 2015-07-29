@@ -91,7 +91,7 @@
     weekday[4] = "Thursday";
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
-    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; 
 
     function setbg(color) {
         document.getElementById("message").style.background = color
@@ -111,16 +111,16 @@
 
     function returnTimestamp(dateForTimestamp) {
         var timestamp;
-        var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
+    var dayTimestamp = weekday[dateForTimestamp.getDay() % 7];
         dateForTimestamp.setTime(dateForTimestamp.getTime() + dateForTimestamp.getTimezoneOffset() * 60 * 1000);
         if (days[now.getDay()] == dayTimestamp) {
             dayTimestamp = "Today";
-
+            
         } else if (days[addDays(now, -1).getDay()] == dayTimestamp) {
             dayTimestamp = "Yesterday";
         }
 
-        timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
+    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
         return timestamp;
     }
 
@@ -132,22 +132,22 @@
             dayTimestamp = "Today";
 
         }
-        timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
+    timestamp = dayTimestamp + " " + dateForTimestamp.getHours() + ":" + dateForTimestamp.getMinutes() + ":" + dateForTimestamp.getSeconds();
         return timestamp;
     }
 
+   
 
 
-
-
-
-    /* if (days[now.getDay()] == dayTimestamp) {
-         dayOfWeekS = "Today";
-         timestamp = dayOfWeekS + "&nbsp";
-     } else
-     {
-         timestamp = dayTimestamp + "&nbsp";
-     }*/
+   
+   
+   /* if (days[now.getDay()] == dayTimestamp) {
+        dayOfWeekS = "Today";
+        timestamp = dayOfWeekS + "&nbsp";
+    } else
+    {
+        timestamp = dayTimestamp + "&nbsp";
+    }*/
     function privateChatSubmitMessage(to) {
         $(function () {
             usernameFrom = "@Context.User.Identity.Name"
@@ -184,7 +184,7 @@
 
                     //Send notification about message.
                     chat.server.sendMessageNotification(usernameFrom, messageTemp, to);
-
+                    
                 }
                 $("#" + to + "ChatInput").val('').focus();
             });
@@ -206,7 +206,7 @@
             if (recipientName != null) {
                 $('#' + name + 'UlWindow').append('<li><strong>' + htmlEncode(name) +
                     '</strong>: ' + htmlEncode(message) + '</li>');
-
+                
 
             } else {
 
@@ -252,7 +252,7 @@
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<li><strong>' + htmlEncode(usernameFrom) +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li>');
-
+                
             }
 
         });
@@ -273,7 +273,7 @@
 
             if (validUser == 1) {
                 if (name != null && name != "") {
-                    chatWithFunction(name, null, null);
+                    chatWithFunction(name, null, null); previousNotification.length
                 }
             } else {
                 window.location.href = "/Chat/Chat";
@@ -281,7 +281,7 @@
         }
 
         usernameFrom = "@Context.User.Identity.Name";
-
+        
         //Load notification list in chat
         notifications.client.loadNotificationList = function (previousNotification) {
             $("#notifications").empty();
@@ -341,7 +341,7 @@
                     var dateTemp = new Date(previousMessages[j].DateCreated);
                     $('#' + chatWith + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(previousMessages[j].Sender) +
                         '</strong>: ' + htmlEncode(previousMessages[j].Message) + '</li><span class="badge lowerCase"><small>' + returnTimestamp(dateTemp) + '</small></span>');
-
+                    
                 }
                 var objDiv = document.getElementById(chatWith + "Window");
                 if (objDiv != null) {
@@ -387,23 +387,23 @@
                     var str = previousMessages[j].Message;
                     var arrayMessage = [];
                     var messageConstraint = 72;
-
+                   
                     while (str) {
                         if (str.length < messageConstraint) {
-
+                      
                             break;
                         }
                         else {
                             arrayMessage.push(str.substr(0, messageConstraint));
                             str = str.substr(messageConstraint);
-
+                        
                         }
                     }
                     $('#discussion').append('<div id="messageLoad"><font size="2"><i>Sent at:&nbsp&nbsp&nbsp&nbsp&nbsp[ </font><font size="2">' + '       ' + '' + returnTimestamp(dateForGlobalChatUser) + ']</font>' + ' </i>' + '<br><li><strong>' + imageForUser + "&nbsp&nbsp" + htmlEncode(previousMessages[j].Sender) +
                                     '</strong>:   ')
                     for (var i = 0; i < arrayMessage.length; i++) {
                         //funkcija za smjlije
-
+                     
                         $('#discussion').append(htmlEncode(arrayMessage[i]) + '</li></div><br/>')
                         var objDiv = document.getElementById("chatRoom");
                         transferTextToSmile();
@@ -413,16 +413,16 @@
             }
 
         }
+                 
+    
 
+        
 
-
-
-
-
+   
 
         //meda
         chat.client.addNewMessageToPage = function (name, message, recipientName, previousMessages) {
-
+            
             if (recipientName != null) {
                 var dateForTimestamp = new Date();
                 if (previousMessages != null) {
@@ -509,7 +509,7 @@
                 }
             }
         }
-
+        
         //meda
 
         function unlock() {
@@ -519,7 +519,7 @@
 
         $('#message').focus();
         //react on enter Mihajlo M.
-
+        
         $.connection.hub.start().done(function () {
             chat.server.initialCheckUp();
             $('#message').keypress(function (e) {
@@ -539,7 +539,7 @@
             });
         });
 
-
+       
 
         $(document).ready(function () {
             $("#sendMessage").click(function () {
@@ -555,7 +555,7 @@
                 }
             });
         });
-
+        
         var not = $.connection.chatHub;
         var notify = $.connection.notifierHub;
         $(function () {
@@ -570,7 +570,7 @@
         });
 
         $.connection.hub.start().done(function () {
-
+            
             var chatInputEnter = document.getElementById(chatWith + "ChatInput");
             var dateForTimestamp = new Date();
 
@@ -579,7 +579,7 @@
                 chat.server.send(usernameFrom, $('#' + usernameFrom + "ChatInput").val(), chatWith);
                 $('#' + chatWith + 'UlWindow').append('<p>' + returnTimestamp(dateForTimestamp) + '</p><li><strong>' + htmlEncode(usernameFrom) +
                         '</strong>: ' + htmlEncode(messageTemp) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
-            }
+            } 
 
         });
     });
@@ -604,29 +604,32 @@
                     document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
                         "<div id=\"" + username + "Window2\" name=\"" + username + "\" style=\"margin-right:" + inc +
                         "px; text-align: justify;\" class=\"chatProzor\"><div name=\"" + username +
-                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><div id=\"" + username + "Window\" name=\"" + username + "\" style=\"height: 168px; width: 280px; right:1; position: relative; top:25px; padding-bottom:30px; text-align: justify; display: inline-block; overflow-y:scroll;\"><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
+                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><div id=\"" + username + "Window\" name=\"" + username + "\" style=\"height: 168px; width: 280px; right:1; position: relative; top:25px; padding-bottom:30px; text-align: justify; display: inline-block; overflow-y:scroll;\"><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"43\" class=\"myChatInput\" id=\"" +
                         username + "ChatInput\"/></div>"
-
-                    inc += 330;
-
+                    
                     $.connection.hub.start().done(function () {
                         chat.server.loadPrivateMessagesHistory(username, "@Context.User.Identity.Name");
                     });
+
+                    inc += 330;
+                    /*var chatInput = document.getElementById(username + "ChatInput");
+                    chatInput.disabled = true;
+                    setTimeout(function () {
+                        var chatInput = document.getElementById(username + "ChatInput");
+                        chatInput.disabled = false;
+                    }, 3000);*/
+                    
                 } else {
                     return;
                 }
 
-                var dateForTimestamp = new Date();
-                if (message != null) {
-                    $('#' + username + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(username) +
-                          '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
-                }
+                
 
                 var divHeader = document.getElementById(username + "Window2");
                 var divHeader2 = document.getElementById("Div" + username);
                 var childDivs = document.getElementById(username + "Window2").getElementsByTagName('div');
 
-                var elem = $("div[id$='Window2']");
+                var elem = $("div[id$='Window']");
                 var element = document.getElementById("" + username + "Window2" + "");
 
                 for (var b = 0; b < elem.length; b++) { //scrolls all open chat divs to bottom
@@ -643,7 +646,7 @@
                 }
                 divHeader.style.color = "#575757";
                 divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window2" + "');\" style=\"float:right; color:white; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
-
+                
                 $("#" + username + "ChatInput").focus();
             }
         } else {
@@ -798,36 +801,36 @@
 
 <div class="scroller" style="position:fixed;top:0; right:0; padding-right:0px;  padding-top:50px; width: 250px; background-color: #d3d3d3; height:100%; ">
     @foreach (var u in ViewBag.users)
+{
+    var activityImage = "/Content/smile/online.png";
+    var imgSrc = "/Content/img/empty.png";
+    if (u.profilePicture != null)
     {
-        var activityImage = "/Content/smile/online.png";
-        var imgSrc = "/Content/img/empty.png";
-        if (u.profilePicture != null)
-        {
-            var base64 = Convert.ToBase64String(@u.profilePicture);
-            imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        var base64 = Convert.ToBase64String(@u.profilePicture);
+        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
 
-        }
-        var usernameFrom2 = "@Context.User.Identity.Name";
+    }
+    var usernameFrom2 = "@Context.User.Identity.Name";
 
-        if (Context.User.Identity.Name == @u.username)
+    if (Context.User.Identity.Name == @u.username)
+    {
+        continue;
+    }
+    else
+    {
+        if (@u.activity == true)
         {
-            continue;
+            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item" data-toggle="tooltip" data-placement="bottom" title="Online now"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
         }
         else
         {
-            if (@u.activity == true)
-            {
-                <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
-            }
-            else
-            {
 
-                <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
-            }
-
-
+            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item" data-toggle="tooltip" data-placement="bottom" title="Last seen : @u.lastSeenOn"><img src="@imgSrc " height=" 27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
         }
-
+        
 
     }
+    
+
+}
 </div>
