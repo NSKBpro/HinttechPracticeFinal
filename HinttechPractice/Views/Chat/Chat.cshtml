@@ -801,7 +801,12 @@
 
 <div class="scroller" style="position:fixed;top:0; right:0; padding-right:0px;  padding-top:50px; width: 250px; background-color: #d3d3d3; height:100%; ">
     @foreach (var u in ViewBag.users)
-{
+    {
+
+        if (!u.IsUserRegistered && !u.IsAdmin)
+        {
+            continue;
+        }
     var activityImage = "/Content/smile/online.png";
     var imgSrc = "/Content/img/empty.png";
     if (u.profilePicture != null)

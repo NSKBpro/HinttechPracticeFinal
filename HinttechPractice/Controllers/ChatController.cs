@@ -36,7 +36,7 @@ namespace HinttechPractice.Controllers
                     {
                         us.lastSeenOn = "Today";
                     }
-                
+                    us.IsUserRegistered = usr.FindUserByUsername(us.username).IsUserRegistered;
                     ViewBag.users = usersOnline;
                 }
 
@@ -51,6 +51,9 @@ namespace HinttechPractice.Controllers
                     usl.lastName = us.LastName;
                     usl.username = us.Username;
                     usl.profilePicture = us.ProfilePicture;
+                    usl.IsAdmin = us.IsUserAdmin;
+                    usl.IsUserRegistered = us.IsUserRegistered;
+
                     if (us.Username == usrnmOfUserLoggedIn)
                     {
                         usl.activity = true;
@@ -68,6 +71,8 @@ namespace HinttechPractice.Controllers
                         usl.lastSeenOn = ((DateTime)us.LastLoginDate).ToString("yyyy-MM-dd");
                     }
                     users.Add(usl);
+
+                    
                 }
                 usersOnline = new List<UsersLite>();
                 usersOnline = users;

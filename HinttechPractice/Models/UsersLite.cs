@@ -14,5 +14,7 @@ namespace HinttechPractice.Models
         public byte[] profilePicture { get; set; }
         public bool activity { get; set; }
         public String lastSeenOn { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsUserRegistered { get; set; } 
     }
 }
