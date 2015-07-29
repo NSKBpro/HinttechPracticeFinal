@@ -600,7 +600,7 @@
                     document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
                         "<div id=\"" + username + "Window2\" name=\"" + username + "\" style=\"margin-right:" + inc +
                         "px; text-align: justify;\" class=\"chatProzor\"><div name=\"" + username +
-                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><div id=\"" + username + "Window\" name=\"" + username + "\" style=\"height: 168px; width: 280px; right:1; position: relative; top:25px; padding-bottom:30px; text-align: justify; display: inline-block; overflow-y:scroll;\"><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
+                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><div id=\"" + username + "Window\" name=\"" + username + "\" style=\"height: 168px; width: 280px; right:1; position: relative; top:25px; padding-bottom:30px; text-align: justify; display: inline-block; overflow-y:scroll;\"><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"43\" class=\"myChatInput\" id=\"" +
                         username + "ChatInput\"/></div>"
                     
                     $.connection.hub.start().done(function () {
@@ -608,12 +608,12 @@
                     });
 
                     inc += 330;
-                    var chatInput = document.getElementById(username + "ChatInput");
+                    /*var chatInput = document.getElementById(username + "ChatInput");
                     chatInput.disabled = true;
                     setTimeout(function () {
                         var chatInput = document.getElementById(username + "ChatInput");
                         chatInput.disabled = false;
-                    }, 6000);
+                    }, 3000);*/
                     
                 } else {
                     return;
@@ -625,7 +625,7 @@
                 var divHeader2 = document.getElementById("Div" + username);
                 var childDivs = document.getElementById(username + "Window2").getElementsByTagName('div');
 
-                var elem = $("div[id$='Window2']");
+                var elem = $("div[id$='Window']");
                 var element = document.getElementById("" + username + "Window2" + "");
 
                 for (var b = 0; b < elem.length; b++) { //scrolls all open chat divs to bottom
