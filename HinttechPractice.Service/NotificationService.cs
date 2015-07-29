@@ -71,34 +71,33 @@ namespace HinttechPractice.Service
         public List<NotificationModel> AllUnreadNotification()
         {
             List<NotificationModel> notifications = new List<NotificationModel>();
-            String recipientUsername = null;
-            String senderUsername = null;
-            foreach (Notification notification in context.Notifications)
+
+            var notificationsDb = from notification in context.Notifications
+                                  where notification.IsRead == false
+                                  select notification;
+
+            List<Notification> notificationsFromDB = notificationsDb.ToList();
+            foreach (Notification notification in notificationsFromDB)
             {
-                if (!notification.IsRead)
+                NotificationModel notificationModel = new NotificationModel();
+                String recipientUsername = ((User)context.Users.Find(notification.SentTo)).Username;
+                String senderUsername = ((User)context.Users.Find(notification.CreatedBy)).Username;
+
+                notificationModel.DateCreated = notification.DateCreated;
+                notificationModel.Description = notification.Description;
+                notificationModel.IsRead = true;
+                notificationModel.RecipientUsername = recipientUsername;
+                notificationModel.SenderUsername = senderUsername;
+                notificationModel.NotificationId = notification.NotificationId;
+                if (notification.Description.Contains("New message from"))
                 {
-                    NotificationModel notificationModel = new NotificationModel();
-                    using (var userContext = new DataContext())
-                    {
-                        recipientUsername = ((User)userContext.Users.Find(notification.SentTo)).Username;
-                        senderUsername = ((User)userContext.Users.Find(notification.CreatedBy)).Username;
-                    }
-                    notificationModel.DateCreated = notification.DateCreated;
-                    notificationModel.Description = notification.Description;
-                    notificationModel.IsRead = true;
-                    notificationModel.RecipientUsername = recipientUsername;
-                    notificationModel.SenderUsername = senderUsername;
-                    notificationModel.NotificationId = notification.NotificationId;
-                    if (notification.Description.Contains("New message from"))
-                    {
-                        notificationModel.IsMessage = true;
-                    }
-                    else
-                    {
-                        notificationModel.IsMessage = false;
-                    }
-                    notifications.Add(notificationModel);
+                    notificationModel.IsMessage = true;
                 }
+                else
+                {
+                    notificationModel.IsMessage = false;
+                }
+                notifications.Add(notificationModel);
             }
             return notifications;
         }
@@ -109,7 +108,10 @@ namespace HinttechPractice.Service
         /// </summary>
         public void FixNotificationSpam()
         {
-            for (int i = 0; i < context.Notifications.ToList().Count(); i++)
+            List<Notification> notifications = context.Notifications.ToList();
+            notifications = notifications.OrderBy(n => n.CreatedBy).ThenBy(n => n.SentTo).ToList();
+
+            for (int i = 0; i < notifications.Count(); i++)
             {
                 if (i == 0)
                 {
@@ -117,10 +119,10 @@ namespace HinttechPractice.Service
                 }
                 else
                 {
-                    if (context.Notifications.ToList().ElementAt(i - 1).Description.Equals(context.Notifications.ToList().ElementAt(i).Description)
-                        && context.Notifications.ToList().ElementAt(i - 1).SentTo == context.Notifications.ToList().ElementAt(i).SentTo)
+                    if (notifications.ElementAt(i - 1).Description.Equals(notifications.ToList().ElementAt(i).Description)
+                        && notifications.ElementAt(i - 1).SentTo == notifications.ElementAt(i).SentTo)
                     {
-                        context.Notifications.ToList().ElementAt(i - 1).IsRead = true;
+                        notifications.ElementAt(i - 1).IsRead = true;
                     }
                 }
             }

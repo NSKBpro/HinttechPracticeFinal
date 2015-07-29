@@ -29,7 +29,6 @@ namespace HinttechPractice
 
         protected void Application_Start()
         {
-
             //Always call this when need to use logger.
             log4net.GlobalContext.Properties["LogName"] = DateTime.Now.ToShortDateString().ToString();
             log = MyLogger.GetLogger(typeof(MvcApplication));

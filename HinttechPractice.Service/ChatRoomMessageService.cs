@@ -4,6 +4,7 @@ using HinttechPractice.Data.Models;
 using HinttechPractice.Service.Intefaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,32 +53,34 @@ namespace HinttechPractice.Service
         {
             List<ChatMessageModel> messages = new List<ChatMessageModel>();
 
-            foreach (ChatRoomMessage message in context.ChatRoomMessages)
+            var messageFromChatRoom = from room in context.ChatRoomMessages
+                                      where room.RoomId == roomId
+                                      select room;
+
+            List<ChatRoomMessage> msgFromDB = messageFromChatRoom.ToList();
+
+            foreach (ChatRoomMessage message in msgFromDB)
             {
-                if (message.RoomId == roomId)
+                ChatMessageModel newMessage = new ChatMessageModel();
+                String sender = context.Users.Find(message.CreatedBy).Username;
+                String recipient = null;
+                if (message.SentTo != null)
                 {
-                    ChatMessageModel newMessage = new ChatMessageModel();
-                    User sender = null;
-                    User recipient = null;
-                    using (var userContext = new DataContext())
-                    {
-                        sender = userContext.Users.Find(message.CreatedBy);
-                        if (message.SentTo != null)
-                        {
-                            recipient = userContext.Users.Find(message.SentTo);
-                            newMessage.Recipient = recipient.Username;
-                        }
-                    }
-
-                    newMessage.Sender = sender.Username;
-                    newMessage.Message = message.Message;
-                    newMessage.DateCreated = message.DateCreated;
-
-                    messages.Add(newMessage);
+                    recipient = context.Users.Find(message.SentTo).Username;
+                    newMessage.Recipient = recipient;
                 }
+
+                newMessage.Sender = sender;
+                newMessage.Message = message.Message;
+                newMessage.DateCreated = message.DateCreated;
+
+                messages.Add(newMessage);
             }
             return messages;
         }
+
+
+
 
         public void Delete(int messageId)
         {

@@ -34,7 +34,7 @@
 
     <!-- CLIENT -->
     <script type="text/javascript">
-        var chat = $.connection.chatHub;
+        var chatLayout = $.connection.chatHub;
         var fillNotification = $.connection.notifierHub;
         var currentUsername = '@Context.User.Identity.Name';
 
@@ -82,9 +82,9 @@
                 }
             };
 
-            //recive all notification when someone change holiday.
-            chat.client.broadcastNotification = function (name, message, recipientName, notificationId) {
-                if (title != "Chat") {
+            //if user isnt on chat page, send him notification.
+            chatLayout.client.broadcastNotification = function (name, message, recipientName, notificationId) {
+                if (title != 'Chat') {
                     alertify.success('New message from ' + name, 5, function (isClicked) {
                         if (isClicked) {
                             $.connection.hub.start().done(function () {
@@ -93,8 +93,6 @@
                             openMessage(name, notificationId, false);
                         }
                     });
-                } else {
-                    fillNotification.server.markAsRead(notificationId);
                 }
             };
         });
@@ -121,7 +119,7 @@
         @if (User.IsInRole("User")){<text>
         $(function () {
             var notifications = $.connection.notifierHub;
-            //When admin change holiday, allow on alertify click to mark as read notification.
+            //When admin change holiday alert all users, allow on alertify click to mark as read notification.
             notifications.client.broadcastNotification = function (type, message, minNotificationId, maxNotificationId) {
                 if (type == "add") {
                     alertify.success(message, 5, function (isClicked) {

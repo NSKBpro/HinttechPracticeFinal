@@ -84,7 +84,12 @@ namespace HinttechPractice.Hubs
         public void MarkAsRead(int notificationId)
         {
             NotificationService notificationService = new NotificationService();
+            if (notificationId == -1)
+            {
+                notificationId = notificationService.FindLastNotificationId();
+            }
             Notification notification = (Notification)notificationService.FindById(notificationId);
+
             if (notification != null)
             {
                 notification.IsRead = true;
