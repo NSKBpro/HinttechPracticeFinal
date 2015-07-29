@@ -95,7 +95,7 @@ namespace HinttechPractice.Controllers
                 ck.Expires = DateTime.Now.AddMinutes(15);
 
                 Response.Cookies.Add(ck);
-                currentUser.LastLoginDate = DateTime.Now;
+               // currentUser.LastLoginDate = DateTime.Now;
                 currentUser.ProfilePicture = tempPicture;
                 currentUser.Holidays = tempHolidays;
                 currentUser.Vacations = tempVacation;
@@ -114,6 +114,8 @@ namespace HinttechPractice.Controllers
         [Authorize]
         public ActionResult Logout()
         {
+            UsersService userService = new UsersService();
+            User currentUser = userService.FindUserByUsername(currentUserOffline);
             if (ChatController.usersOnline != null)
             {
                 foreach (UsersLite us in ChatController.usersOnline)
@@ -122,6 +124,10 @@ namespace HinttechPractice.Controllers
                     {
                         us.activity = true;
                         ChatController.usersOnline.First(d => d.username == currentUserOffline).activity = false;
+                        DateTime dateNow=DateTime.Now;
+                        ChatController.usersOnline.First(d => d.username == currentUserOffline).lastSeenOn = dateNow.ToString("yyyy-MM-dd");
+                        currentUser.LastLoginDate = dateNow;
+                        userService.Edit(currentUser);
                     }
 
                     ViewBag.users = ChatController.usersOnline;
