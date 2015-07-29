@@ -285,7 +285,9 @@
             for (var i = 0; i < previousNotification.length; i++) {
                 if (previousNotification[i].RecipientUsername == currentUsername) {
                     var ul = document.getElementById("notifications");
-                    var li = document.createElement("li");
+                    var li = document.createElement("a");
+                    li.setAttribute("class", "list-group-item")
+                    li.setAttribute("href", "")
                     li.appendChild(document.createTextNode(previousNotification[i].Description));
                     li.setAttribute("id", "userHover");
                     if (previousNotification[i].IsMessage == true) {
@@ -583,9 +585,9 @@
 
                 if (divCheck == null) {
                     document.getElementById("zaChat").innerHTML = document.getElementById("zaChat").innerHTML +
-                        "<div id=\"" + username + "Window\" name=\"" + username + "\" style=\"margin-right:" + inc +
-                        "px; text-align: justify; display: inline-block; overflow-y:scroll;\" class=\"chatProzor\"><div name=\"" + username +
-                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
+                        "<div id=\"" + username + "Window2\" name=\"" + username + "\" style=\"margin-right:" + inc +
+                        "px; text-align: justify;\" class=\"chatProzor\"><div name=\"" + username +
+                        "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><div id=\"" + username + "Window\" name=\"" + username + "\" style=\"height: 168px; width: 280px; right:1; position: relative; top:25px; padding-bottom:30px; text-align: justify; display: inline-block; overflow-y:scroll;\"><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
                         username + "ChatInput\"/></div>"
                     
                     inc += 330;
@@ -603,12 +605,12 @@
                           '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
                 }
 
-                var divHeader = document.getElementById(username + "Window");
+                var divHeader = document.getElementById(username + "Window2");
                 var divHeader2 = document.getElementById("Div" + username);
-                var childDivs = document.getElementById(username + "Window").getElementsByTagName('div');
+                var childDivs = document.getElementById(username + "Window2").getElementsByTagName('div');
 
-                var elem = $("div[id$='Window']");
-                var element = document.getElementById("" + username + "Window" + "");
+                var elem = $("div[id$='Window2']");
+                var element = document.getElementById("" + username + "Window2" + "");
 
                 for (var b = 0; b < elem.length; b++) { //scrolls all open chat divs to bottom
                     var objDiv = document.getElementById(elem[b].id)
@@ -620,14 +622,15 @@
                 for (i = 0; i < childDivs.length; i++) {
                     var child = childDivs[i];
                     child.innerHTML = "<small style=\"color:white;font-style:normal;\">" + divHeader.getAttribute('name') + "</small>"
+                    break;
                 }
                 divHeader.style.color = "#575757";
-                divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window" + "');\" style=\"float:right; color:white; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
+                divHeader2.innerHTML = divHeader2.innerHTML + "<span onClick=\"dismissChat('" + username + "Window2" + "');\" style=\"float:right; color:white; padding-top:2px;\" class=\"glyphicon glyphicon-remove\"></span>";
                 
                 $("#" + username + "ChatInput").focus();
             }
         } else {
-            dismissChat(username + "Window");
+            dismissChat(username + "Window2");
         }
         i++;
     }
@@ -635,7 +638,7 @@
     function dismissChat(div) {
         if (showHide[0] === 1) {
             var tempDiv = [];
-            var elem = $("div[id$='Window']");
+            var elem = $("div[id$='Window2']");
             var element = document.getElementById(div);
 
             for (var b = 0; b < elem.length; b++) {
@@ -658,12 +661,12 @@
             loadPrivateMessages = 0;
             if (tempDiv != null || typeof tempDiv != 'undefined') {
                 for (var c = 0; c < tempDiv.length; c++) {
-                    var windowUsername = tempDiv[c].replace("Window", "")
+                    var windowUsername = tempDiv[c].replace("Window2", "")
                     $("#" + windowUsername + "ChatInput").focus();
                 }
 
                 if (tempDiv.length == 1) {
-                    var windowUsername = tempDiv[0].replace("Window", "")
+                    var windowUsername = tempDiv[0].replace("Window2", "")
                     $("#" + windowUsername + "ChatInput").focus();
                 }
             }
