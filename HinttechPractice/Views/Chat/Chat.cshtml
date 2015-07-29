@@ -286,10 +286,10 @@
                 if (previousNotification[i].RecipientUsername == currentUsername) {
                     var ul = document.getElementById("notifications");
                     var li = document.createElement("a");
-                    li.setAttribute("class", "list-group-item")
-                    li.setAttribute("href", "")
                     li.appendChild(document.createTextNode(previousNotification[i].Description));
                     li.setAttribute("id", "userHover");
+                    li.setAttribute("class", "list-group-item")
+                    li.setAttribute("href", "")
                     if (previousNotification[i].IsMessage == true) {
                         var username = previousNotification[i].SenderUsername;
                         var notificationId = previousNotification[i].NotificationId;
@@ -312,9 +312,22 @@
             }
             if (isEmpty == "true") {
                 var ul = document.getElementById("notifications");
-                var li = document.createElement("li");
+                var li = document.createElement("a");
+                li.setAttribute("class", "list-group-item")
+                li.setAttribute("href", "")
                 li.appendChild(document.createTextNode("You don't have new notifications"));
                 ul.appendChild(li);
+            }
+        };
+
+        function openMessage(username, notificationId, isCalendar) {
+            $.connection.hub.start().done(function () {
+                notifications.server.markAsRead(notificationId);
+            });
+            if (isCalendar == true) {
+                window.location.href = "/LoadHolidays/initHolidays";
+            } else {
+                window.location.href = "/Chat/Chat?nameTo=" + username;
             }
         };
 
