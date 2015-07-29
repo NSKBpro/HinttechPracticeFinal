@@ -812,17 +812,17 @@
     {
         if (@u.activity == true)
         {
-            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
+            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item" data-toggle="tooltip" data-placement="bottom" title="Online now"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float:right; margin-top:6px;" src="/Content/smile/online1.png" height="15" width="15" /></a>
         }
         else
         {
 
-            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item"><img src="@imgSrc" height="27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
+            <a onclick="chatWithFunction('@u.username',null, null)" class="list-group-item" data-toggle="tooltip" data-placement="bottom" title="Last seen : @u.lastSeenOn"><img src="@imgSrc " height=" 27" width="27" style="margin-right: 10px;" />@u.firstName @u.lastName <img style="float: right; margin-top: 6px" src="/Content/smile/offline1.png" height="15" width="15" /></a>
         }
-        
+
 
     }
-    
+
 
 }
 </div>
