@@ -269,7 +269,7 @@
 
             if (validUser == 1) {
                 if (name != null && name != "") {
-                    chatWithFunction(name, null, null);
+                    chatWithFunction(name, null, null); previousNotification.length
                 }
             } else {
                 window.location.href = "/Chat/Chat";
@@ -603,20 +603,23 @@
                         "\" class=\"ChatHeaderDiv\" id=\"Div" + username + "\"><p class=\"ChatHeader\"></p></div><div id=\"" + username + "Window\" name=\"" + username + "\" style=\"height: 168px; width: 280px; right:1; position: relative; top:25px; padding-bottom:30px; text-align: justify; display: inline-block; overflow-y:scroll;\"><ul class=\"moja\" id=\"" + username + "UlWindow\"></ul><input onkeydown=\"if (event.keyCode == 13) { privateChatSubmitMessage('" + username + "'); return false; }\" size=\"42\" class=\"myChatInput\" id=\"" +
                         username + "ChatInput\"/></div>"
                     
-                    inc += 330;
-
                     $.connection.hub.start().done(function () {
                         chat.server.loadPrivateMessagesHistory(username, "@Context.User.Identity.Name");
                     });
+
+                    inc += 330;
+                    var chatInput = document.getElementById(username + "ChatInput");
+                    chatInput.disabled = true;
+                    setTimeout(function () {
+                        var chatInput = document.getElementById(username + "ChatInput");
+                        chatInput.disabled = false;
+                    }, 6000);
+                    
                 } else {
                     return;
                 }
 
-                var dateForTimestamp = new Date();
-                if (message != null) {
-                    $('#' + username + 'UlWindow').append('<li class=\"moja\"><strong>' + htmlEncode(username) +
-                          '</strong>: ' + htmlEncode(message) + '</li><span class="badge lowerCase"><small>' + returnTimestampNow(dateForTimestamp) + '</small></span>');
-                }
+                
 
                 var divHeader = document.getElementById(username + "Window2");
                 var divHeader2 = document.getElementById("Div" + username);
